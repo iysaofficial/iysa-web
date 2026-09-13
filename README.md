@@ -82,6 +82,12 @@ IYSA_API_BASE=https://api-dashboard.iysa.or.id/api/public/v1
 IYSA_API_ORG_SLUG=iysa
 ```
 
+## Melanjutkan pekerjaan ini
+
+[HANDOFF.md](HANDOFF.md) — serah-terima lengkap: inventaris aset yang masih
+kosong per halaman, keadaan motion, dan daftar keputusan desain yang sudah
+final. Baca itu dulu sebelum menyentuh aset atau animasi.
+
 ## Yang masih perlu dibereskan
 
 Lihat `/id/status` di situs yang sudah jalan untuk keadaan terkini.
