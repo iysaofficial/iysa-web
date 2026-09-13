@@ -83,7 +83,10 @@ export default async function EventsPage({
             />
           </div>
         ) : (
-          <ul className="mt-10 grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
+          // Dua kolom sejak ponsel: sejak kartunya berposter, satu kolom
+          // membuat tiap kartu ~700px tinggi, dan 66 event jadi puluhan ribu
+          // piksel gulir yang tidak bisa dipindai sama sekali.
+          <ul className="mt-10 grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3">
             {results.map((e) => (
               <li key={e.slug} className="bg-[var(--bg)]">
                 <EventCard event={e} />

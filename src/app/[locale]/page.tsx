@@ -105,7 +105,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         action={<MoreLink href="/event">{t("eventsAll")}</MoreLink>}
       >
         <ul
-          className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3"
+          className="rise-stagger grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3"
         >
           {featured.map((e) => (
             <li key={e.slug} className="bg-[var(--bg)]">
