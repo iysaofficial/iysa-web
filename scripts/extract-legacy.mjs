@@ -71,8 +71,21 @@ function affiliates() {
     const headings = [...raw.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>/g)].map((m) => tidy(m[1]));
     const name = headings[0] ?? `Affiliate ${i}`;
 
-    // Logo = <img src="..."> pertama.
-    const logo = raw.match(/<img[^>]*?src=["']([^"']+)["']/)?.[1] ?? null;
+    /**
+     * Gambar lokal: yang PERTAMA logo, sisanya dokumentasi.
+     *
+     * Sebelumnya hanya <img> pertama yang diambil dan sisanya dibuang diam-diam.
+     * Untuk dua belas komponen pertama itu kebetulan benar — mereka memang cuma
+     * memasang logo — tapi MIYIO (13) memasang dua foto dokumentasi acara di
+     * bawah judul "Dokumentasi", dan keduanya hilang tanpa jejak di data hasil
+     * migrasi. Sumber gambar http(s) disaring lebih dulu supaya thumbnail
+     * YouTube di markah lama tidak pernah bisa naik jadi logo.
+     */
+    const gambar = [...raw.matchAll(/<img[^>]*?src=["']([^"']+)["']/g)]
+      .map((m) => m[1])
+      .filter((src) => !/^https?:/i.test(src));
+    const logo = gambar[0] ?? null;
+    const images = gambar.slice(1);
 
     // Deskripsi = gabungan <p> yang panjangnya layak (buang label galeri).
     const paras = [...raw.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)]
@@ -82,10 +95,51 @@ function affiliates() {
     // Video after-event.
     const videos = [...raw.matchAll(/youtube\.com\/embed\/([\w-]{6,})/g)].map((m) => m[1]);
 
-    // Tautan galeri Drive.
-    const gallery = [...raw.matchAll(/https:\/\/drive\.google\.com\/[^"'\s]+/g)].map((m) =>
-      m[0].replace(/[",]+$/, ""),
-    );
+    /**
+     * Tautan Drive — BESERTA judulnya, bukan URL telanjang.
+     *
+     * Versi pertama hanya memanen URL-nya, jadi halaman mitra memberi label
+     * yang sama ("Buka galeri di Google Drive") ke semua tautan. Itu keliru:
+     * ICPC memasang "Press Release 2025" di samping "Gallery 2025", dan MIYIO
+     * sama sekali tidak punya galeri — tautan Drive-nya adalah "Guidebook"
+     * yang di situs lama tampil sebagai pratinjau PDF. Menamai berkas siaran
+     * pers sebagai galeri membuat pengunjung mengklik sesuatu yang bukan yang
+     * dijanjikan.
+     *
+     * Judulnya diambil dari dua tempat berbeda karena markah lamanya memang
+     * dua bentuk: tautan biasa membawa judulnya sebagai teks <a>, sedangkan
+     * yang disematkan sebagai <iframe> tidak punya teks sama sekali — judulnya
+     * ada di <h3> terdekat DI ATASNYA. Yang tidak ketemu dibiarkan null supaya
+     * halaman jatuh ke label umum, bukan menebak nama.
+     */
+    const links = [];
+    const sudah = new Set();
+    const catatTautan = (url, title, at) => {
+      const bersih = url.replace(/[",]+$/, "");
+      if (sudah.has(bersih)) return;
+      sudah.add(bersih);
+      links.push({ url: bersih, title: title || null, at });
+    };
+
+    const DRIVE = "https://drive\\.google\\.com/";
+
+    for (const m of raw.matchAll(
+      new RegExp(`<a[^>]*?href=["'](${DRIVE}[^"']+)["'][^>]*>([\\s\\S]*?)</a>`, "g"),
+    ))
+      catatTautan(m[1], tidy(m[2]), m.index);
+
+    for (const m of raw.matchAll(new RegExp(`<iframe[^>]*?src=["'](${DRIVE}[^"']+)["']`, "g"))) {
+      const judulDiAtas = [...raw.slice(0, m.index).matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>/g)].pop();
+      catatTautan(m[1], judulDiAtas ? tidy(judulDiAtas[1]) : null, m.index);
+    }
+
+    // Jaring pengaman: URL Drive yang tidak berada di <a> maupun <iframe>
+    // tetap ikut, tanpa judul — lebih baik tautan tanpa label daripada hilang.
+    for (const m of raw.matchAll(new RegExp(`${DRIVE}[^"'\\s]+`, "g")))
+      catatTautan(m[0], null, m.index);
+
+    // Urutkan seperti urutan tampilnya di halaman lama, lalu buang penandanya.
+    const gallery = links.sort((a, b) => a.at - b.at).map(({ url, title }) => ({ url, title }));
 
     // Judul seksi selain nama lembaga, mis. "After Event 2024".
     const sections = headings.slice(1);
@@ -96,10 +150,14 @@ function affiliates() {
       slug: slugify(name),
       name,
       logo,
+      // Foto dokumentasi di badan halaman, di luar logo.
+      images,
       description: paras.join("\n\n"),
       words: paras.join(" ").split(/\s+/).filter(Boolean).length,
       videos,
-      gallery,
+      // Namanya `links`, bukan `gallery`, karena isinya memang bukan hanya
+      // galeri: ada siaran pers dan panduan peserta di dalamnya.
+      links: gallery,
       sections,
     });
   }
@@ -383,14 +441,36 @@ function misc() {
     legacyPath: r.link ?? null,
   }));
 
-  // Hierarki 5 tingkat dipertahankan apa adanya; hanya dirapikan.
-  const walk = (node) => ({
-    name: tidy(node.name ?? ""),
-    position: tidy(node.position ?? ""),
-    photo: node.photo1 ?? null,
-    photoAlt: node.photo2 ?? null,
-    children: (node.children ?? []).map(walk),
-  });
+  /**
+   * Hierarki 5 tingkat dipertahankan apa adanya; hanya dirapikan.
+   *
+   * Fotonya SEMUA diambil, tidak lagi dua yang pertama saja.
+   *
+   * Sumbernya menyimpan photo1..photo4 per orang dan kartu situs lama
+   * (`TeamMemberCard.js`) memutar semuanya saat diklik — ia menyapu photo1
+   * sampai photo10, jadi batas yang sama dipakai di sini supaya orang ke-23
+   * dengan photo5 tidak diam-diam kehilangan fotonya lagi. Versi pertama
+   * ekstraktor ini hanya memetakan photo1/photo2 dan membuang 30 berkas: 18
+   * photo3 dan 12 photo4. Berkasnya nyata dan ada di repo lama; yang hilang
+   * cuma rujukannya.
+   *
+   * Duplikat dibuang karena tiga orang teratas menulis berkas yang sama persis
+   * di photo1 dan photo2 — tanpa penyaringan, kartu mereka menampilkan foto
+   * kecil yang identik dengan foto besar di atasnya.
+   */
+  const walk = (node) => {
+    const photos = [
+      ...new Set(Array.from({ length: 10 }, (_, i) => node[`photo${i + 1}`]).filter(Boolean)),
+    ];
+    return {
+      name: tidy(node.name ?? ""),
+      position: tidy(node.position ?? ""),
+      // `photo` tetap ada sebagai foto utama; `photos[0]` selalu sama dengannya.
+      photo: photos[0] ?? null,
+      photos,
+      children: (node.children ?? []).map(walk),
+    };
+  };
   const team = readJSON("data/team/organizationStructure.json").map(walk);
 
   // expertTeam.json hanya senarai nama berkas, bukan data orang.
@@ -426,7 +506,10 @@ write("expert-images.json", m.expertImages);
 /* ── laporan mutu ──────────────────────────────────────────────────── */
 
 const flat = (n) => [n, ...(n.children ?? []).flatMap(flat)];
-const people = m.team.flatMap(flat).length;
+const orang = m.team.flatMap(flat);
+const people = orang.length;
+const fotoOrang = orang.reduce((s, p) => s + p.photos.length, 0);
+const tautanMitra = aff.flatMap((a) => a.links);
 const affWords = aff.reduce((s, a) => s + a.words, 0);
 const unmapped = nl.cards.filter((c) => !c.slug).length;
 const noLevel = ev.events.filter((e) => !e.level).length;
@@ -441,4 +524,7 @@ Ringkasan
   level dibakukan            ${[...new Set(ev.events.map((e) => e.levelRaw))].filter(Boolean).join(" / ")}
   moda dibakukan             ${[...new Set(ev.events.map((e) => e.mode))].filter(Boolean).join(" / ")}
   orang di struktur          ${people}
+  foto orang                 ${fotoOrang} (rata-rata ${(fotoOrang / people).toFixed(1)} per orang)
+  tautan mitra               ${tautanMitra.length} (tanpa judul: ${tautanMitra.filter((l) => !l.title).length})
+  foto dokumentasi mitra     ${aff.reduce((s, a) => s + a.images.length, 0)}
 `);

@@ -97,6 +97,49 @@ function namaDivisi(jabatan: string) {
  * sebelumnya tidak dimanfaatkan. Semuanya dalam rasio yang sama, dengan
  * `object-top` supaya wajah tidak pernah terpotong berapa pun tinggi fotonya.
  */
+
+/**
+ * Bingkai kecil untuk foto kedua dan seterusnya.
+ *
+ * Tiap orang difoto sampai empat kali — 70 foto untuk 22 orang — dan sampai
+ * sekarang hanya yang pertama yang pernah tampil. Situs lama memutar foto-foto
+ * itu saat kartunya diklik; di sini TIDAK dibuat komponen klien untuk meniru
+ * perilaku itu. Memutar foto berarti mengirim JavaScript ke setiap pengunjung
+ * halaman tim demi sesuatu yang bisa ditunjukkan sekaligus tanpa interaksi
+ * apa pun, dan foto yang cuma muncul setelah diklik sama saja dengan foto yang
+ * tidak ada bagi orang yang tidak tahu harus mengklik.
+ *
+ * Di kartu kisi bingkainya ditempel DI DALAM foto utama, bukan di bawahnya:
+ * hanya sebagian orang punya foto tambahan, dan menambah satu baris di
+ * sebagian kartu saja membuat nama dan jabatan tetangganya tidak lagi sebaris.
+ */
+function FotoLain({
+  urls,
+  lebar,
+  className = "",
+}: {
+  urls: string[];
+  /** Lebar tiap bingkai sebagai kelas Tailwind — beda per ukuran kartu. */
+  lebar: string;
+  className?: string;
+}) {
+  if (!urls.length) return null;
+  return (
+    // `alt` sengaja kosong: ini orang yang sama dengan foto utama di sebelahnya,
+    // yang sudah membawa namanya. Pembaca layar tidak perlu mendengar nama itu
+    // tiga kali berturut-turut.
+    <div className={`flex gap-px p-px ${className}`}>
+      {urls.map((u) => (
+        <span
+          key={u}
+          className={`relative aspect-[4/5] overflow-hidden bg-[var(--bg-sunk)] ${lebar}`}
+        >
+          <Image src={u} alt="" fill sizes="80px" className="object-cover object-top" />
+        </span>
+      ))}
+    </div>
+  );
+}
 function KartuOrang({
   person,
   ukuran = "biasa",
@@ -110,6 +153,13 @@ function KartuOrang({
   ringkas?: boolean;
 }) {
   const photo = photoUrl(person.photo);
+  // Foto selain yang utama. Disaring lewat photoUrl dulu: berkas yang tidak
+  // ada di repo lama mengembalikan null, dan bingkai kosong lebih buruk
+  // daripada bingkai yang tidak pernah dipasang.
+  const lainnya = person.photos
+    .slice(1)
+    .map((p) => photoUrl(p))
+    .filter((u): u is string => Boolean(u));
 
   const namaKelas =
     ukuran === "besar"
@@ -120,7 +170,10 @@ function KartuOrang({
 
   if (ringkas) {
     return (
-      <div className="group flex items-center gap-5">
+      // `flex-wrap`: di kartu mendatar bingkai tambahannya berdiri di samping
+      // teks, dan di layar ponsel deretan itu turun ke baris berikutnya
+      // ketimbang memampatkan nama dan jabatan jadi dua huruf per baris.
+      <div className="group flex flex-wrap items-center gap-5">
         <div className="relative aspect-[4/5] w-[104px] shrink-0 overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
           {photo ? (
             <Image
@@ -146,6 +199,8 @@ function KartuOrang({
             {person.position}
           </p>
         </div>
+
+        <FotoLain urls={lainnya} lebar="w-[62px]" className="bg-[var(--line)]" />
       </div>
     );
   }
@@ -178,6 +233,14 @@ function KartuOrang({
               .join("")}
           </span>
         )}
+
+        {/* Bingkainya berlatar --bg, bukan --line: garis rambut yang biasa
+            memisahkan dua kotak putih hilang begitu ia berdiri di atas foto. */}
+        <FotoLain
+          urls={lainnya}
+          lebar={ukuran === "biasa" ? "w-8 sm:w-9" : "w-9 sm:w-11"}
+          className="absolute right-1.5 bottom-1.5 bg-[var(--bg)]"
+        />
       </div>
 
       <div>

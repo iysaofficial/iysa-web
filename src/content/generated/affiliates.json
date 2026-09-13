@@ -5,13 +5,17 @@
     "slug": "beijing-youth-science-creation-competition",
     "name": "Beijing Youth Science Creation Competition",
     "logo": "./assets/images/logo afiliasi/BYSCC.png",
+    "images": [],
     "description": "The Beijing Youth Science Creation Competition (BYSCC) is a science and technology innovation competition that aims to provide a platform for contestants to showcase their research results and communicate with each other. This annual event has been widely recognized internationally.",
     "words": 40,
     "videos": [
       "vOyOEYo04o4"
     ],
-    "gallery": [
-      "https://drive.google.com/drive/folders/1-H0sgwoL0ey7KI0XRaFm-WL-9uqFC4m6"
+    "links": [
+      {
+        "url": "https://drive.google.com/drive/folders/1-H0sgwoL0ey7KI0XRaFm-WL-9uqFC4m6",
+        "title": "Gallery BYSCC"
+      }
     ],
     "sections": [
       "After Event 2024",
@@ -24,13 +28,17 @@
     "slug": "taiwan-international-science-fair",
     "name": "Taiwan International Science Fair",
     "logo": "./assets/images/logo afiliasi/tisf.png",
+    "images": [],
     "description": "TISF is a science research competition for high school students from grades 9 to 12. With a mission to identify and nurture talented young scientists, TISF 2024 brought together 630 domestic and international participants and 211 projects from 27 countries/regions to compete for awards. It was organized by the Taiwan National Science Education Center (NTSEC) from January 28 to February 2, 2024.",
     "words": 62,
     "videos": [
       "Z92X74fQYX8"
     ],
-    "gallery": [
-      "https://drive.google.com/drive/folders/1vo41Ek45-MWX779uWSwL5h8khynkWwtN?usp=sharing"
+    "links": [
+      {
+        "url": "https://drive.google.com/drive/folders/1vo41Ek45-MWX779uWSwL5h8khynkWwtN?usp=sharing",
+        "title": "Gallery TISF"
+      }
     ],
     "sections": [
       "After Event 2024",
@@ -43,13 +51,17 @@
     "slug": "phatthalung-international-science-fair",
     "name": "Phatthalung International Science Fair",
     "logo": "./assets/images/logo afiliasi/pisf.png",
+    "images": [],
     "description": "Phatthalung International Science Fair (PISF) is an event organized by Princess Ubolratana Rajakanya's College Phatthalung, Thailand in collaboration with Phatthalung Provincial Administrative Organization, Thailand science and technology competition for elementary, junior high, and high school students.",
     "words": 36,
     "videos": [
       "vOyOEYo04o4"
     ],
-    "gallery": [
-      "https://drive.google.com/drive/folders/1-H0sgwoL0ey7KI0XRaFm-WL-9uqFC4m6"
+    "links": [
+      {
+        "url": "https://drive.google.com/drive/folders/1-H0sgwoL0ey7KI0XRaFm-WL-9uqFC4m6",
+        "title": "Gallery BYSCC"
+      }
     ],
     "sections": [
       "After Event 2024",
@@ -62,10 +74,11 @@
     "slug": "5th-international-exhibition-inventcor",
     "name": "5th International Exhibition InventCor",
     "logo": "./assets/images/logo afiliasi/inventcore.png",
+    "images": [],
     "description": "Inventcor adalah salah satu event afiliasi IYSA yang berasal dari Romania. Event ini cukup bergengsi dengan membahas berbagai topik: sains, inovasi, ekologi, keamanan, kesehatan, komunitas, kekayaan intelektual, metode pengajaran, kewirausahaan, seni dan lain-lain..",
     "words": 33,
     "videos": [],
-    "gallery": [],
+    "links": [],
     "sections": []
   },
   {
@@ -74,10 +87,11 @@
     "slug": "malaysia-invention-innovation-expo",
     "name": "Malaysia Invention & Innovation Expo?",
     "logo": "./assets/images/logo afiliasi/miix.png",
+    "images": [],
     "description": "MIIX is one of the IYSA events originating from Malaysia. Showcasing innovations from various fields. Foster a culture of innovation and design in teaching and learning and other related fields among educators, learners and society. Provide a prestigious platform for students and teachers to participate and showcase their innovations and designs through digital platforms.",
     "words": 54,
     "videos": [],
-    "gallery": [],
+    "links": [],
     "sections": []
   },
   {
@@ -86,10 +100,11 @@
     "slug": "international-innovation-and-invention-show-e-nnovate",
     "name": "International Innovation and Invention Show (E-nnovate)",
     "logo": "./assets/images/logo afiliasi/ennovate.png",
+    "images": [],
     "description": "E-NNOVATE is one of IYSA's affiliated events from Poland. E-nnovate is more than just a regular innovation show. It is a competition where science meets business. E-NNOVATE boasts a web platform with global reach and popularity that will promote your popularity that will promote your innovative ideas in the international arena. international arena.",
     "words": 53,
     "videos": [],
-    "gallery": [],
+    "links": [],
     "sections": []
   },
   {
@@ -98,13 +113,17 @@
     "slug": "worldinvent-singapore-wosg",
     "name": "WorldInvent Singapore (WoSG)",
     "logo": "./assets/images/logo afiliasi/wosg.jpeg",
+    "images": [],
     "description": "WoSG is an IYSA affiliate event originating from Singapore that showcases inventions and innovations from around the world in 12 categories. categories. Exhibitors will also be judged and awarded awards based on the quality of their ideas.",
     "words": 37,
     "videos": [
       "Br2r-zOwVFE"
     ],
-    "gallery": [
-      "https://drive.google.com/drive/folders/14yspxk4-E81gqIUdUfVgBudrUqFrHlBW?usp=sharing"
+    "links": [
+      {
+        "url": "https://drive.google.com/drive/folders/14yspxk4-E81gqIUdUfVgBudrUqFrHlBW?usp=sharing",
+        "title": "Gallery WOSG"
+      }
     ],
     "sections": [
       "After Event 2023",
@@ -117,10 +136,11 @@
     "slug": "africa-science-buskers-festival",
     "name": "Africa Science Buskers Festival",
     "logo": "./assets/images/logo afiliasi/asbf.png",
+    "images": [],
     "description": "The Africa Science Buskers Festival (ASBF) is Africa's leading science fair for young scientists, engineers, artists and science communicators in primary and secondary schools. In ASBF 2024, participants will present and perform a “show-and-tell” on any chosen science topic, innovation or original research.",
     "words": 43,
     "videos": [],
-    "gallery": [],
+    "links": [],
     "sections": []
   },
   {
@@ -129,13 +149,17 @@
     "slug": "china-adolescents-science-and-technology-innovation-contest-castic",
     "name": "China Adolescents Science and Technology Innovation Contest (CASTIC)",
     "logo": "./assets/images/logo afiliasi/castic.png",
+    "images": [],
     "description": "CASTIC is Asia's largest and most prestigious event for young scientists around the world, where young scientists can engage with science, share different values and traditions, and build friendships globally.",
     "words": 30,
     "videos": [
       "GSgfn3_NJV0"
     ],
-    "gallery": [
-      "https://drive.google.com/drive/folders/11OJdLQ4aW6ky1uqwKO4lWefTyZtW8Go0?usp=sharing"
+    "links": [
+      {
+        "url": "https://drive.google.com/drive/folders/11OJdLQ4aW6ky1uqwKO4lWefTyZtW8Go0?usp=sharing",
+        "title": "Gallery CASTIC"
+      }
     ],
     "sections": [
       "After Event 2024",
@@ -148,13 +172,17 @@
     "slug": "world-invention-creativity-olympic-wico",
     "name": "World Invention Creativity Olympic (WICO)",
     "logo": "./assets/images/logo afiliasi/wico.png",
+    "images": [],
     "description": "WICO is an IYSA affiliate event originating from South Korea. This event encourages creative ideas, provides new insights, accelerates one's creativity, improves presentation skills and establishes a global network for the participants.",
     "words": 32,
     "videos": [
       "XCsdLoYQF28"
     ],
-    "gallery": [
-      "https://drive.google.com/drive/folders/1hI5NSgttY2dmwYIfSzpL6F8RVvUlrXeP?usp=sharing"
+    "links": [
+      {
+        "url": "https://drive.google.com/drive/folders/1hI5NSgttY2dmwYIfSzpL6F8RVvUlrXeP?usp=sharing",
+        "title": "Gallery WICO"
+      }
     ],
     "sections": [
       "After Event 2024",
@@ -167,10 +195,11 @@
     "slug": "innoverse-invention-and-innovation-expo",
     "name": "Innoverse Invention and Innovation Expo",
     "logo": "./assets/images/logo afiliasi/IIIE.png",
+    "images": [],
     "description": "Innoverse Expo is the premier event for inventors, innovators, and entrepreneurs to showcase their products and ideas. This year's expo will feature cutting-edge technology, groundbreaking research, and innovative products from a variety of industries, including healthcare, energy, telecommunications, and many others.",
     "words": 41,
     "videos": [],
-    "gallery": [],
+    "links": [],
     "sections": []
   },
   {
@@ -179,12 +208,19 @@
     "slug": "international-creative-papers-conference-olympics-icpc",
     "name": "International Creative Papers Conference & Olympics (ICPC)",
     "logo": "./assets/images/logo afiliasi/ICPClogo.avif",
+    "images": [],
     "description": "The International Creative Papers Conference (ICPC) is an academic event where researchers from around the world present their innovative research. The conference provides a platform for students and professionals to present creative and outstanding papers, whether they are invention papers, academic papers, or other forms of research. The main objective of ICPC is to facilitate the exchange and presentation of outstanding papers from leading global scholars who play an important role in science, technology, and the knowledge economy.",
     "words": 78,
     "videos": [],
-    "gallery": [
-      "https://drive.google.com/file/d/1Of3yjWHmqDBuMcS3MaYsD6Y5uz_XY38y/view?usp=sharing",
-      "https://drive.google.com/drive/folders/1lpiVfQlxcF-gIzuOvBmy8GI06BtoXUhg?usp=sharing"
+    "links": [
+      {
+        "url": "https://drive.google.com/file/d/1Of3yjWHmqDBuMcS3MaYsD6Y5uz_XY38y/view?usp=sharing",
+        "title": "Press Release 2025"
+      },
+      {
+        "url": "https://drive.google.com/drive/folders/1lpiVfQlxcF-gIzuOvBmy8GI06BtoXUhg?usp=sharing",
+        "title": "Gallery 2025"
+      }
     ],
     "sections": []
   },
@@ -194,11 +230,18 @@
     "slug": "malaysia-international-young-inventors-olympiad-miyio-2025",
     "name": "Malaysia International Young Inventors Olympiad (MIYIO) 2025",
     "logo": "/assets/images/allimg/Desain_tanpa_judul_2_zcvmjl.png",
+    "images": [
+      "/assets/images/allimg/miyio1_odzdlm.jpg",
+      "/assets/images/allimg/miyio2_bauqhd.jpg"
+    ],
     "description": "MIYIO 2025 (13th Malaysia International Young Inventors Olympiad) is an international innovation competition designed for young inventors and students to showcase their creative projects and technological solutions. About MIYIO: MIYIO aims to promote creativity, scientific thinking, and problem-solving skills among young innovators. Participants present their invention projects in various fields such as science, technology, engineering, environment, health, and social innovation.",
     "words": 60,
     "videos": [],
-    "gallery": [
-      "https://drive.google.com/file/d/1SFYb5g_nwEf6pCagvdxC8kNSC2ZJc5GU/preview"
+    "links": [
+      {
+        "url": "https://drive.google.com/file/d/1SFYb5g_nwEf6pCagvdxC8kNSC2ZJc5GU/preview",
+        "title": "Guidebook"
+      }
     ],
     "sections": [
       "Dokumentasi",

@@ -61,6 +61,11 @@ export type EdisiDashboard = {
   logo: string | null;
   /** Gambar lebar 3:2 — foto acara, bukan poster. */
   banner: string | null;
+  /**
+   * Tautan pendaftaran di situs LAIN, kalau ajang ini tidak mendaftar lewat
+   * dashboard. Lihat catatan `bisaDaftar` di bawah.
+   */
+  pendaftaranUrl: string | null;
   mulai: string | null;
   selesai: string | null;
   pendaftaranBuka: string | null;
@@ -93,20 +98,45 @@ export function gambarDashboard(url: string, lebar: LebarSah): string {
 }
 
 /**
- * Status pendaftaran.
+ * Apakah ajang ini masih bisa didaftari.
  *
- * `pendaftaran_dibuka` adalah saklar sungguhan di dashboard dan satu-satunya
- * penentu buka/tutup — backend-nya pun menolak pendaftaran berdasarkan kolom
- * itu, bukan berdasarkan tanggal. Tanggal hanya dipakai untuk membedakan yang
- * "akan datang" dari yang sudah lewat.
+ * ── Dua jalur pendaftaran, dua penanda ───────────────────────────────────
+ *
+ * Sebagian ajang IYSA mendaftar lewat dashboard itu sendiri; sisanya lewat
+ * situsnya masing-masing — nyiia.or.id, wice.or.id, isif.or.id, dan
+ * seterusnya. Keduanya tidak bisa memakai penanda yang sama:
+ *
+ *   pendaftaranDibuka → saklar di dashboard. Ia juga yang dipakai backend
+ *                       untuk MENERIMA atau MENOLAK pendaftaran, jadi ia
+ *                       hanya menyala untuk ajang yang formulirnya di sana.
+ *   pendaftaranUrl    → formulirnya di situs lain. Dashboard sengaja
+ *                       membiarkan saklarnya mati supaya tidak ada dua pintu
+ *                       masuk untuk satu ajang.
+ *
+ * Karena itu ajang jenis kedua dinilai dari TANGGAL TUTUPNYA. Yang tidak
+ * punya tanggal tutup dianggap masih buka selama acaranya belum lewat —
+ * situs lama pun menampilkannya begitu.
  */
-function hitungStatus(
+function bisaDaftar(
   dibuka: boolean,
+  url: string | null,
+  tutup: string | null,
+  akhirAcara: string | null,
+  kini: Date,
+): boolean {
+  if (dibuka) return true;
+  if (!url) return false;
+  if (tutup) return new Date(`${tutup}T23:59:59Z`) >= kini;
+  return akhirAcara ? new Date(`${akhirAcara}T23:59:59Z`) >= kini : false;
+}
+
+function hitungStatus(
+  terbuka: boolean,
   mulai: string | null,
   selesai: string | null,
   kini: Date,
 ): StatusDashboard {
-  if (dibuka) return "terbuka";
+  if (terbuka) return "terbuka";
   const akhir = selesai ?? mulai;
   if (akhir && new Date(`${akhir}T23:59:59Z`) < kini) return "selesai";
   return "akan";
@@ -152,7 +182,10 @@ export async function ambilSeriDashboard(akronim: string): Promise<EdisiDashboar
 
   const mulai = teks(id.mulai);
   const selesai = teks(id.selesai);
-  const dibuka = id.pendaftaran_dibuka === true;
+  const tutup = teks(id.pendaftaran_tutup);
+  const pUrl = teks(id.pendaftaran_url);
+  const kini = new Date();
+  const dibuka = bisaDaftar(id.pendaftaran_dibuka === true, pUrl, tutup, selesai ?? mulai, kini);
 
   return {
     id: id.id,
@@ -162,31 +195,73 @@ export async function ambilSeriDashboard(akronim: string): Promise<EdisiDashboar
     slug: teks(id.slug) ?? "",
     logo: teks(id.logo),
     banner: teks(id.banner),
+    pendaftaranUrl: teks(id.pendaftaran_url),
     mulai,
     selesai,
     pendaftaranBuka: teks(id.pendaftaran_buka),
-    pendaftaranTutup: teks(id.pendaftaran_tutup),
+    pendaftaranTutup: tutup,
     pendaftaranDibuka: dibuka,
     lingkup: lingkup === "international" || lingkup === "national" ? lingkup : null,
     moda: moda === "online" || moda === "offline" || moda === "hybrid" ? moda : null,
-    status: hitungStatus(dibuka, mulai, selesai, new Date()),
+    status: hitungStatus(dibuka, mulai, selesai, kini),
     tahunEdisi,
   };
 }
 
 /**
- * Semua seri yang bisa diambil, dipetakan menurut akronim huruf besar.
+ * Semua seri sekaligus, satu permintaan.
  *
- * Dipanggil dengan seluruh akronim yang diketahui situs, lalu yang menjawab
- * 404 dibuang. Permintaannya berbarengan dan jawabannya disinggahi sejam, jadi
- * biayanya satu gelombang per jam, bukan per kunjungan.
+ * ── Kenapa bukan satu panggilan per seri ─────────────────────────────────
+ *
+ * Versi pertama memanggil `/{akronim}` untuk tiap akronim yang diketahui
+ * situs. Waktu itu hanya tujuh seri yang disiarkan, jadi ongkosnya tak terasa.
+ * Setelah seluruh edisi situs lama dipindahkan ke dashboard, jumlahnya jadi
+ * enam puluh — seratus dua puluh permintaan untuk merender satu halaman, tiap
+ * kali singgahannya kedaluwarsa.
+ *
+ * `/_seri` mengirim semuanya dalam satu jawaban, hanya ruas yang dipakai untuk
+ * memilih dan mendaftar. Yang butuh rincian satu seri tetap memakai
+ * `ambilSeriDashboard`.
  */
-export async function ambilSemuaSeriDashboard(
-  akronim: string[],
-): Promise<Map<string, EdisiDashboard>> {
-  const unik = [...new Set(akronim.map((a) => a.toUpperCase()))];
-  const hasil = await Promise.all(unik.map((a) => ambilSeriDashboard(a)));
-  return new Map(
-    hasil.filter((x): x is EdisiDashboard => x !== null).map((x) => [x.akronim.toUpperCase(), x]),
-  );
+export async function ambilSemuaSeriDashboard(): Promise<Map<string, EdisiDashboard>> {
+  const jawaban = await ambilJson(`${PANGKAL}/_seri`);
+  const daftar = (jawaban as { data?: { seri?: Record<string, unknown>[] } })?.data?.seri;
+  if (!Array.isArray(daftar)) return new Map();
+
+  const kini = new Date();
+  const peta = new Map<string, EdisiDashboard>();
+  for (const r of daftar) {
+    const akronim = teks(r.akronim);
+    const id = teks(r.id);
+    if (!akronim || !id) continue;
+
+    const mulai = teks(r.mulai);
+    const selesai = teks(r.selesai);
+    const tutup = teks(r.pendaftaran_tutup);
+    const pUrl = teks(r.pendaftaran_url);
+    const lingkup = teks(r.lingkup);
+    const moda = teks(r.moda);
+    const dibuka = bisaDaftar(r.pendaftaran_dibuka === true, pUrl, tutup, selesai ?? mulai, kini);
+
+    peta.set(akronim.toUpperCase(), {
+      id,
+      akronim,
+      nama: teks(r.nama) ?? "",
+      tahun: teks(r.tahun) ?? "",
+      slug: teks(r.slug) ?? "",
+      logo: teks(r.logo),
+      banner: teks(r.banner),
+      pendaftaranUrl: pUrl,
+      mulai,
+      selesai,
+      pendaftaranBuka: teks(r.pendaftaran_buka),
+      pendaftaranTutup: tutup,
+      pendaftaranDibuka: dibuka,
+      lingkup: lingkup === "international" || lingkup === "national" ? lingkup : null,
+      moda: moda === "online" || moda === "offline" || moda === "hybrid" ? moda : null,
+      status: hitungStatus(dibuka, mulai, selesai, kini),
+      tahunEdisi: [],
+    });
+  }
+  return peta;
 }

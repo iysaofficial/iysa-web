@@ -283,3 +283,29 @@ export function EmptyState({ title, action }: { title: string; action?: ReactNod
     </div>
   );
 }
+
+/**
+ * Sel kosong penutup baris terakhir sebuah kisi garis rambut.
+ *
+ * Kisi di situs ini menggambar garisnya dengan `gap-px` di atas wadah yang
+ * berlatar warna garis. Trik itu rapi selama tiap baris penuh — begitu baris
+ * terakhir kurang satu-dua sel, yang tampak bukan ruang kosong melainkan
+ * KOTAK berwarna garis di sebelah kartu terakhir, seolah ada kartu yang gagal
+ * dimuat.
+ *
+ * Pengisi ini menambal sisa baris dengan latar halaman. Jumlahnya beda per
+ * titik henti, jadi dua himpunan disiapkan dan masing-masing hanya tampil di
+ * lebar yang membutuhkannya.
+ */
+export function SelPengisi({ jumlah, kolom }: { jumlah: number; kolom: 2 | 3 }) {
+  const sisa = (kolom - (jumlah % kolom)) % kolom;
+  if (sisa === 0) return null;
+  const tampak = kolom === 3 ? "hidden lg:block" : "hidden sm:block lg:hidden";
+  return (
+    <>
+      {Array.from({ length: sisa }).map((_, i) => (
+        <li key={`pengisi-${kolom}-${i}`} aria-hidden className={`bg-[var(--bg)] ${tampak}`} />
+      ))}
+    </>
+  );
+}

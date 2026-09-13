@@ -140,8 +140,13 @@ export async function EdisiDashboardKartu({
         )}
 
         {edisi.pendaftaranDibuka ? (
+          /* Ke situs ajangnya sendiri kalau pendaftarannya memang di sana —
+             nyiia.or.id, wice.or.id, dan seterusnya. Dashboard hanya jadi
+             tujuan untuk ajang yang formulirnya memang dilayani di sana;
+             mengarahkan semua orang ke dashboard akan membuat mereka mencari
+             formulir yang tidak pernah ada di situ. */
           <a
-            href={org.dashboardUrl}
+            href={edisi.pendaftaranUrl ?? org.dashboardUrl}
             className="inline-flex items-center gap-1.5 text-[14px] font-medium text-[var(--teal)] underline decoration-1 underline-offset-2"
           >
             {t("register")}

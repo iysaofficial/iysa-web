@@ -3,11 +3,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
-import { Section, StatRow, ButtonLink, MoreLink, Pill } from "@/components/ui";
+import { Section, StatRow, ButtonLink, MoreLink, Pill, SelPengisi } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
 import { HeroAtom } from "@/components/hero-atom";
-import { statusEvent, waktuEvent, kelompokkanSeri } from "@/lib/event-seri";
+import { statusEvent, waktuEvent } from "@/lib/event-seri";
 import { PartnerWall } from "@/components/partner-wall";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
 import { ambilSemuaSeriDashboard } from "@/lib/dashboard-event";
@@ -74,7 +74,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
      satunya sumber yang tahu saklarnya, dan sebagian edisi di sini belum
      pernah ada di data warisan sama sekali. Seri yang belum dipin panitia
      tidak menjawab, dan beranda diam-diam tampil tanpa blok ini. */
-  const dibuka = [...(await ambilSemuaSeriDashboard(kelompokkanSeri(allEvents()).map((x) => x.akronim))).values()]
+  const dibuka = [...(await ambilSemuaSeriDashboard()).values()]
     .filter((e) => e.pendaftaranDibuka)
     .sort((a, b) => (a.pendaftaranTutup ?? "").localeCompare(b.pendaftaranTutup ?? ""))
     .slice(0, 3);
@@ -148,6 +148,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
                 <EdisiDashboardKartu edisi={e} />
               </li>
             ))}
+            <SelPengisi jumlah={dibuka.length} kolom={3} />
+            <SelPengisi jumlah={dibuka.length} kolom={2} />
           </ul>
         </Section>
       )}

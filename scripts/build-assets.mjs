@@ -47,14 +47,20 @@ for (const e of readJSON("events.json")) {
 }
 for (const i of readJSON("newsletter-issues.json")) note(i.cover);
 for (const c of readJSON("newsletter-cards.json")) note(c.cover);
-for (const a of readJSON("affiliates.json")) note(a.logo);
+for (const a of readJSON("affiliates.json")) {
+  note(a.logo);
+  // Foto dokumentasi di badan halaman mitra (MIYIO memasang dua).
+  for (const img of a.images ?? []) note(img);
+}
 for (const p of readJSON("partners.json")) note(p.logo);
 for (const h of readJSON("event-highlights.json")) note(h.poster);
 
+// Seluruh isi `photos`, bukan foto utamanya saja: sejak ekstraktor memanen
+// photo1..photo4, foto ketiga dan keempat tiap orang ikut ditampilkan di
+// halaman tim, jadi berkasnya harus ikut dikonversi juga.
 const walkPeople = (nodes) => {
   for (const n of nodes) {
-    note(n.photo);
-    note(n.photoAlt);
+    for (const p of n.photos ?? [n.photo]) note(p);
     walkPeople(n.children ?? []);
   }
 };

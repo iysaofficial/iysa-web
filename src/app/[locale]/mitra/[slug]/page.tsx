@@ -7,7 +7,7 @@ import { routing, type Locale } from "@/i18n/routing";
 import { BackLink, ButtonLink, Pill, Section } from "@/components/ui";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allAffiliates, affiliateBySlug } from "@/lib/data";
-import { logoUrl } from "@/lib/assets";
+import { assetUrl, logoUrl } from "@/lib/assets";
 import { affiliateCopy, affiliateCountry, affiliateNames, unverifiedCountry } from "@/content/affiliates";
 
 /** 13 komponen React → satu rute. */
@@ -62,6 +62,21 @@ export default async function AffiliateDetail({
   const copy = affiliateCopy[a.slug]?.[locale] ?? a.description;
   const country = affiliateCountry[a.slug];
   const showCountry = country && !unverifiedCountry.has(a.slug);
+
+  // Foto dokumentasi acara; hanya MIYIO yang punya (dua buah). Yang berkasnya
+  // tidak ada di repo lama disaring di sini, bukan dirender jadi kotak 404.
+  const dokumentasi = a.images.map((p) => assetUrl(p)).filter((u): u is string => Boolean(u));
+
+  /**
+   * Judul seksi tautan mengikuti isinya.
+   *
+   * Tautan Drive mitra tidak semuanya galeri: MIYIO hanya menautkan panduan
+   * peserta, jadi memberi judul "Galeri" pada seksinya menjanjikan sesuatu yang
+   * tidak ada di balik tombolnya. Folder Drive = galeri; berkas tunggal (siaran
+   * pers, panduan) bukan.
+   */
+  const adaGaleri = a.links.some((l) => l.url.includes("/drive/folders/"));
+  const judulTautan = adaGaleri ? t("gallery") : t("links");
 
   return (
     <>
@@ -136,13 +151,45 @@ export default async function AffiliateDetail({
         </Section>
       )}
 
-      {/* Galeri — tetap di Drive; dokumentasinya tidak dipindah tanpa diminta. */}
-      {a.gallery.length > 0 && (
-        <Section eyebrow={t("gallery")} title={t("gallery")} sunk>
+      {/* Foto dokumentasi. Di situs lama dua foto ini terpasang di badan
+          halaman MIYIO di bawah judul "Dokumentasi", tapi ekstraktor hanya
+          memanen <img> pertama sebagai logo sehingga keduanya ikut tertinggal
+          waktu migrasi. */}
+      {dokumentasi.length > 0 && (
+        <Section eyebrow={t("documentation")} title={t("documentation")}>
+          {/* Rasio 4/5 mengikuti berkasnya (1080×1350), bukan sebaliknya:
+              dengan bingkai mendatar, baris bawah kedua gambar — nama sekolah
+              dan asal delegasi — terpotong habis. Lebarnya dibatasi supaya dua
+              gambar tegak berdampingan tidak menjadi pita setinggi dua layar. */}
+          <ul className="grid max-w-[760px] gap-8 sm:grid-cols-2">
+            {dokumentasi.map((src, i) => (
+              <li key={src}>
+                <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
+                  <Image
+                    src={src}
+                    alt={`${name} — ${t("documentation")} ${i + 1}`}
+                    fill
+                    sizes="(max-width: 640px) 92vw, 360px"
+                    className="object-contain"
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      {/* Tautan Drive — berkasnya tetap di Drive; tidak dipindah tanpa diminta.
+          Labelnya memakai judul asli tiap tautan ("Press Release 2025",
+          "Gallery 2025", "Guidebook"). Sebelumnya ketiganya berlabel sama,
+          "Buka galeri di Google Drive", jadi satu-satunya cara tahu bahwa
+          sebuah tombol membuka siaran pers dan bukan galeri adalah mengkliknya. */}
+      {a.links.length > 0 && (
+        <Section eyebrow={judulTautan} title={judulTautan} sunk>
           <div className="flex flex-wrap gap-3">
-            {a.gallery.map((url) => (
-              <ButtonLink key={url} href={url} tone="outline" external>
-                {t("openGallery")}
+            {a.links.map((l) => (
+              <ButtonLink key={l.url} href={l.url} tone="outline" external>
+                {l.title ?? t("openGallery")}
               </ButtonLink>
             ))}
           </div>

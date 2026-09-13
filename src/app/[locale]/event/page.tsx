@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 
-import { PageHeader, EmptyState, MoreLink, Section } from "@/components/ui";
+import { PageHeader, EmptyState, MoreLink, Section, SelPengisi } from "@/components/ui";
 import { EventCard } from "@/components/event-card";
 import { EventFilters } from "@/components/event-filters";
 import { SeriKartu } from "@/components/seri-kartu";
@@ -94,7 +94,7 @@ export default async function EventsPage({
      menjawab; sisanya diam-diam tetap memakai data warisan situs lama. Karena
      itu blok ini tidak pernah bisa menggagalkan halaman — paling buruk ia
      kosong. Lihat src/lib/dashboard-event.ts. */
-  const dariDashboard = await ambilSemuaSeriDashboard(seri.map((x) => x.akronim));
+  const dariDashboard = await ambilSemuaSeriDashboard();
   const dibuka = [...dariDashboard.values()]
     .filter((e) => e.pendaftaranDibuka)
     .sort((a, b) => (a.pendaftaranTutup ?? "").localeCompare(b.pendaftaranTutup ?? ""));
@@ -175,6 +175,8 @@ export default async function EventsPage({
                       <EdisiDashboardKartu edisi={e} />
                     </li>
                   ))}
+                  <SelPengisi jumlah={dibuka.length} kolom={3} />
+                  <SelPengisi jumlah={dibuka.length} kolom={2} />
                 </ul>
               )}
 

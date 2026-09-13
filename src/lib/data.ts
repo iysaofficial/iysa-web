@@ -66,10 +66,21 @@ export type Affiliate = {
   slug: string;
   name: string;
   logo: string | null;
+  /** Foto dokumentasi di badan halaman lama, di luar logo. Hanya MIYIO punya. */
+  images: string[];
   description: string;
   words: number;
   videos: string[];
-  gallery: string[];
+  /**
+   * Tautan Drive beserta judul aslinya.
+   *
+   * Namanya `links`, bukan `gallery`, karena isinya bukan hanya galeri:
+   * ICPC menautkan siaran pers dan MIYIO menautkan panduan peserta. Halaman
+   * mitra sempat melabeli ketiganya "Buka galeri di Google Drive" — `title`
+   * ada supaya tombolnya menyebut isi tautannya yang sebenarnya. Null berarti
+   * markah lamanya memang tidak memberi judul; pemakainya jatuh ke label umum.
+   */
+  links: { url: string; title: string | null }[];
   sections: string[];
 };
 
@@ -86,8 +97,17 @@ export type VideoItem = {
 export type Person = {
   name: string;
   position: string;
+  /** Foto utama; selalu sama dengan `photos[0]`. */
   photo: string | null;
-  photoAlt: string | null;
+  /**
+   * Semua foto orang itu, 1–4 buah, sudah bebas duplikat.
+   *
+   * Dulu di sini ada `photoAlt` yang hanya memuat foto kedua, dan tidak pernah
+   * dirender — sementara 30 berkas foto ketiga dan keempat tidak ikut migrasi
+   * sama sekali. Satu senarai menggantikan keduanya supaya tidak ada lagi dua
+   * cara menyimpan hal yang sama yang bisa saling menyimpang.
+   */
+  photos: string[];
   children: Person[];
 };
 
