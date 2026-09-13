@@ -43,16 +43,8 @@ export default async function PartnersPage({
         eyebrow={t("international")}
         title={t("title")}
         lead={t("lead")}
-        aside={
-          <div className="flex flex-col gap-1">
-            <p className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
-              {items.length}
-            </p>
-            <p className="text-[13px] text-[var(--ink-faint)]">
-              {t("count", { count: items.length })}
-            </p>
-          </div>
-        }
+        count={items.length}
+        countLabel={t("count", { count: items.length })}
       />
 
       <div className="shell py-12 md:py-16">

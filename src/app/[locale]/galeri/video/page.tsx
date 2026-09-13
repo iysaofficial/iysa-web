@@ -22,16 +22,14 @@ export default async function VideoGallery({ params }: { params: Promise<{ local
   return (
     <>
       <PageHeader eyebrow="Galeri" title={t("videoTitle")} lead={t("videoLead")}
+        count={all.length}
+        countLabel={t("count", { count: all.length })}
         aside={
-          <div className="flex flex-col gap-3">
-            <p className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">{all.length}</p>
-            <p className="text-[13px] text-[var(--ink-faint)]">{t("count", { count: all.length })}</p>
-            <nav aria-label={t("year")} className="mt-1 flex flex-wrap gap-1.5">
-              {years.map((y) => (
-                <a key={y} href={`#tahun-${y}`} className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-[11.5px] text-[var(--ink-muted)] hover:border-[var(--teal)] hover:text-[var(--teal)]">{y}</a>
-              ))}
-            </nav>
-          </div>
+          <nav aria-label={t("year")} className="flex flex-wrap gap-1.5 md:justify-end">
+            {years.map((y) => (
+              <a key={y} href={`#tahun-${y}`} className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-[11.5px] text-[var(--ink-muted)] hover:border-[var(--teal)] hover:text-[var(--teal)]">{y}</a>
+            ))}
+          </nav>
         }
       />
 

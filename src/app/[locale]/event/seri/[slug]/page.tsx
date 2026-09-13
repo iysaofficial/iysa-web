@@ -88,16 +88,8 @@ export default async function SeriPage({
         eyebrow={t("seriesOne")}
         title={seri.akronim}
         lead={seri.nama ?? undefined}
-        aside={
-          <div className="flex flex-col gap-1">
-            <p className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
-              {seri.edisi.length}
-            </p>
-            <p className="text-[13px] text-[var(--ink-faint)]">
-              {t("editions", { count: seri.edisi.length })}
-            </p>
-          </div>
-        }
+        count={seri.edisi.length}
+        countLabel={t("editions", { count: seri.edisi.length })}
       />
 
       <Section>

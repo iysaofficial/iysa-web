@@ -211,14 +211,8 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
         eyebrow="Tim"
         title={t("title")}
         lead={t("lead")}
-        aside={
-          <div className="flex flex-col gap-1">
-            <p className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
-              {total}
-            </p>
-            <p className="text-[13px] text-[var(--ink-faint)]">{t("people", { count: total })}</p>
-          </div>
-        }
+        count={total}
+        countLabel={t("people", { count: total })}
       />
 
       {/* ── Pimpinan ───────────────────────────────────────────────────

@@ -5,34 +5,82 @@ import { AngkaNaik } from "./angka-naik";
 /* ── kerangka halaman ──────────────────────────────────────────────── */
 
 /**
- * Kepala halaman. Grid asimetris: judul kiri berat, metadata kanan —
- * bukan semuanya di tengah seperti situs lama, yang membuat tiap halaman
- * terlihat sama dan tidak memberi mata tempat berpijak.
+ * Kepala halaman.
+ *
+ * ── Kenapa serapat ini ───────────────────────────────────────────────────
+ *
+ * Versi sebelumnya judul berukuran `display` dengan jarak `py-20` dan
+ * ringkasan `text-lead` — satu pita setinggi 330px sebelum isi halaman
+ * dimulai. Di halaman daftar akibatnya fatal: di layar laptop 1280×820,
+ * kartu event pertama berada di y=912, yaitu halaman daftar yang tidak
+ * memperlihatkan satu pun daftarnya sampai digulir.
+ *
+ * Sekarang semuanya satu baris kisi: judul kiri, angka kanan, jarak `py-10`.
+ * Judulnya turun ke ukuran `title` — navigasi di atasnya sudah menyebut nama
+ * halaman, jadi judul sebesar hero mengulang informasi yang sudah ada sambil
+ * membayar ruang paling mahal di layar.
+ *
+ * ── Kenapa angkanya prop, bukan JSX bebas ────────────────────────────────
+ *
+ * Tujuh halaman dulu menulis sendiri blok "angka besar + keterangan kecil"
+ * dengan markah yang disalin satu sama lain. Begitu salinan bercabang,
+ * ukurannya berbeda tipis antar halaman tanpa ada yang berniat begitu. Di sini
+ * ia satu prop, jadi tidak bisa lagi berbeda.
  */
 export function PageHeader({
   eyebrow,
   title,
   lead,
+  count,
+  countLabel,
   aside,
+  bawah,
 }: {
   eyebrow?: string;
   title: string;
   lead?: string;
+  /** Angka besar di kanan — jumlah event, edisi, terbitan, orang. */
+  count?: string | number;
+  countLabel?: string;
+  /** Isi tambahan di kolom kanan, mis. deretan tahun untuk melompat. */
   aside?: ReactNode;
+  /** Pita di bawah judul, di dalam kotak yang sama — dipakai saringan. */
+  bawah?: ReactNode;
 }) {
+  const adaKanan = count !== undefined || Boolean(aside);
+
   return (
     <header className="border-b border-[var(--line)]">
-      <div className="shell py-14 md:py-20">
-        <div className="grid gap-8 md:grid-cols-12 md:gap-12">
-          <div className="md:col-span-8">
+      <div className="shell py-8 md:py-10">
+        <div className="grid gap-x-10 gap-y-4 md:grid-cols-12 md:items-end">
+          <div className={adaKanan ? "md:col-span-8" : "md:col-span-12"}>
             {eyebrow && <p className="eyebrow rise">{eyebrow}</p>}
-            <h1 className="rise mt-3 text-display text-[var(--navy)]">{title}</h1>
+            <h1 className="rise mt-1.5 text-title text-[var(--navy)]">{title}</h1>
             {lead && (
-              <p className="rise mt-5 max-w-[56ch] text-lead text-[var(--ink-muted)]">{lead}</p>
+              <p className="rise mt-3 max-w-[62ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">
+                {lead}
+              </p>
             )}
           </div>
-          {aside && <div className="md:col-span-4 md:pt-10">{aside}</div>}
+
+          {adaKanan && (
+            <div className="md:col-span-4 md:text-right">
+              {count !== undefined && (
+                <>
+                  <p className="tnum font-mono text-[26px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
+                    {count}
+                  </p>
+                  {countLabel && (
+                    <p className="mt-1.5 text-[12.5px] text-[var(--ink-faint)]">{countLabel}</p>
+                  )}
+                </>
+              )}
+              {aside && <div className={count !== undefined ? "mt-3" : ""}>{aside}</div>}
+            </div>
+          )}
         </div>
+
+        {bawah && <div className="mt-6 border-t border-[var(--line)] pt-5">{bawah}</div>}
       </div>
     </header>
   );

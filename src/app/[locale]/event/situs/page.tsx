@@ -22,12 +22,8 @@ export default async function EventSitesPage({ params }: { params: Promise<{ loc
     <>
       <div className="shell pt-8"><BackLink href="/event">{t("backToEvents")}</BackLink></div>
       <PageHeader eyebrow="Ekosistem" title={t("sites")} lead={t("sitesLead")}
-        aside={
-          <div className="flex flex-col gap-1">
-            <p className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">{sites.length}</p>
-            <p className="text-[13px] text-[var(--ink-faint)]">{locale === "id" ? "domain terdaftar" : "registered domains"}</p>
-          </div>
-        }
+        count={sites.length}
+        countLabel={locale === "id" ? "domain terdaftar" : "registered domains"}
       />
       <Section>
         {/* Satu-satunya tempat seluruh ekosistem domain IYSA tercatat. */}

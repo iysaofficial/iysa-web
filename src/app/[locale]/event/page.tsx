@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 
-import { EmptyState, MoreLink, Section } from "@/components/ui";
+import { PageHeader, EmptyState, MoreLink, Section } from "@/components/ui";
 import { EventCard } from "@/components/event-card";
 import { EventFilters } from "@/components/event-filters";
 import { SeriKartu } from "@/components/seri-kartu";
@@ -122,40 +122,22 @@ export default async function EventsPage({
 
   return (
     <>
-      {/* Kepala halaman ringkas — judul, ringkasan, hitungan, dan saringan
-          dalam SATU pita.
-          Sebelumnya kepala halaman penuh (judul raksasa + ringkasan + angka)
-          dan blok saringan berdiri sendiri-sendiri, masing-masing dengan jarak
-          longgar. Hasilnya kartu event pertama berada di y=912 sementara layar
-          laptop cuma 820: halaman daftar yang tidak memperlihatkan satu pun
-          datanya sebelum digulir. */}
-      <header className="border-b border-[var(--line)]">
-        <div className="shell py-8 md:py-10">
-          <div className="grid gap-x-10 gap-y-4 md:grid-cols-12 md:items-end">
-            <div className="md:col-span-5">
-              <p className="eyebrow">Event</p>
-              <h1 className="mt-1.5 text-title text-[var(--navy)]">{t("title")}</h1>
-            </div>
-            <p className="text-[15px] leading-relaxed text-[var(--ink-muted)] md:col-span-4">
-              {t("lead")}
-            </p>
-            <div className="md:col-span-3 md:text-right">
-              <p className="tnum font-mono text-[26px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
-                {menyaring ? hasil.length : semua.length}
-              </p>
-              <p className="mt-1.5 text-[12.5px] text-[var(--ink-faint)]">
-                {menyaring
-                  ? `${t("count", { count: hasil.length })} · ${semua.length} ${locale === "id" ? "total" : "in total"}`
-                  : `${t("count", { count: semua.length })} · ${t("seriesCount", { count: seri.length })}`}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-6 border-t border-[var(--line)] pt-5">
-            <EventFilters facets={facets} active={{ level, mode, q }} />
-          </div>
-        </div>
-      </header>
+      {/* Kepala halaman baku, ditambah satu pita saringan di slot `bawah`.
+          Ringkasan halaman sengaja tidak dikirim: di kepala seringkas ini ia
+          menggantung di kolom tengah tanpa apa pun untuk diratakan, dan
+          pemilik situs menilainya tidak pada tempatnya. Deskripsi halamannya
+          tetap hidup di metadata untuk mesin pencari. */}
+      <PageHeader
+        eyebrow="Event"
+        title={t("title")}
+        count={menyaring ? hasil.length : semua.length}
+        countLabel={
+          menyaring
+            ? `${t("count", { count: hasil.length })} · ${semua.length} ${locale === "id" ? "total" : "in total"}`
+            : `${t("count", { count: semua.length })} · ${t("seriesCount", { count: seri.length })}`
+        }
+        bawah={<EventFilters facets={facets} active={{ level, mode, q }} />}
+      />
 
       {menyaring ? (
         <div className="shell pb-16">

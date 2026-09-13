@@ -43,16 +43,12 @@ export default async function NewsletterIndex({
         eyebrow="Newsletter"
         title={t("title")}
         lead={t("lead")}
+        count={allIssues().length}
+        countLabel={t("count", { count: allIssues().length })}
         aside={
-          <div className="flex flex-col gap-3">
-            <p className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
-              {allIssues().length}
-            </p>
-            <p className="text-[13px] text-[var(--ink-faint)]">
-              {t("count", { count: allIssues().length })}
-            </p>
+          <>
             {/* Tautan lompat per tahun — 48 terbitan terlalu banyak untuk digulir buta. */}
-            <nav aria-label={t("year")} className="mt-2 flex flex-wrap gap-1.5">
+            <nav aria-label={t("year")} className="flex flex-wrap gap-1.5 md:justify-end">
               {years.map((y) => (
                 <a
                   key={y}
@@ -63,7 +59,7 @@ export default async function NewsletterIndex({
                 </a>
               ))}
             </nav>
-          </div>
+          </>
         }
       />
 
