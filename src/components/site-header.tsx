@@ -7,7 +7,7 @@ import { primaryNav } from "@/lib/nav";
 import { org } from "@/content/org";
 import { ThemeToggle } from "./theme-toggle";
 import { LocaleSwitch } from "./locale-switch";
-import { IysaWordmark } from "./iysa-logo";
+import { IysaWordmark, IysaLockup } from "./iysa-logo";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
@@ -20,16 +20,20 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--bg)]/88 backdrop-blur-md">
       <div className="shell flex h-16 items-center justify-between gap-4">
-        {/* Lambang + wordmark. Lambangnya SVG sebaris, bukan <Image>: di 28px
-            ia hanya ~1 KB di dalam HTML, tidak menambah satu pun permintaan
-            jaringan, dan ikut berganti warna saat tema berubah tanpa perlu
-            menukar berkas. */}
+        {/* Dua bentuk merek, dipilih lebar layar.
+            Di lebar desktop: lockup resmi apa adanya, tanpa teks tambahan.
+            Di bawahnya: lambang + huruf "IYSA" saja — baris keterangan lockup
+            sudah di ambang keterbacaan pada tinggi navbar ini dan di layar
+            sempit ia jadi bubur sekaligus memakan ruang tombol menu.
+            Yang tersembunyi memakai `display:none`, jadi pembaca layar hanya
+            menemui satu nama, bukan dua. */}
         <Link
           href="/"
           className="shrink-0 transition-opacity duration-[var(--gerak-cepat)] hover:opacity-80"
           onClick={() => setOpen(false)}
         >
-          <IysaWordmark size={28} sub="Young Scientist" />
+          <IysaLockup className="hidden lg:block" />
+          <IysaWordmark size={28} sub="Young Scientist" className="lg:hidden" />
         </Link>
 
         {/* Menu utama — hanya layar lebar. */}

@@ -50,6 +50,43 @@ export function IysaLogo({ size = 32, alt = "", className = "" }: Props) {
 }
 
 /**
+ * Lockup resmi IYSA apa adanya: lambang + "IYSA" + baris "Indonesian Young
+ * Scientist Association", satu gambar, tanpa teks tambahan dari situs.
+ *
+ * Dipakai di navbar lebar. Sumbernya `iysa-lockup.svg`, hasil `npm run
+ * trace:logo` atas berkas lockup asli — bukan PNG-nya langsung, karena seluruh
+ * teks di lockup itu gelap dan akan lenyap ke latar di tema gelap situs ini.
+ * Versi telusurannya berkelas, dan @media di dalam berkasnya menukar palet
+ * teks serta orbitnya sendiri.
+ *
+ * Ia tidak dipakai di lebar ponsel: baris keterangannya sudah di ambang
+ * keterbacaan pada tinggi navbar desktop, dan di bawahnya ia jadi bubur. Di
+ * sana yang tampil `IysaWordmark`.
+ */
+export function IysaLockup({
+  height = 44,
+  className = "",
+}: {
+  height?: number;
+  className?: string;
+}) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/media/logo/iysa-lockup.svg"
+      alt="IYSA — Indonesian Young Scientist Association"
+      /* Rasio lockup terpotong: 1153×502. Lebar ikut tinggi, dan ditulis
+         eksplisit supaya tata letak navbar tidak bergeser saat berkasnya
+         selesai diunduh. */
+      width={Math.round(height * 2.297)}
+      height={height}
+      className={className}
+      style={{ height, width: "auto" }}
+    />
+  );
+}
+
+/**
  * Lambang + tulisan "IYSA". Satu komponen supaya jarak dan perataan garis
  * dasarnya identik di header dan kaki halaman — di situs lama keduanya
  * menulis ulang gayanya sendiri dan akhirnya berbeda tipis.

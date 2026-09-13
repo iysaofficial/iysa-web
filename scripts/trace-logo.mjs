@@ -299,3 +299,133 @@ if (existsSync(SUMBER_LOCKUP)) {
 } else {
   console.log(`  wordmark dilewati — berkas lockup tidak ada di ${SUMBER_LOCKUP}\n`);
 }
+
+/* ── Lockup lengkap ─────────────────────────────────────────────────────
+ *
+ * Navbar desktop memakai lockup resmi apa adanya: lambang + "IYSA" + baris
+ * "Indonesian Young Scientist Association", satu gambar, tanpa teks tambahan
+ * dari situs. Itu permintaan pemilik merek, dan ia yang berhak menentukan
+ * mereknya tampil bagaimana.
+ *
+ * Dua hal yang dulu menggagalkan pemakaian PNG-nya langsung diselesaikan di
+ * sini, bukan dihindari:
+ *
+ *   - Teksnya gelap, jadi lenyap ke latar di tema gelap. Ditelusuri jadi SVG
+ *     berkelas, lalu @media di dalam berkasnya menukar paletnya sendiri —
+ *     pola yang sama dengan iysa-mark-traced.svg.
+ *   - Baris keterangan jadi bubur kalau lockup-nya dipaksa setinggi lambang
+ *     saja. Karena itu komponennya memberi lockup TINGGI yang lebih besar dan
+ *     hanya memakainya di lebar desktop; di ponsel yang tampil lambang saja.
+ *
+ * Baris keterangan berwarna nyaris hitam — sama dengan benua bola dunia —
+ * padahal keduanya harus berperilaku berbeda di tema gelap: teksnya jadi
+ * terang, benuanya harus tetap gelap karena duduk di atas badan bola yang
+ * putih. Keduanya dipisah menurut posisi x: histogram kolom piksel hitam
+ * kosong sama sekali antara x=380 dan x=579, jadi batas di 480 aman dan tidak
+ * memotong apa pun.
+ */
+if (existsSync(SUMBER_LOCKUP)) {
+  /** Kolom pemisah benua bola dunia (kiri) dari baris keterangan (kanan). */
+  const BATAS_TEKS = 480;
+
+  const KELAS_LOCKUP = [
+    { nama: "bola-badan", rgb: [255, 255, 255] },
+    { nama: "teal", rgb: [48, 192, 192] },
+    { nama: "coral", rgb: [240, 96, 72] },
+    { nama: "navy", rgb: [48, 96, 144] },
+    { nama: "bola-benua", rgb: [24, 24, 24] },
+  ];
+
+  const { data: pikselL, info: infoL } = await sharp(SUMBER_LOCKUP)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const { width: WL, height: HL } = infoL;
+
+  // Kotak isi, supaya berkas hasilnya tidak membawa margin kosong yang
+  // membuat tinggi CSS-nya berbohong.
+  let x0 = WL, x1 = -1, y0 = HL, y1 = -1;
+  for (let y = 0; y < HL; y++) {
+    for (let x = 0; x < WL; x++) {
+      const i = (y * WL + x) * 4;
+      if (pikselL[i + 3] < 128) continue;
+      if (pikselL[i] > 245 && pikselL[i + 1] > 245 && pikselL[i + 2] > 245) continue;
+      if (x < x0) x0 = x;
+      if (x > x1) x1 = x;
+      if (y < y0) y0 = y;
+      if (y > y1) y1 = y;
+    }
+  }
+
+  const lapisanL = [];
+  for (const kelas of KELAS_LOCKUP) {
+    // Benua dan teks keterangan berbagi warna, jadi kelas hitam ditelusuri
+    // dua kali dengan potongan x yang berbeda.
+    const bagian =
+      kelas.nama === "bola-benua"
+        ? [
+            { nama: "bola-benua", dari: 0, sampai: BATAS_TEKS },
+            { nama: "teks", dari: BATAS_TEKS, sampai: WL },
+          ]
+        : [{ nama: kelas.nama, dari: 0, sampai: WL }];
+
+    for (const bag of bagian) {
+      const masker = Buffer.alloc(WL * HL, 255);
+      let jumlah = 0;
+      for (let y = 0; y < HL; y++) {
+        for (let x = 0; x < WL; x++) {
+          const p = y * WL + x;
+          const i = p * 4;
+          if (pikselL[i + 3] < 128) continue;
+          if (x < bag.dari || x >= bag.sampai) continue;
+          const px = [pikselL[i], pikselL[i + 1], pikselL[i + 2]];
+          let terdekat = null;
+          let min = Infinity;
+          for (const k of KELAS_LOCKUP) {
+            const d = jarak(px, k.rgb);
+            if (d < min) {
+              min = d;
+              terdekat = k.nama;
+            }
+          }
+          if (terdekat === kelas.nama) {
+            masker[p] = 0;
+            jumlah++;
+          }
+        }
+      }
+      if (jumlah === 0) continue;
+
+      const png = await sharp(masker, { raw: { width: WL, height: HL, channels: 1 } })
+        .png()
+        .toBuffer();
+      const { d, aturan } = ambilPath(await telusuri(png));
+      lapisanL.push({ nama: bag.nama, d, aturan });
+      console.log(`  lockup ${bag.nama.padEnd(12)} ${String(jumlah).padStart(6)} piksel`);
+    }
+  }
+
+  const TERANG_L = { ...TERANG_SVG, teks: "#1a1a1a" };
+  const GELAP_L = { ...GELAP_SVG, teks: "#eef2f9" };
+
+  const wL = x1 - x0 + 1;
+  const hL = y1 - y0 + 1;
+  const berkasL =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${wL} ${hL}">` +
+    `<style>@media (prefers-color-scheme:dark){` +
+    lapisanL.map((l) => `.${kelasDari(l.nama)}{fill:${GELAP_L[l.nama]}}`).join("") +
+    `}</style>` +
+    lapisanL
+      .map(
+        (l) =>
+          `<path class="${kelasDari(l.nama)}" fill="${TERANG_L[l.nama]}" fill-rule="${l.aturan}" d="${l.d}"/>`,
+      )
+      .join("") +
+    `</svg>\n`;
+
+  writeFileSync(join(ROOT, "public", "media", "logo", "iysa-lockup.svg"), berkasL);
+  console.log(
+    `\n  public/media/logo/iysa-lockup.svg        ${(Buffer.byteLength(berkasL) / 1024).toFixed(1)} KB` +
+      `   ${wL}×${hL} (rasio ${(wL / hL).toFixed(2)})\n`,
+  );
+}
