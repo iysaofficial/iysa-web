@@ -8,6 +8,7 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { routing, type Locale } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { GulirHalus } from "@/components/gulir-halus";
 import { ThemeScript } from "@/components/theme-script";
 import { siteUrl, alternatesFor, organizationJsonLd } from "@/lib/seo";
 import "../globals.css";
@@ -109,6 +110,7 @@ export default async function LocaleLayout({
       </head>
       <body className={`${sans.variable} ${mono.variable} antialiased`}>
         <NextIntlClientProvider>
+          <GulirHalus />
           <a
             href="#isi"
             className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded focus:bg-[var(--navy)] focus:px-4 focus:py-2 focus:text-[var(--on-navy)]"
