@@ -144,10 +144,39 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         return; // WebGL tidak tersedia
       }
 
-      renderer.setSize(lebar, tinggi);
+      /* ── Kanvas TIDAK BOLEH ikut menentukan ukuran wadahnya ───────────
+       *
+       * Ini pernah membuat seluruh situs tidak bisa dipakai, jadi jangan
+       * diubah tanpa membaca ini.
+       *
+       * Kanvas adalah anak dari `el`, dan `setSize()` bawaannya menulis
+       * `style.width/height` dalam piksel. Kalau ukurannya diambil dari tinggi
+       * terukur `el`, terjadi gelang: tinggi `el` ditentukan isinya —
+       * `aspect-square` kalah oleh `min-content` anaknya — jadi kanvas
+       * membesar, `el` ikut membesar, kanvas diset lebih besar lagi. Terukur
+       * di produksi: dokumen tumbuh ~20.000px per detik sampai 950.000px, dan
+       * seluruh isi halaman terdorong jauh di luar jangkauan gulir. Penjaga
+       * "lewati kalau ukurannya sama" tidak pernah menyala justru karena
+       * ukurannya berubah setiap frame.
+       *
+       * Dua hal yang memutus gelang itu:
+       *   1. kanvas dikeluarkan dari aliran tata letak (`position: absolute`),
+       *      jadi ia tidak pernah menyumbang tinggi ke induknya;
+       *   2. `setSize(w, h, false)` — argumen ketiga mematikan penulisan gaya
+       *      oleh three, dan ukurannya diserahkan ke CSS (`inset: 0`).
+       *
+       * Dengan begitu tinggi `el` murni dari `aspect-square`, dan tidak ada
+       * jalan bagi kanvas untuk memengaruhinya. */
+      const kanvas = renderer.domElement;
+      kanvas.style.position = "absolute";
+      kanvas.style.inset = "0";
+      kanvas.style.width = "100%";
+      kanvas.style.height = "100%";
+      kanvas.style.display = "block";
+
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.domElement.style.display = "block";
-      el.appendChild(renderer.domElement);
+      renderer.setSize(lebar, tinggi, false);
+      el.appendChild(kanvas);
 
       const scene = new THREE.Scene();
       const kamera = new THREE.PerspectiveCamera(34, lebar / tinggi, 0.1, 100);
@@ -397,11 +426,23 @@ export function HeroAtom({ className = "" }: { className?: string }) {
           const h = el.clientHeight;
           if (w === 0 || h === 0) return;
           if (w === lebarLalu && h === tinggiLalu) return;
+
+          /* Pagar terakhir. Wadahnya `max-w-[340px]` dan bujur sangkar, jadi
+             ukuran di atas 1.200px berarti ada yang salah dengan tata
+             letaknya — bukan layar yang besar. Kalau itu terjadi, berhenti
+             mengukur alih-alih ikut membesarkan apa pun. Gelang umpan balik
+             di sini pernah menumbuhkan dokumen sampai 950.000px. */
+          if (w > 1200 || h > 1200) {
+            ro.disconnect();
+            return;
+          }
+
           lebarLalu = w;
           tinggiLalu = h;
           kamera.aspect = w / h;
           kamera.updateProjectionMatrix();
-          renderer.setSize(w, h);
+          // `false`: jangan biarkan three menulis gaya ukuran ke kanvas.
+          renderer.setSize(w, h, false);
         });
       };
       const ro = new ResizeObserver(onResize);
@@ -446,7 +487,10 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         alt=""
         width={220}
         height={220}
-        className={`h-[65%] w-auto transition-opacity duration-500 ${hidup ? "opacity-0" : "opacity-100"}`}
+        /* Ikut dikeluarkan dari aliran tata letak, sama seperti kanvasnya.
+           Dengan kedua anaknya absolut, tinggi wadah murni berasal dari
+           `aspect-square` dan tidak ada anak yang bisa memengaruhinya. */
+        className={`absolute inset-0 m-auto h-[65%] w-auto transition-opacity duration-500 ${hidup ? "opacity-0" : "opacity-100"}`}
       />
     </div>
   );
