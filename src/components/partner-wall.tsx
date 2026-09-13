@@ -48,7 +48,6 @@ export function PartnerWall({ scope }: { scope?: "national" | "international" })
 
   return (
     <ul
-      data-reveal
       className="rise-stagger grid grid-cols-3 gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-4 lg:grid-cols-6"
     >
       {items.map((p, i) => {

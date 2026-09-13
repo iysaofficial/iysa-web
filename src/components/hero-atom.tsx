@@ -248,10 +248,6 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       const pusat = new THREE.Box3().setFromObject(grup).getCenter(new THREE.Vector3());
       grup.position.sub(pusat);
 
-      /* Lambang cadangan hanya disembunyikan kalau ada yang benar-benar
-         digambar menggantikannya. Tanpa penjaga ini, satu kegagalan di
-         penguraian SVG menghasilkan kanvas kosong DAN cadangan yang sudah
-         terlanjur dilenyapkan — hero-nya jadi bidang kosong. */
       if (jumlahMesh === 0) {
         renderer.dispose();
         renderer.domElement.remove();
@@ -260,7 +256,49 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       }
 
       akar.add(grup);
+
+      /* ── Bukti sebelum menyembunyikan cadangan ───────────────────────
+       *
+       * Gambar satu bingkai, lalu BACA pikselnya. Lambang cadangan hanya
+       * dilenyapkan kalau kanvas benar-benar berisi sesuatu.
+       *
+       * Versi sebelumnya menyembunyikannya begitu mesh terbentuk — dan itu
+       * bukan hal yang sama. Pengunjung melaporkan lambang di hero muncul
+       * sekilas saat memuat lalu hilang tepat setelah selesai: mesh memang
+       * terbentuk, tapi tidak ada yang tergambar, dan cadangannya sudah
+       * telanjur dibuang. "Ada mesh" adalah niat; "ada piksel" adalah bukti.
+       *
+       * readPixels di sini aman: pembacaan terjadi di tugas yang sama dengan
+       * penggambarannya, sebelum penyangga ditukar. */
+      renderer.render(scene, kamera);
+
+      let adaPiksel = false;
+      try {
+        const gl = renderer.getContext();
+        const w = renderer.domElement.width;
+        const h = renderer.domElement.height;
+        const buf = new Uint8Array(w * h * 4);
+        gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+        for (let i = 3; i < buf.length; i += 4) {
+          if (buf[i] > 8) {
+            adaPiksel = true;
+            break;
+          }
+        }
+      } catch {
+        adaPiksel = false;
+      }
+
+      if (!adaPiksel) {
+        renderer.dispose();
+        renderer.domElement.remove();
+        for (const d of dibuang) d.dispose();
+        return;
+      }
+
+      // Terbukti ada yang tergambar — baru cadangannya boleh menghilang.
       setHidup(true);
+
 
       /* ── Gerak ────────────────────────────────────────────────────────
          Putaran lambat terus-menerus, plus kemiringan mengikuti kursor yang

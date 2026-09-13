@@ -33,7 +33,6 @@ export default async function ExpertTeamPage({ params }: { params: Promise<{ loc
         <p className="max-w-[66ch] text-[15.5px] leading-relaxed text-[var(--ink-muted)]">{experts[locale]}</p>
         {images.length > 0 && (
           <ul
-            data-reveal
             className="rise-stagger mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5"
           >
             {images.map((src) => (

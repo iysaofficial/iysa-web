@@ -274,33 +274,28 @@ p, li {
 }
 
 /*
- * Menahan animasi sampai elemennya masuk layar.
+ * ── Kenapa TIDAK ada animasi terpicu gulir di sini ───────────────────────
  *
- * Penahannya di CSS, bukan di JavaScript, supaya ikut render pertama: kalau
- * JS yang memberi aba-aba mulai, ada jendela antara halaman terlihat dan
- * skrip jalan, dan di jendela itu animasinya sudah telanjur berjalan.
- * src/components/reveal.tsx yang memasang `data-terlihat`.
+ * Pernah ada: `[data-reveal]` menahan animasi dengan `animation-play-state:
+ * paused` sampai IntersectionObserver melepasnya. Dibuang setelah merusak
+ * produksi — pengunjung melaporkan seluruh isi halaman kosong saat digulir.
  *
- * ── Kenapa digerbangi `[data-gerak="aktif"]` ─────────────────────────────
+ * Cacatnya struktural, bukan salah setelan. `rise` mulai dari `opacity: 0`,
+ * jadi menahannya berarti MENYEMBUNYIKAN isi halaman, dan satu-satunya yang
+ * bisa memunculkannya lagi adalah JavaScript. Setiap gerbang yang saya pasang
+ * — `@media (scripting: none)`, lalu atribut `data-gerak` dari skrip, lalu
+ * jaring pengaman 3 detik — hanya menambal satu jalur kegagalan dan
+ * menyisakan yang lain. Halaman yang bisa kosong selamanya bukan harga yang
+ * pantas untuk animasi masuk.
  *
- * `rise` mulai dari `opacity: 0`. Menahannya berarti isi halaman TIDAK
- * TERLIHAT sampai ada yang melepasnya — jadi penahannya hanya boleh menyala
- * kalau sudah terbukti ada JavaScript yang sanggup melepasnya. Atribut itu
- * dipasang ThemeScript di <head>, sebelum lukis pertama.
+ * Sekarang `.rise` dan `.rise-stagger` jalan saat elemennya dipasang.
+ * Konsekuensinya: isi yang jauh di bawah lipatan selesai beranimasi sebelum
+ * pengunjung sampai, jadi gerakannya tidak tertonton. Itu kerugian yang bisa
+ * diterima — tidak ada keadaan di mana halaman jadi kosong.
  *
- * Tanpa atribut — JS dimatikan, skrip diblokir, galat lebih dulu, jaringan
- * putus — tidak ada yang ditahan dan halaman tampil utuh.
- *
- * Versi sebelumnya memakai `@media (scripting: none)` untuk tujuan yang sama
- * dan itu SALAH: Chrome melaporkan `scripting: enabled` bahkan ketika
- * JavaScript dimatikan, jadi pagarnya tidak pernah menyala justru bagi orang
- * yang membutuhkannya. Ketahuan waktu tangkapan layar tanpa-JS menampilkan
- * dinding logo yang kosong melompong.
+ * Kalau nanti mau dicoba lagi, syaratnya satu: elemennya TIDAK BOLEH pernah
+ * berada di keadaan tak terlihat yang hanya bisa dibatalkan JavaScript.
  */
-:root[data-gerak="aktif"] [data-reveal]:not([data-terlihat]),
-:root[data-gerak="aktif"] [data-reveal]:not([data-terlihat]) > * {
-  animation-play-state: paused;
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -312,12 +307,6 @@ p, li {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  /* Penahan ikut dilepas: kalau tidak, elemen yang tidak pernah masuk layar
-     tetap tertahan di keadaan awalnya. */
-  [data-reveal]:not([data-terlihat]),
-  [data-reveal]:not([data-terlihat]) > * {
-    animation-play-state: running !important;
   }
 }
 

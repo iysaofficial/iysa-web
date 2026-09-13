@@ -9,7 +9,6 @@ import { routing, type Locale } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeScript } from "@/components/theme-script";
-import { Reveal } from "@/components/reveal";
 import { siteUrl, alternatesFor, organizationJsonLd } from "@/lib/seo";
 import "../globals.css";
 
@@ -119,10 +118,6 @@ export default async function LocaleLayout({
           <SiteHeader />
           <main id="isi">{children}</main>
           <SiteFooter />
-          {/* Tidak merender apa pun; hanya melepas tahanan animasi saat
-              elemennya masuk layar. Dipasang di layout supaya berlaku untuk
-              semua halaman tanpa tiap halaman perlu mengingatnya. */}
-          <Reveal />
         </NextIntlClientProvider>
       </body>
     </html>

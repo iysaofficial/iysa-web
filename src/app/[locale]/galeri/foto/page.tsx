@@ -47,7 +47,6 @@ export default async function PhotoGallery({ params }: { params: Promise<{ local
         {/* Dokumentasi foto tetap di Drive. Memindahkannya ke penyimpanan lain
             adalah keputusan IYSA, bukan keputusan penulisan ulang situs. */}
         <ul
-          data-reveal
           className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-4"
         >
           {photoFolders.map((f) => (

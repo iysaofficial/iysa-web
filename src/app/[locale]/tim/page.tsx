@@ -114,10 +114,6 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
       {levels.map((people, depth) => (
         <Section key={depth} sunk={depth % 2 === 1}>
           <div
-            /* Tingkat 0 (pimpinan) tidak bertahap: isinya empat kartu besar
-               yang selalu terlihat begitu seksinya dibuka. `data-reveal` hanya
-               dipasang di tingkat yang memang beranimasi bertahap. */
-            data-reveal={depth === 0 ? undefined : ""}
             className={
               depth === 0
                 ? "grid gap-8 sm:grid-cols-2 lg:grid-cols-4"

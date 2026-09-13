@@ -81,7 +81,7 @@ export default async function NewsletterIndex({
                 </p>
               </div>
 
-              <ul data-reveal className="rise-stagger grid gap-7 sm:grid-cols-3 lg:grid-cols-5">
+              <ul className="rise-stagger grid gap-7 sm:grid-cols-3 lg:grid-cols-5">
                 {items.map((issue) => {
                   const cover = coverUrl(issue.cover);
                   return (

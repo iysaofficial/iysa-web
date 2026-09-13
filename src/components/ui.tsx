@@ -193,7 +193,6 @@ export function Stat({ value, label }: { value: string | number; label: string }
 export function StatRow({ items }: { items: { value: string | number; label: string }[] }) {
   return (
     <div
-      data-reveal
       className="rise-stagger grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-6"
     >
       {items.map((s) => (
