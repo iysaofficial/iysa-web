@@ -59,7 +59,19 @@ export function PartnerWall({ scope }: { scope?: "national" | "international" })
 
         return (
           <li key={`${p.logo}-${i}`} className="bg-[var(--bg)]">
-            <div className="sel-logo flex aspect-[3/2] items-center justify-center p-4">
+            {/*
+              Tinggi tetap, BUKAN `aspect-[3/2]`.
+
+              Rasio menghasilkan tinggi pecahan — di lebar penuh sekitar
+              114,67px per sel — dan celah `gap-px` 1px yang jatuh di batas
+              subpiksel kadang hilang sama sekali saat dilukis. Akibatnya dua
+              baris tampak menyatu jadi satu blok tinggi tanpa pemisah.
+
+              Terukur di tangkapan produksi: garis pemisah ada di y=2958 dan
+              y=3188 — berjarak 230px untuk baris setinggi 115px, jadi satu
+              garis di antaranya memang tidak pernah tergambar.
+            */}
+            <div className="sel-logo flex h-28 items-center justify-center p-4">
               {/*
                 Tanpa `sizes`, dan itu disengaja. Dengan `sizes`, Next
                 memancarkan srcset penuh dari seluruh daftar deviceSizes untuk
