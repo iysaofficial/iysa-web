@@ -70,8 +70,22 @@ const KELAS_KE_NAMA: Record<string, string> = {
 };
 const URUTAN_LAPISAN = ["bola-badan", "teal", "coral", "navy", "bola-benua"];
 
-/** Ukuran lambang saat mengambang mengikuti gulir. */
-const MENGAMBANG = 168;
+/**
+ * Resolusi tetap penyangga gambar kanvas, dalam piksel CSS.
+ *
+ * Ukuran TAMPIL lambang berubah terus sepanjang gulir, tapi penyangga
+ * gambarnya tidak ikut berubah: ia dialokasikan sekali sebesar ini, lalu CSS
+ * yang melar-mengecilkannya. Kalau `setSize` dipanggil tiap kali ukuran
+ * tampilnya bergeser, GPU mengalokasi ulang penyangga tiap bingkai — mahal,
+ * dan tepat jenis jalur yang dulu melahirkan gelang umpan balik di berkas ini.
+ * Angkanya di atas ukuran tampil terbesar, jadi tidak pernah terlihat lunak.
+ */
+const RESOLUSI = 480;
+
+/** Ukuran dasar lambang saat mengambang, sebagai pecahan lebar layar. */
+const PECAHAN_SISI = 0.17;
+const SISI_MIN = 150;
+const SISI_MAKS = 300;
 
 /**
  * Jalur singgah sepanjang halaman: berganti-ganti tepi kiri dan kanan, selalu
@@ -127,10 +141,12 @@ export function HeroAtom({ className = "" }: { className?: string }) {
     (async () => {
       let THREE: typeof import("three");
       let SVGLoaderMod: typeof import("three/examples/jsm/loaders/SVGLoader.js");
+      let RuangMod: typeof import("three/examples/jsm/environments/RoomEnvironment.js");
       try {
-        [THREE, SVGLoaderMod] = await Promise.all([
+        [THREE, SVGLoaderMod, RuangMod] = await Promise.all([
           import("three"),
           import("three/examples/jsm/loaders/SVGLoader.js"),
+          import("three/examples/jsm/environments/RoomEnvironment.js"),
         ]);
       } catch {
         return;
@@ -160,7 +176,9 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       kanvas.style.height = "100%";
       kanvas.style.display = "block";
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(awal.width, awal.width, false);
+      /* Sekali saja, dan tidak pernah lagi. `false` = jangan tulis gaya —
+         ukuran tampilnya diatur CSS di lapisan pembungkus. */
+      renderer.setSize(RESOLUSI, RESOLUSI, false);
       layer.appendChild(kanvas);
 
       const scene = new THREE.Scene();
@@ -174,6 +192,24 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       const isian = new THREE.DirectionalLight(0xffffff, 1.4);
       isian.position.set(-4, -2, 3);
       scene.add(isian);
+
+      /* ── Pantulan lingkungan ──────────────────────────────────────────
+         Tiga lampu arah saja memberi permukaan yang rata dan mati; yang
+         membuat sebuah objek terbaca sebagai benda bernilai adalah pantulan
+         yang BERGERAK di permukaannya saat ia berputar. `RoomEnvironment`
+         adalah ruang studio kecil bawaan three — dikukus sekali jadi peta
+         lingkungan lewat PMREM, tanpa satu pun berkas gambar diunduh.
+
+         Kilapnya sengaja setengah jalan: metalness penuh akan menelan warna
+         merek dan menjadikan lambangnya logam berwarna entah apa. Yang dikejar
+         permukaan berenamel — warnanya tetap warna IYSA, tapi ada sorot yang
+         menyapu tiap kali ia berguling. */
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const ruang = new RuangMod.RoomEnvironment();
+      const petaLingkungan = pmrem.fromScene(ruang, 0.04).texture;
+      scene.environment = petaLingkungan;
+      ruang.dispose?.();
+      pmrem.dispose();
 
       const akar = new THREE.Group();
       scene.add(akar);
@@ -209,8 +245,11 @@ export function HeroAtom({ className = "" }: { className?: string }) {
              dan lambangnya terbaca sebagai siluet gelap, bukan logo IYSA. */
           emissive: isi,
           emissiveIntensity: 0.32,
-          roughness: 0.5,
-          metalness: 0.04,
+          /* Licin dan setengah logam: cukup untuk menangkap sorot dari peta
+             lingkungan, belum cukup untuk menenggelamkan warna mereknya. */
+          roughness: 0.26,
+          metalness: 0.34,
+          envMapIntensity: 0.9,
           side: THREE.DoubleSide,
         });
         dibuang.push(bahan);
@@ -278,8 +317,6 @@ export function HeroAtom({ className = "" }: { className?: string }) {
          itu masih cukup di layar; sesudahnya ia menambat di kanan atas sambil
          mengecil. Semua angka berasal dari kotak kosong dan ukuran layar —
          tidak satu pun dari kanvas itu sendiri. */
-      let lebarLalu = 0;
-
       const tempatkan = (p: number) => {
         const r = kotak.getBoundingClientRect();
         const lebarLayar = window.innerWidth;
@@ -311,9 +348,16 @@ export function HeroAtom({ className = "" }: { className?: string }) {
           }
         }
 
+        /* Ukurannya mengembang di tengah halaman lalu mengempis lagi —
+           setengah perjalanan adalah puncaknya. Tanpa ini lambangnya bergerak
+           tapi tidak pernah "terjadi" apa-apa padanya; dengan ini ia terasa
+           mendekat lalu menjauh. */
+        const sisiDasar = jepit(lebarLayar * PECAHAN_SISI, SISI_MIN, SISI_MAKS);
+        const mengembang = 1 + 0.32 * Math.sin(jepit(p) * Math.PI);
+
         let tujuanX = xf * lebarLayar;
         let tujuanY = yf * tinggiLayar;
-        let tujuanSisi = MENGAMBANG;
+        let tujuanSisi = sisiDasar * mengembang;
         let tujuanKabur = 0.42;
 
         /* ── Perhentian terakhir ──────────────────────────────────────────
@@ -325,7 +369,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         const atapFooter = footer ? footer.getBoundingClientRect().top : Infinity;
         if (atapFooter < tinggiLayar) {
           const akhirJalan = lunak(jepit((tinggiLayar - atapFooter) / (tinggiLayar * 0.45)));
-          const sisiAkhir = antara(MENGAMBANG, 230, akhirJalan);
+          const sisiAkhir = antara(tujuanSisi, sisiDasar * 1.35, akhirJalan);
           tujuanX = antara(tujuanX, lebarLayar / 2 - sisiAkhir / 2, akhirJalan);
           tujuanY = antara(tujuanY, atapFooter - sisiAkhir * 0.75, akhirJalan);
           tujuanSisi = sisiAkhir;
@@ -347,11 +391,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         layer.style.width = `${Math.round(sisi)}px`;
         layer.style.height = `${Math.round(sisi)}px`;
         layer.style.opacity = kabur.toFixed(2);
-
-        if (Math.abs(sisi - lebarLalu) > 1) {
-          lebarLalu = sisi;
-          renderer.setSize(sisi, sisi, false);
-        }
+        // Penyangga gambar TIDAK disentuh di sini — lihat catatan di RESOLUSI.
       };
 
       /* ── Gerak ───────────────────────────────────────────────────────
@@ -406,10 +446,20 @@ export function HeroAtom({ className = "" }: { className?: string }) {
           bahanLapisan[i].emissiveIntensity = 0.2 + 0.28 * (0.5 + 0.5 * Math.sin(fase));
         }
 
+        /* ── Jungkir balik ────────────────────────────────────────────
+           Satu sumbu saja menghasilkan gasing: bentuknya tidak pernah benar-
+           benar berubah, jadi mata berhenti memperhatikannya setelah satu
+           putaran. Dua sumbu tambahan yang berjalan pada kelipatan berbeda
+           membuat siluetnya tidak pernah mengulang persis, dan relief antar
+           lapisannya jadi terbaca — itu satu-satunya alasan objek ini dibuat
+           tiga dimensi sejak awal.
+
+           Miring mengikuti kursor tetap ditumpuk di atasnya, jadi ia masih
+           membalas gerakan tetikus. */
         kiniX += (tujuanX - kiniX) * 0.05;
         kiniY += (tujuanY - kiniY) * 0.05;
-        akar.rotation.x = kiniX;
-        akar.rotation.z = kiniY;
+        akar.rotation.x = kiniX + Math.sin(putarGulir * 0.5) * 0.34;
+        akar.rotation.z = kiniY + Math.cos(putarGulir * 0.33) * 0.2;
 
         renderer.render(scene, kamera);
       };
@@ -420,6 +470,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         window.removeEventListener("pointermove", onPointer);
         document.removeEventListener("visibilitychange", onVisibilitas);
         for (const d of dibuang) d.dispose();
+        petaLingkungan.dispose();
         renderer.dispose();
         kanvas.remove();
       };
