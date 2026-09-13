@@ -257,14 +257,29 @@ Yang perlu diketahui sebelum menyentuhnya:
   `globals.css` sudah digeser sampai ≥3:1 di kedua tema; `npm run contrast`
   melaporkannya tanpa menggagalkan build (WCAG 1.4.11 mengecualikan logotype).
 
-**Ada DUA lambang, dan keduanya memang dipakai:**
+**Satu lambang untuk semuanya: `public/media/logo/iysa-mark-traced.svg`.**
 
-| | dari | dipakai di | ukuran |
-|---|---|---|---|
-| `iysa-logo.tsx` | geometri (elips + lingkaran) | header, footer, favicon, apple-icon, `icon.svg` | ~1 KB sebaris |
-| `iysa-mark-traced.svg` | **tracing raster aslinya** | cadangan hero, sumber bentuk objek 3D | 19 KB berkas |
+Dipakai header, kaki halaman, `icon.svg`, `favicon.ico`, `apple-icon.png`,
+cadangan hero, dan sebagai sumber bentuk objek 3D. Tidak ada varian kedua.
 
-Yang kedua dibangun `npm run trace:logo` (`scripts/trace-logo.mjs`) dari
+> Sempat ada dua: lambang geometris (tiga elips + tiga lingkaran, ~1 KB
+> sebaris) untuk ukuran kecil, dan hasil tracing untuk ukuran besar. Alasannya
+> di 32px hasil tracing terlihat berbutir. Dibuang setelah pemilik situs
+> menyadari sendiri bahwa yang di navbar dan di tab peramban **bukan logo
+> IYSA yang sebenarnya** — dan dia benar. Tiruan yang rapi tetap tiruan.
+>
+> Di 32px hasil tracing memang lebih lembut, tapi terbaca: tiga orbit, tiga
+> simpul, dan bola dunianya tetap kelihatan. Diperiksa dengan merender 32px
+> lalu memperbesarnya tanpa penghalusan.
+
+Karena dipakai lewat `<img>`, lambangnya mengikuti `prefers-color-scheme`
+lewat @media di dalam berkasnya sendiri — **bukan** atribut `data-theme`
+halaman. Kalau pengunjung memaksa tema yang berlawanan dengan sistemnya, bola
+dunianya memakai pasangan warna tema yang lain; ketiga orbitnya tetap terbaca
+di kedua latar. Itu harga yang dibayar untuk tidak menambah 19 KB ke setiap
+halaman.
+
+Dibangun `npm run trace:logo` (`scripts/trace-logo.mjs`) dari
 `logo iysa tanpa logo type.png` 472×512 — satu-satunya berkas lambang yang
 dimiliki IYSA. potrace hanya bisa memisahkan gelap dari terang, jadi rasternya
 dipecah dulu jadi **lima masker warna** (navy · teal · coral · badan bola
@@ -278,8 +293,10 @@ di depan ikut terbawa apa adanya.
 > pertama hanya mengambil atribut `d`, dan aturan bawaan `nonzero` menutup
 > semua lubang: bola dunia berbenua jadi cakram hitam pekat.
 
-Yang geometris tetap dipakai untuk ukuran kecil karena di 32px hasil tracing
-berbutir, dan 19 KB terlalu berat untuk ikut di setiap HTML halaman.
+> **`ensureAlpha()` wajib sebelum menulis favicon.ico.** `flatten()`
+> menghasilkan PNG tiga kanal, dan pengurai ICO milik Next menolaknya — "The
+> PNG is not in RGBA format" — sehingga SELURUH build gagal, bukan cuma
+> ikonnya.
 
 Ikon dibangun `npm run build:icons` (`scripts/build-icons.mjs`, ikut
 `npm run migrate`): `src/app/icon.svg` (adaptif tema lewat `@media` di dalam
