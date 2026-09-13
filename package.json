@@ -6,10 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "contrast": "node scripts/contrast.mjs",
+    "migrate:content": "node scripts/extract-legacy.mjs",
+    "migrate:assets": "node scripts/build-assets.mjs",
+    "migrate:redirects": "node scripts/build-redirects.mjs",
+    "migrate": "npm run migrate:content && npm run migrate:assets && npm run migrate:redirects",
+    "prebuild": "npm run contrast"
   },
   "dependencies": {
     "next": "16.3.5",
+    "next-intl": "^4.14.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
@@ -20,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "BYSCC",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage1"
+  },
+  {
+    "name": "TISF",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage2"
+  },
+  {
+    "name": "PISF",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage3"
+  },
+  {
+    "name": "INVENTCOR",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage4"
+  },
+  {
+    "name": "MIIX",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage5"
+  },
+  {
+    "name": "E-NNOVATE",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage6"
+  },
+  {
+    "name": "WoSG",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage7"
+  },
+  {
+    "name": "ASBF",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage8"
+  },
+  {
+    "name": "CASTIC",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage9"
+  },
+  {
+    "name": "WICO",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage10"
+  },
+  {
+    "name": "INNOVERSE EXPO",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage11"
+  },
+  {
+    "name": "ICPC",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage12"
+  },
+  {
+    "name": "MIYIO",
+    "type": "Affiliation",
+    "legacyPath": "/EventAffiliationPage13"
+  }
+]

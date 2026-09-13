@@ -1,0 +1,303 @@
+[
+  {
+    "year": 2022,
+    "title": "IYSA Newsletter June 2022",
+    "cover": "./assets/images/newsletter/NEWSLETTERGAMBAR.jpg",
+    "legacyPath": "/NewsletterDetailPage6",
+    "slug": "juni-2022"
+  },
+  {
+    "year": 2022,
+    "title": "IYSA Newsletter July 2022",
+    "cover": "./assets/images/newsletter/IYSANewsletterJuli2022.WebP",
+    "legacyPath": "/NewsletterDetailPage7",
+    "slug": "juli-2022"
+  },
+  {
+    "year": 2022,
+    "title": "IYSA Newsletter August 2022",
+    "cover": "./assets/images/newsletter/NewsletterAgustus2022.jpg",
+    "legacyPath": "/NewsletterDetailPage8",
+    "slug": "agustus-2022"
+  },
+  {
+    "year": 2022,
+    "title": "IYSA Newsletter September 2022",
+    "cover": "./assets/images/newsletter/NewsletterSeptember2022.WebP",
+    "legacyPath": "/NewsletterDetailPage9",
+    "slug": "september-2022"
+  },
+  {
+    "year": 2022,
+    "title": "IYSA Newsletter October 2022",
+    "cover": "./assets/images/newsletter/NewsletterOktober2022.WebP",
+    "legacyPath": "/NewsletterDetailPage10",
+    "slug": "oktober-2022"
+  },
+  {
+    "year": 2022,
+    "title": "IYSA Newsletter November 2022",
+    "cover": "./assets/images/newsletter/NewsletterNovember2022.WebP",
+    "legacyPath": "/NewsletterDetailPage11",
+    "slug": "november-2022"
+  },
+  {
+    "year": 2022,
+    "title": "IYSA Newsletter December 2022",
+    "cover": "./assets/images/newsletter/NewsletterDesember2022.WebP",
+    "legacyPath": "/NewsletterDetailPage12",
+    "slug": "desember-2022"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter January 2023",
+    "cover": "./assets/images/newsletter/NewsletterJanuari2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage1",
+    "slug": "januari-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter February 2023",
+    "cover": "./assets/images/newsletter/NewsletterFebruari2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage2",
+    "slug": "februari-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter Maret 2023",
+    "cover": "./assets/images/newsletter/NewsletterMaret2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage3",
+    "slug": "maret-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter April 2023",
+    "cover": "./assets/images/newsletter/NewsletterApril2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage4",
+    "slug": "april-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter Mei 2023",
+    "cover": "./assets/images/newsletter/NEWSLETTEREdisiMay2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage5",
+    "slug": "mei-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter June 2023",
+    "cover": "./assets/images/newsletter/Newsletteredisijuni2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage6",
+    "slug": "juni-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter July 2023",
+    "cover": "./assets/images/newsletter/NewsllterJuly2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage7",
+    "slug": "juli-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter August 2023",
+    "cover": "./assets/images/newsletter/IYSA Newsletter Agustus 2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage8",
+    "slug": "agustus-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter September 2023",
+    "cover": "./assets/images/newsletter/IYSA Newsletter September.WebP",
+    "legacyPath": "/Newsletter2023DetailPage13",
+    "slug": "september-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter October 2023",
+    "cover": "./assets/images/newsletter/NewsletterOktober2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage14",
+    "slug": "oktober-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter November 2023",
+    "cover": "./assets/images/newsletter/IYSANewsletterNovember2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage15",
+    "slug": "november-2023"
+  },
+  {
+    "year": 2023,
+    "title": "IYSA Newsletter December 2023",
+    "cover": "./assets/images/newsletter/IYSANewsletterDecember2023.WebP",
+    "legacyPath": "/Newsletter2023DetailPage16",
+    "slug": "desember-2023"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter December 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterDecember2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage12",
+    "slug": "desember-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter November 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterNovember2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage11",
+    "slug": "november-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter October 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterOctober2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage10",
+    "slug": "oktober-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter September 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterSeptember2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage9",
+    "slug": "september-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter Agustus 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterAugust2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage8",
+    "slug": "agustus-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter July 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterJuly2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage7",
+    "slug": "juli-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter June 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterJune2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage6",
+    "slug": "juni-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter May 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterMay2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage5",
+    "slug": "mei-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter April 2024",
+    "cover": "./assets/images/newsletter/Newsletter2024April.WebP",
+    "legacyPath": "/Newsletter2024DetailPage4",
+    "slug": "april-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter Maret 2024",
+    "cover": "./assets/images/newsletter/IYSA Newsletter Maret 2024.jpg",
+    "legacyPath": "/Newsletter2024DetailPage3",
+    "slug": "maret-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter February 2024",
+    "cover": "./assets/images/newsletter/IYSANewsletterFebruary2024.WebP",
+    "legacyPath": "/Newsletter2024DetailPage2",
+    "slug": "februari-2024"
+  },
+  {
+    "year": 2024,
+    "title": "IYSA Newsletter January 2024",
+    "cover": "./assets/images/newsletter/NewsllterJanuari2024.jpeg",
+    "legacyPath": "/Newsletter2024DetailPage1",
+    "slug": "januari-2024"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter January 2025",
+    "cover": "./assets/images/newsletter/NewsletterJanuaryEdition2025.WebP",
+    "legacyPath": "/Newsletter2025DetailPage1",
+    "slug": "januari-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter February 2025",
+    "cover": "./assets/images/newsletter/NewsletterFerbruaryEdition2025.jpg",
+    "legacyPath": "/Newsletter2025DetailPage2",
+    "slug": "februari-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter March 2025",
+    "cover": "./assets/images/newsletter/NewsletterMarchEdition2025.jpg",
+    "legacyPath": "/Newsletter2025DetailPage3",
+    "slug": "maret-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter April 2025",
+    "cover": "./assets/images/newsletter/NewsletterApril2025Edition.jpg",
+    "legacyPath": "/Newsletter2025DetailPage4",
+    "slug": "april-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter May 2025",
+    "cover": "./assets/images/newsletter/NewsletterMayEdition2025.jpg",
+    "legacyPath": "/Newsletter2025DetailPage5",
+    "slug": "mei-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter Juni 2025",
+    "cover": "./assets/images/newsletter/NewsletterJuneEdition2025.jpg",
+    "legacyPath": "/Newsletter2025DetailPage6",
+    "slug": "juni-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter Batch 1 2025",
+    "cover": "./assets/images/newsletter/Newsletter A batch 1.png",
+    "legacyPath": "/Newsletter2025DetailPage7",
+    "slug": "edisi-batch-1-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter Batch 2 2025",
+    "cover": "./assets/images/newsletter/Newsletter B batch 2.png",
+    "legacyPath": "/Newsletter2025DetailPage8",
+    "slug": "edisi-batch-2-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter Batch 3 2025",
+    "cover": "./assets/images/newsletter/Newsletter Batch 3 2025.png",
+    "legacyPath": "/Newsletter2025DetailPage9",
+    "slug": "edisi-batch-3-2025"
+  },
+  {
+    "year": 2025,
+    "title": "IYSA Newsletter Batch 4 2025",
+    "cover": "/assets/images/allimg/Newsletter_Batch_4_2025_mwubst.png",
+    "legacyPath": "/Newsletter2025DetailPage10",
+    "slug": "edisi-batch-4-2025"
+  },
+  {
+    "year": 2026,
+    "title": "IYSA Newsletter January 2026",
+    "cover": "/assets/images/allimg/Newsletter_Batch_1_vfjaf8.png",
+    "legacyPath": "/Newsletter2026DetailPage1",
+    "slug": "edisi-batch-1-2026"
+  },
+  {
+    "year": 2026,
+    "title": "IYSA Newsletter Batch 2 2026",
+    "cover": "/assets/images/allimg/newsletter 2.png",
+    "legacyPath": "/Newsletter2026DetailPage2",
+    "slug": "edisi-batch-2-2026"
+  }
+]

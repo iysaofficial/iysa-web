@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# hasil migrasi aset besar tetap di-commit; ini hanya cache lokal
+.env
+.env.local

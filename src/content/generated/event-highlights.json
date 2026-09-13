@@ -1,0 +1,47 @@
+[
+  {
+    "legacyId": 1,
+    "title": "Youth National Science Fair (YNSF) 2026",
+    "poster": "./assets/images/poster/ynsf2026.png",
+    "level": "national",
+    "location": "Hybrid",
+    "date": "March 31st - April 3rd (online) April 5th - April 9th (offline), 2026",
+    "link": "/EventPage1"
+  },
+  {
+    "legacyId": 2,
+    "title": "Youth International Science Fair (YISF) 2026",
+    "poster": "./assets/images/poster/yisf2026.png",
+    "level": "international",
+    "location": "Hybrid",
+    "date": "March 31st - April 3rd (online) April 5th - April 9th (offline), 2026",
+    "link": "/EventPage2"
+  },
+  {
+    "legacyId": 3,
+    "title": "Online Science Project Competition (OSPC) 2026",
+    "poster": "./assets/images/poster/ospc2026.png",
+    "level": "national",
+    "location": "Online",
+    "date": "February 13rd - March 13th (online), 2026",
+    "link": "/EventPage3"
+  },
+  {
+    "legacyId": 4,
+    "title": "Lomba Karya Tulis Ilmiah Nasional (LKTIN) 2026",
+    "poster": "./assets/images/poster/lktin2026.png",
+    "level": "national",
+    "location": "Online",
+    "date": "March 10th - 13rd (online), 2026",
+    "link": "/EventPage3"
+  },
+  {
+    "legacyId": 5,
+    "title": "Invention and Innovation Fair (IIF) 2026",
+    "poster": "./assets/images/poster/iif2026.png",
+    "level": "national",
+    "location": "Online",
+    "date": "March 10th - 13rd (online), 2026",
+    "link": "/EventPage4"
+  }
+]

@@ -1,0 +1,1402 @@
+[
+  {
+    "source": "/",
+    "destination": "/id",
+    "permanent": true
+  },
+  {
+    "source": "/About",
+    "destination": "/id/profil",
+    "permanent": true
+  },
+  {
+    "source": "/AllEventPage",
+    "destination": "/id/event",
+    "permanent": true
+  },
+  {
+    "source": "/AllEventWebPage",
+    "destination": "/id/event/situs",
+    "permanent": true
+  },
+  {
+    "source": "/AllEventAffiliation",
+    "destination": "/id/event/afiliasi",
+    "permanent": true
+  },
+  {
+    "source": "/AllEventAffiliationWebPage",
+    "destination": "/id/mitra",
+    "permanent": true
+  },
+  {
+    "source": "/CalenderEvent",
+    "destination": "/id/kalender",
+    "permanent": true
+  },
+  {
+    "source": "/ContactPage",
+    "destination": "/id/kontak",
+    "permanent": true
+  },
+  {
+    "source": "/Curasi",
+    "destination": "/id/kurasi",
+    "permanent": true
+  },
+  {
+    "source": "/CurationLKTIN",
+    "destination": "/id/kurasi/lktin",
+    "permanent": true
+  },
+  {
+    "source": "/CurationOSPC",
+    "destination": "/id/kurasi/ospc",
+    "permanent": true
+  },
+  {
+    "source": "/ExpertTeam",
+    "destination": "/id/tim/ahli",
+    "permanent": true
+  },
+  {
+    "source": "/ExpertStaff",
+    "destination": "/id/tim/staf-ahli",
+    "permanent": true
+  },
+  {
+    "source": "/FaqPage",
+    "destination": "/id/faq",
+    "permanent": true
+  },
+  {
+    "source": "/GalleryPhoto",
+    "destination": "/id/galeri/foto",
+    "permanent": true
+  },
+  {
+    "source": "/GalleryVideo",
+    "destination": "/id/galeri/video",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterPage",
+    "destination": "/id/newsletter",
+    "permanent": true
+  },
+  {
+    "source": "/OurTeam",
+    "destination": "/id/tim",
+    "permanent": true
+  },
+  {
+    "source": "/Event/1",
+    "destination": "/id/event/olimpiade-sains-siswa-madrasah-nasional-os2mn-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/2",
+    "destination": "/id/event/youth-national-science-fair-ynsf-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/3",
+    "destination": "/id/event/youth-international-science-fair-yisf-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/4",
+    "destination": "/id/event/national-youth-invention-and-innovation-award-nyiia-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/5",
+    "destination": "/id/event/international-science-project-competition-ispc-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/6",
+    "destination": "/id/event/world-invention-competition-and-exhibition-wice-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/7",
+    "destination": "/id/event/indonesia-international-applied-science-project-olympiad-i2aspo-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/8",
+    "destination": "/id/event/national-applied-science-project-olympiad-naspo-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/9",
+    "destination": "/id/event/international-science-and-invention-fair-isif",
+    "permanent": true
+  },
+  {
+    "source": "/Event/10",
+    "destination": "/id/event/nasional-research-teacher-competition-nrtc-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/11",
+    "destination": "/id/event/international-research-teacher-competition-irtc-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/12",
+    "destination": "/id/event/international-science-festival-isf-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/13",
+    "destination": "/id/event/global-competition-for-life-sciences-glocolis-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/14",
+    "destination": "/id/event/international-science-project-competition-ispc-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/15",
+    "destination": "/id/event/nyiia-ke-2-national-youth-invention-and-innovation-award-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/16",
+    "destination": "/id/event/5th-wyiia-world-youth-invention-and-innovation-award",
+    "permanent": true
+  },
+  {
+    "source": "/Event/17",
+    "destination": "/id/event/national-invention-competition-for-young-moslem-scientists-iicyms-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/18",
+    "destination": "/id/event/indonesia-international-iot-olympiad-i3o-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/19",
+    "destination": "/id/event/international-youth-business-competition-iybc-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/20",
+    "destination": "/id/event/world-youth-stem-invention-innovation-wysii-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/21",
+    "destination": "/id/event/international-youth-physics-olympiad-iypo-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Event/22",
+    "destination": "/id/event/world-invention-competition-and-exhibition-2025-wice",
+    "permanent": true
+  },
+  {
+    "source": "/Event/23",
+    "destination": "/id/event/world-robotics-computer-science-olympiad-wrcso-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/24",
+    "destination": "/id/event/international-invention-competition-for-young-moslem-scientists-iicyms-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Event/25",
+    "destination": "/id/event/national-innovative-science-environmental-and-entrepreneur-fair-niseef-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/26",
+    "destination": "/id/event/asean-innovative-science-environmental-and-entrepreneur-fair-aiseef-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/27",
+    "destination": "/id/event/international-young-moslem-inventor-award-iymia-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/28",
+    "destination": "/id/event/global-youth-invention-and-innovation-fair-gyiif-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/29",
+    "destination": "/id/event/youth-national-science-fair-ynsf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/30",
+    "destination": "/id/event/youth-international-science-fair-yisf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/31",
+    "destination": "/id/event/online-science-project-competition-ospc-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/32",
+    "destination": "/id/event/lomba-karya-tulis-ilmiah-nasional-lktin-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/33",
+    "destination": "/id/event/invention-and-innovation-fair-iif-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/34",
+    "destination": "/id/event/jakarta-international-science-fair-jisf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/35",
+    "destination": "/id/event/jakarta-national-science-fair-jnsf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/36",
+    "destination": "/id/event/imsef-international-mathematics-and-science-education-fair-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/37",
+    "destination": "/id/event/os2mn-olimpiade-sains-siswa-madrasah-nasional-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/38",
+    "destination": "/id/event/bisf-bali-international-science-fair-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/39",
+    "destination": "/id/event/i3oindonesia-international-iot-olympiad-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/40",
+    "destination": "/id/event/iybcinternational-youth-business-competition-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/41",
+    "destination": "/id/event/iwc-i3cworld-cup-innovation-international-invention-and-innovation-competition-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/42",
+    "destination": "/id/event/wico-world-innovation-and-creativity-olympiad-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/43",
+    "destination": "/id/event/nicyms-national-invention-competition-for-young-moslem-scientist",
+    "permanent": true
+  },
+  {
+    "source": "/Event/44",
+    "destination": "/id/event/iicyms-international-invention-competition-for-young-moslem-scientists",
+    "permanent": true
+  },
+  {
+    "source": "/Event/45",
+    "destination": "/id/event/wrcso-world-robotic-and-computer-science-olympiad",
+    "permanent": true
+  },
+  {
+    "source": "/Event/46",
+    "destination": "/id/event/tisiif-thailand-international-science-invention-and-innovation-fair",
+    "permanent": true
+  },
+  {
+    "source": "/Event/47",
+    "destination": "/id/event/wseec-world-science-environment-engineering-competition",
+    "permanent": true
+  },
+  {
+    "source": "/Event/48",
+    "destination": "/id/event/iiiex-indonesia-international-invention-expo",
+    "permanent": true
+  },
+  {
+    "source": "/Event/49",
+    "destination": "/id/event/wice-world-invention-competition-and-exhibition",
+    "permanent": true
+  },
+  {
+    "source": "/Event/50",
+    "destination": "/id/event/isif-international-science-and-invention-fair",
+    "permanent": true
+  },
+  {
+    "source": "/Event/51",
+    "destination": "/id/event/nsif-national-science-and-invention-fair",
+    "permanent": true
+  },
+  {
+    "source": "/Event/52",
+    "destination": "/id/event/irtc-international-research-teacher-competition",
+    "permanent": true
+  },
+  {
+    "source": "/Event/53",
+    "destination": "/id/event/nrtc-national-research-teacher-competition",
+    "permanent": true
+  },
+  {
+    "source": "/Event/54",
+    "destination": "/id/event/nasisc-national-agriculture-strategic-studies-and-innovation-science-competition",
+    "permanent": true
+  },
+  {
+    "source": "/Event/55",
+    "destination": "/id/event/wasisc-world-agriculture-strategic-studies-and-innovation-science-competition",
+    "permanent": true
+  },
+  {
+    "source": "/Event/56",
+    "destination": "/id/event/wsdg-world-sustainable-development-goals-challenge-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Event/57",
+    "destination": "/id/event/nyiia-national-youth-invention-and-innovation-award",
+    "permanent": true
+  },
+  {
+    "source": "/Event/58",
+    "destination": "/id/event/wyiia-world-youth-invention-and-innovation-award",
+    "permanent": true
+  },
+  {
+    "source": "/Event/59",
+    "destination": "/id/event/naspo-national-applied-science-project-olympiad",
+    "permanent": true
+  },
+  {
+    "source": "/Event/60",
+    "destination": "/id/event/i2aspo-indonesian-international-applied-science-project-olympiad",
+    "permanent": true
+  },
+  {
+    "source": "/Event/61",
+    "destination": "/id/event/lomba-invensi-ptk",
+    "permanent": true
+  },
+  {
+    "source": "/Event/:id",
+    "destination": "/id/event",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage1",
+    "destination": "/id/mitra/beijing-youth-science-creation-competition",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage10",
+    "destination": "/id/mitra/world-invention-creativity-olympic-wico",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage11",
+    "destination": "/id/mitra/innoverse-invention-and-innovation-expo",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage12",
+    "destination": "/id/mitra/international-creative-papers-conference-olympics-icpc",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage13",
+    "destination": "/id/mitra/malaysia-international-young-inventors-olympiad-miyio-2025",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage2",
+    "destination": "/id/mitra/taiwan-international-science-fair",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage3",
+    "destination": "/id/mitra/phatthalung-international-science-fair",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage4",
+    "destination": "/id/mitra/5th-international-exhibition-inventcor",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage5",
+    "destination": "/id/mitra/malaysia-invention-innovation-expo",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage6",
+    "destination": "/id/mitra/international-innovation-and-invention-show-e-nnovate",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage7",
+    "destination": "/id/mitra/worldinvent-singapore-wosg",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage8",
+    "destination": "/id/mitra/africa-science-buskers-festival",
+    "permanent": true
+  },
+  {
+    "source": "/EventAffiliationPage9",
+    "destination": "/id/mitra/china-adolescents-science-and-technology-innovation-contest-castic",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage1",
+    "destination": "/id/newsletter/januari-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage13",
+    "destination": "/id/newsletter/september-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage14",
+    "destination": "/id/newsletter/oktober-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage15",
+    "destination": "/id/newsletter/november-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage16",
+    "destination": "/id/newsletter/desember-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage2",
+    "destination": "/id/newsletter/februari-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage3",
+    "destination": "/id/newsletter/maret-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage4",
+    "destination": "/id/newsletter/april-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage5",
+    "destination": "/id/newsletter/mei-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage6",
+    "destination": "/id/newsletter/juni-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage7",
+    "destination": "/id/newsletter/juli-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2023DetailPage8",
+    "destination": "/id/newsletter/agustus-2023",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage1",
+    "destination": "/id/newsletter/januari-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage10",
+    "destination": "/id/newsletter/oktober-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage11",
+    "destination": "/id/newsletter/november-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage12",
+    "destination": "/id/newsletter/desember-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage2",
+    "destination": "/id/newsletter/februari-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage3",
+    "destination": "/id/newsletter/maret-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage4",
+    "destination": "/id/newsletter/april-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage5",
+    "destination": "/id/newsletter/mei-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage6",
+    "destination": "/id/newsletter/juni-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage7",
+    "destination": "/id/newsletter/juli-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage8",
+    "destination": "/id/newsletter/agustus-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2024DetailPage9",
+    "destination": "/id/newsletter/september-2024",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage1",
+    "destination": "/id/newsletter/januari-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage10",
+    "destination": "/id/newsletter/edisi-batch-4-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage2",
+    "destination": "/id/newsletter/februari-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage3",
+    "destination": "/id/newsletter/maret-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage4",
+    "destination": "/id/newsletter/april-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage5",
+    "destination": "/id/newsletter/mei-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage6",
+    "destination": "/id/newsletter/juni-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage7",
+    "destination": "/id/newsletter/edisi-batch-1-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage8",
+    "destination": "/id/newsletter/edisi-batch-2-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2025DetailPage9",
+    "destination": "/id/newsletter/edisi-batch-3-2025",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2026DetailPage1",
+    "destination": "/id/newsletter/edisi-batch-1-2026",
+    "permanent": true
+  },
+  {
+    "source": "/Newsletter2026DetailPage2",
+    "destination": "/id/newsletter/edisi-batch-2-2026",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage1",
+    "destination": "/id/newsletter/januari-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage10",
+    "destination": "/id/newsletter/oktober-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage11",
+    "destination": "/id/newsletter/november-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage12",
+    "destination": "/id/newsletter/desember-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage2",
+    "destination": "/id/newsletter/februari-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage3",
+    "destination": "/id/newsletter/maret-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage4",
+    "destination": "/id/newsletter/april-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage5",
+    "destination": "/id/newsletter/mei-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage6",
+    "destination": "/id/newsletter/juni-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage7",
+    "destination": "/id/newsletter/juli-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage8",
+    "destination": "/id/newsletter/agustus-2022",
+    "permanent": true
+  },
+  {
+    "source": "/NewsletterDetailPage9",
+    "destination": "/id/newsletter/september-2022",
+    "permanent": true
+  },
+  {
+    "source": "/about",
+    "destination": "/id/profil",
+    "permanent": true
+  },
+  {
+    "source": "/alleventpage",
+    "destination": "/id/event",
+    "permanent": true
+  },
+  {
+    "source": "/alleventwebpage",
+    "destination": "/id/event/situs",
+    "permanent": true
+  },
+  {
+    "source": "/alleventaffiliation",
+    "destination": "/id/event/afiliasi",
+    "permanent": true
+  },
+  {
+    "source": "/alleventaffiliationwebpage",
+    "destination": "/id/mitra",
+    "permanent": true
+  },
+  {
+    "source": "/calenderevent",
+    "destination": "/id/kalender",
+    "permanent": true
+  },
+  {
+    "source": "/contactpage",
+    "destination": "/id/kontak",
+    "permanent": true
+  },
+  {
+    "source": "/curasi",
+    "destination": "/id/kurasi",
+    "permanent": true
+  },
+  {
+    "source": "/curationlktin",
+    "destination": "/id/kurasi/lktin",
+    "permanent": true
+  },
+  {
+    "source": "/curationospc",
+    "destination": "/id/kurasi/ospc",
+    "permanent": true
+  },
+  {
+    "source": "/expertteam",
+    "destination": "/id/tim/ahli",
+    "permanent": true
+  },
+  {
+    "source": "/expertstaff",
+    "destination": "/id/tim/staf-ahli",
+    "permanent": true
+  },
+  {
+    "source": "/faqpage",
+    "destination": "/id/faq",
+    "permanent": true
+  },
+  {
+    "source": "/galleryphoto",
+    "destination": "/id/galeri/foto",
+    "permanent": true
+  },
+  {
+    "source": "/galleryvideo",
+    "destination": "/id/galeri/video",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterpage",
+    "destination": "/id/newsletter",
+    "permanent": true
+  },
+  {
+    "source": "/ourteam",
+    "destination": "/id/tim",
+    "permanent": true
+  },
+  {
+    "source": "/event/1",
+    "destination": "/id/event/olimpiade-sains-siswa-madrasah-nasional-os2mn-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/2",
+    "destination": "/id/event/youth-national-science-fair-ynsf-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/3",
+    "destination": "/id/event/youth-international-science-fair-yisf-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/4",
+    "destination": "/id/event/national-youth-invention-and-innovation-award-nyiia-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/5",
+    "destination": "/id/event/international-science-project-competition-ispc-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/6",
+    "destination": "/id/event/world-invention-competition-and-exhibition-wice-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/7",
+    "destination": "/id/event/indonesia-international-applied-science-project-olympiad-i2aspo-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/8",
+    "destination": "/id/event/national-applied-science-project-olympiad-naspo-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/9",
+    "destination": "/id/event/international-science-and-invention-fair-isif",
+    "permanent": true
+  },
+  {
+    "source": "/event/10",
+    "destination": "/id/event/nasional-research-teacher-competition-nrtc-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/11",
+    "destination": "/id/event/international-research-teacher-competition-irtc-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/12",
+    "destination": "/id/event/international-science-festival-isf-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/13",
+    "destination": "/id/event/global-competition-for-life-sciences-glocolis-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/14",
+    "destination": "/id/event/international-science-project-competition-ispc-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/15",
+    "destination": "/id/event/nyiia-ke-2-national-youth-invention-and-innovation-award-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/16",
+    "destination": "/id/event/5th-wyiia-world-youth-invention-and-innovation-award",
+    "permanent": true
+  },
+  {
+    "source": "/event/17",
+    "destination": "/id/event/national-invention-competition-for-young-moslem-scientists-iicyms-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/18",
+    "destination": "/id/event/indonesia-international-iot-olympiad-i3o-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/19",
+    "destination": "/id/event/international-youth-business-competition-iybc-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/20",
+    "destination": "/id/event/world-youth-stem-invention-innovation-wysii-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/21",
+    "destination": "/id/event/international-youth-physics-olympiad-iypo-2024",
+    "permanent": true
+  },
+  {
+    "source": "/event/22",
+    "destination": "/id/event/world-invention-competition-and-exhibition-2025-wice",
+    "permanent": true
+  },
+  {
+    "source": "/event/23",
+    "destination": "/id/event/world-robotics-computer-science-olympiad-wrcso-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/24",
+    "destination": "/id/event/international-invention-competition-for-young-moslem-scientists-iicyms-2025",
+    "permanent": true
+  },
+  {
+    "source": "/event/25",
+    "destination": "/id/event/national-innovative-science-environmental-and-entrepreneur-fair-niseef-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/26",
+    "destination": "/id/event/asean-innovative-science-environmental-and-entrepreneur-fair-aiseef-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/27",
+    "destination": "/id/event/international-young-moslem-inventor-award-iymia-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/28",
+    "destination": "/id/event/global-youth-invention-and-innovation-fair-gyiif-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/29",
+    "destination": "/id/event/youth-national-science-fair-ynsf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/30",
+    "destination": "/id/event/youth-international-science-fair-yisf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/31",
+    "destination": "/id/event/online-science-project-competition-ospc-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/32",
+    "destination": "/id/event/lomba-karya-tulis-ilmiah-nasional-lktin-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/33",
+    "destination": "/id/event/invention-and-innovation-fair-iif-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/34",
+    "destination": "/id/event/jakarta-international-science-fair-jisf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/35",
+    "destination": "/id/event/jakarta-national-science-fair-jnsf-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/36",
+    "destination": "/id/event/imsef-international-mathematics-and-science-education-fair-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/37",
+    "destination": "/id/event/os2mn-olimpiade-sains-siswa-madrasah-nasional-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/38",
+    "destination": "/id/event/bisf-bali-international-science-fair-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/39",
+    "destination": "/id/event/i3oindonesia-international-iot-olympiad-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/40",
+    "destination": "/id/event/iybcinternational-youth-business-competition-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/41",
+    "destination": "/id/event/iwc-i3cworld-cup-innovation-international-invention-and-innovation-competition-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/42",
+    "destination": "/id/event/wico-world-innovation-and-creativity-olympiad-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/43",
+    "destination": "/id/event/nicyms-national-invention-competition-for-young-moslem-scientist",
+    "permanent": true
+  },
+  {
+    "source": "/event/44",
+    "destination": "/id/event/iicyms-international-invention-competition-for-young-moslem-scientists",
+    "permanent": true
+  },
+  {
+    "source": "/event/45",
+    "destination": "/id/event/wrcso-world-robotic-and-computer-science-olympiad",
+    "permanent": true
+  },
+  {
+    "source": "/event/46",
+    "destination": "/id/event/tisiif-thailand-international-science-invention-and-innovation-fair",
+    "permanent": true
+  },
+  {
+    "source": "/event/47",
+    "destination": "/id/event/wseec-world-science-environment-engineering-competition",
+    "permanent": true
+  },
+  {
+    "source": "/event/48",
+    "destination": "/id/event/iiiex-indonesia-international-invention-expo",
+    "permanent": true
+  },
+  {
+    "source": "/event/49",
+    "destination": "/id/event/wice-world-invention-competition-and-exhibition",
+    "permanent": true
+  },
+  {
+    "source": "/event/50",
+    "destination": "/id/event/isif-international-science-and-invention-fair",
+    "permanent": true
+  },
+  {
+    "source": "/event/51",
+    "destination": "/id/event/nsif-national-science-and-invention-fair",
+    "permanent": true
+  },
+  {
+    "source": "/event/52",
+    "destination": "/id/event/irtc-international-research-teacher-competition",
+    "permanent": true
+  },
+  {
+    "source": "/event/53",
+    "destination": "/id/event/nrtc-national-research-teacher-competition",
+    "permanent": true
+  },
+  {
+    "source": "/event/54",
+    "destination": "/id/event/nasisc-national-agriculture-strategic-studies-and-innovation-science-competition",
+    "permanent": true
+  },
+  {
+    "source": "/event/55",
+    "destination": "/id/event/wasisc-world-agriculture-strategic-studies-and-innovation-science-competition",
+    "permanent": true
+  },
+  {
+    "source": "/event/56",
+    "destination": "/id/event/wsdg-world-sustainable-development-goals-challenge-2026",
+    "permanent": true
+  },
+  {
+    "source": "/event/57",
+    "destination": "/id/event/nyiia-national-youth-invention-and-innovation-award",
+    "permanent": true
+  },
+  {
+    "source": "/event/58",
+    "destination": "/id/event/wyiia-world-youth-invention-and-innovation-award",
+    "permanent": true
+  },
+  {
+    "source": "/event/59",
+    "destination": "/id/event/naspo-national-applied-science-project-olympiad",
+    "permanent": true
+  },
+  {
+    "source": "/event/60",
+    "destination": "/id/event/i2aspo-indonesian-international-applied-science-project-olympiad",
+    "permanent": true
+  },
+  {
+    "source": "/event/61",
+    "destination": "/id/event/lomba-invensi-ptk",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage1",
+    "destination": "/id/mitra/beijing-youth-science-creation-competition",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage10",
+    "destination": "/id/mitra/world-invention-creativity-olympic-wico",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage11",
+    "destination": "/id/mitra/innoverse-invention-and-innovation-expo",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage12",
+    "destination": "/id/mitra/international-creative-papers-conference-olympics-icpc",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage13",
+    "destination": "/id/mitra/malaysia-international-young-inventors-olympiad-miyio-2025",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage2",
+    "destination": "/id/mitra/taiwan-international-science-fair",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage3",
+    "destination": "/id/mitra/phatthalung-international-science-fair",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage4",
+    "destination": "/id/mitra/5th-international-exhibition-inventcor",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage5",
+    "destination": "/id/mitra/malaysia-invention-innovation-expo",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage6",
+    "destination": "/id/mitra/international-innovation-and-invention-show-e-nnovate",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage7",
+    "destination": "/id/mitra/worldinvent-singapore-wosg",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage8",
+    "destination": "/id/mitra/africa-science-buskers-festival",
+    "permanent": true
+  },
+  {
+    "source": "/eventaffiliationpage9",
+    "destination": "/id/mitra/china-adolescents-science-and-technology-innovation-contest-castic",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage1",
+    "destination": "/id/newsletter/januari-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage13",
+    "destination": "/id/newsletter/september-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage14",
+    "destination": "/id/newsletter/oktober-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage15",
+    "destination": "/id/newsletter/november-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage16",
+    "destination": "/id/newsletter/desember-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage2",
+    "destination": "/id/newsletter/februari-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage3",
+    "destination": "/id/newsletter/maret-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage4",
+    "destination": "/id/newsletter/april-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage5",
+    "destination": "/id/newsletter/mei-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage6",
+    "destination": "/id/newsletter/juni-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage7",
+    "destination": "/id/newsletter/juli-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2023detailpage8",
+    "destination": "/id/newsletter/agustus-2023",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage1",
+    "destination": "/id/newsletter/januari-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage10",
+    "destination": "/id/newsletter/oktober-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage11",
+    "destination": "/id/newsletter/november-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage12",
+    "destination": "/id/newsletter/desember-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage2",
+    "destination": "/id/newsletter/februari-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage3",
+    "destination": "/id/newsletter/maret-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage4",
+    "destination": "/id/newsletter/april-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage5",
+    "destination": "/id/newsletter/mei-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage6",
+    "destination": "/id/newsletter/juni-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage7",
+    "destination": "/id/newsletter/juli-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage8",
+    "destination": "/id/newsletter/agustus-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2024detailpage9",
+    "destination": "/id/newsletter/september-2024",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage1",
+    "destination": "/id/newsletter/januari-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage10",
+    "destination": "/id/newsletter/edisi-batch-4-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage2",
+    "destination": "/id/newsletter/februari-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage3",
+    "destination": "/id/newsletter/maret-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage4",
+    "destination": "/id/newsletter/april-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage5",
+    "destination": "/id/newsletter/mei-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage6",
+    "destination": "/id/newsletter/juni-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage7",
+    "destination": "/id/newsletter/edisi-batch-1-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage8",
+    "destination": "/id/newsletter/edisi-batch-2-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2025detailpage9",
+    "destination": "/id/newsletter/edisi-batch-3-2025",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2026detailpage1",
+    "destination": "/id/newsletter/edisi-batch-1-2026",
+    "permanent": true
+  },
+  {
+    "source": "/newsletter2026detailpage2",
+    "destination": "/id/newsletter/edisi-batch-2-2026",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage1",
+    "destination": "/id/newsletter/januari-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage10",
+    "destination": "/id/newsletter/oktober-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage11",
+    "destination": "/id/newsletter/november-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage12",
+    "destination": "/id/newsletter/desember-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage2",
+    "destination": "/id/newsletter/februari-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage3",
+    "destination": "/id/newsletter/maret-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage4",
+    "destination": "/id/newsletter/april-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage5",
+    "destination": "/id/newsletter/mei-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage6",
+    "destination": "/id/newsletter/juni-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage7",
+    "destination": "/id/newsletter/juli-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage8",
+    "destination": "/id/newsletter/agustus-2022",
+    "permanent": true
+  },
+  {
+    "source": "/newsletterdetailpage9",
+    "destination": "/id/newsletter/september-2022",
+    "permanent": true
+  }
+]

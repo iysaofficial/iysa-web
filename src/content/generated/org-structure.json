@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Deni Irawan, M. Pd",
+    "position": "Owner & Founder",
+    "photo": "/assets/images/allimg/pa_den_r1nzbs.png",
+    "photoAlt": "/assets/images/allimg/pa_den_r1nzbs.png",
+    "children": [
+      {
+        "name": "Anggraini, A. Md",
+        "position": "General Manager",
+        "photo": "/assets/images/allimg/bu_en2_ejstat.png",
+        "photoAlt": "/assets/images/allimg/bu_en2_ejstat.png",
+        "children": [
+          {
+            "name": "Kamal Putra",
+            "position": "Supervisor",
+            "photo": "/assets/images/allimg/kamal_slybh6.png",
+            "photoAlt": "/assets/images/allimg/kamal_slybh6.png",
+            "children": [
+              {
+                "name": "Zaidan Adi Prasetya",
+                "position": "IT Staff",
+                "photo": "/assets/images/allimg/pras_hn8zpc.png",
+                "photoAlt": "/assets/images/allimg/edit1_gndjwx.png",
+                "children": []
+              },
+              {
+                "name": "Astri, S.M",
+                "position": "Administration Team Coordinator",
+                "photo": "/assets/images/allimg/astri_a4dujw.png",
+                "photoAlt": "/assets/images/allimg/50.png",
+                "children": [
+                  {
+                    "name": "Risnawati",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/risna_sejmjx.png",
+                    "photoAlt": "/assets/images/allimg/63.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Nur Azizah, S.M",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/azizah_dcmxes.png",
+                    "photoAlt": "/assets/images/allimg/60.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Dini Juniarsih, S.Pd",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/dini2_ruwdyg.png",
+                    "photoAlt": "/assets/images/allimg/56.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Al Khansa Ariska Yulia",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/khansa1_ler8ob.png",
+                    "photoAlt": "/assets/images/allimg/khansa2_vghfvd.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Aziza Cinta Nadia Radjaloa",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/cinta_afjsnp.png",
+                    "photoAlt": "/assets/images/allimg/54.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Rafida Anzelia",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/rafida2_dpvbve.png",
+                    "photoAlt": "/assets/images/allimg/58.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Umi Safitry, S.Ak",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/umi_ontvyq.png",
+                    "photoAlt": "/assets/images/allimg/70.png",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "Irsyad Kamil Zaidan",
+                "position": "Promotion and Publication Team Coordinator",
+                "photo": "/assets/images/allimg/zidan_lunpac.png",
+                "photoAlt": "/assets/images/allimg/65.png",
+                "children": [
+                  {
+                    "name": "Maulana Yusup",
+                    "position": "Promotion and Publication Staff",
+                    "photo": "/assets/images/allimg/usup_fqioyz.png",
+                    "photoAlt": "/assets/images/allimg/73.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Handaka Putra Atmaja",
+                    "position": "Promotion and Publication Staff",
+                    "photo": "/assets/images/allimg/daka_zwmy8v.png",
+                    "photoAlt": "/assets/images/allimg/76.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Auli Fadhillah S.Ds",
+                    "position": "Promotion and Publication Staff",
+                    "photo": "/assets/images/allimg/49.png",
+                    "photoAlt": "/assets/images/allimg/48.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Bunga Aulia Zahra",
+                    "position": "Promotion and Publication Staff",
+                    "photo": "/assets/images/allimg/bunga_olbags.png",
+                    "photoAlt": "/assets/images/allimg/80.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Indah Khaira Azahra A.Md.I.Kom",
+                    "position": "Promotion and Publication Staff",
+                    "photo": "/assets/images/allimg/bunga_ty0gh4.png",
+                    "photoAlt": "/assets/images/allimg/86.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Nadya Nur Aulia A.Md.I.Kom",
+                    "position": "Promotion and Publication Staff",
+                    "photo": "/assets/images/allimg/nadia2_iejnwm.png",
+                    "photoAlt": "/assets/images/allimg/83.png",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "Eki Iman Jordiansyah",
+                "position": "Research & Development Team Coordinator",
+                "photo": "/assets/images/allimg/eki_iman_y3ih3r.png",
+                "photoAlt": "/assets/images/allimg/90.png",
+                "children": [
+                  {
+                    "name": "Candini Ardiyanah",
+                    "position": "Research & Development Staff",
+                    "photo": "/assets/images/allimg/candini_tpiejj.png",
+                    "photoAlt": "/assets/images/allimg/92.png",
+                    "children": []
+                  },
+                  {
+                    "name": "Iqbal Rahmatullah",
+                    "position": "Research & Development Staff",
+                    "photo": "/assets/images/allimg/69.png",
+                    "photoAlt": "/assets/images/allimg/68.png",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
