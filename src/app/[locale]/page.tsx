@@ -16,6 +16,7 @@ import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allIssues, allAffiliates } from "@/lib/data";
 import { intro, vision, mission, goals } from "@/content/profile";
 import { affiliateNames } from "@/content/affiliates";
+import { mediaPartners } from "@/content/external";
 
 export async function generateMetadata({
   params,
@@ -245,6 +246,33 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             {t("partnersWallLead", { count: s.partners })}
           </p>
           <PartnerWall />
+
+          {/* Mitra media. Situs lama memberinya seksi sendiri di beranda; itu
+              tidak ikut pindah sama sekali, jadi satu-satunya mitra media IYSA
+              tak tersebut di mana pun. Ia menumpang di sini alih-alih diberi
+              seksi sendiri — satu logo di bawah judul selebar layar akan
+              terbaca sebagai ruang kosong, bukan sebagai pengakuan. */}
+          <div className="mt-10 border-t border-[var(--line)] pt-8">
+            <h3 className="eyebrow">{t("mediaPartnersTitle")}</h3>
+            <ul className="mt-4 flex flex-wrap gap-4">
+              {mediaPartners.map((m) => (
+                /* Tanpa ubin terang `sel-logo` yang dipakai dinding mitra:
+                   logo ini sudah membawa latarnya sendiri yang gelap, jadi
+                   alas terang di baliknya cuma jadi bingkai canggung. */
+                <li key={m.name} className="grid h-20 w-44 place-items-center overflow-hidden border border-[var(--line)]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={m.logo}
+                    alt={m.name}
+                    width={176}
+                    height={80}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </Section>
 

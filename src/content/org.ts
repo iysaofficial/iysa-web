@@ -27,6 +27,12 @@ export const org = {
     postalCode: "16519",
     country: "ID",
     mapsUrl: "https://goo.gl/maps/9x18coXGCmSscKec6",
+    /* Peta tersemat kantor. Situs lama memasangnya di halaman kontak; versi
+       pertama situs baru hanya menyisakan alamatnya sebagai tautan teks, jadi
+       pengunjung kehilangan satu-satunya cara melihat di mana kantornya
+       sebelum mengklik keluar. */
+    mapsEmbed:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253741.41689444406!2d106.49425108671875!3d-6.431333699999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69e906913915c7%3A0x1de9ddf653d9736f!2sIYSA!5e0!3m2!1sid!2sid!4v1689664084076!5m2!1sid!2sid",
   },
 
   /**

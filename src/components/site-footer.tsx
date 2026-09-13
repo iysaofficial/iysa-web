@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { primaryNav } from "@/lib/nav";
+import { primaryNav, secondaryNav } from "@/lib/nav";
 import { org, addressLine, primaryWhatsapp } from "@/content/org";
 import { SubscribeForm } from "./subscribe-form";
 import { IysaWordmark } from "./iysa-logo";
@@ -19,7 +19,7 @@ export async function SiteFooter() {
       <div className="shell py-14">
         <div className="grid gap-10 md:grid-cols-12">
           {/* Identitas */}
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             {/* Lambang di kaki halaman lebih besar daripada di header (36px):
                 di sini ia satu-satunya tanda merek di layar, bukan pendamping
                 navigasi, dan di 36px meridian bola dunianya ikut terbaca. */}
@@ -31,7 +31,7 @@ export async function SiteFooter() {
           </div>
 
           {/* Tautan */}
-          <nav aria-label={t("explore")} className="md:col-span-3">
+          <nav aria-label={t("explore")} className="md:col-span-2">
             <h2 className="eyebrow">{t("explore")}</h2>
             <ul className="mt-4 flex flex-col gap-2.5">
               {primaryNav.map((item) => (
@@ -52,6 +52,29 @@ export async function SiteFooter() {
                   {nav("dashboard")}
                 </a>
               </li>
+            </ul>
+          </nav>
+
+          {/* Lainnya.
+              Bukan sekadar pelengkap: sampai kolom ini ada, empat halaman —
+              kurasi, kalender event, galeri foto, dan event afiliasi — tidak
+              bisa dijangkau dari mana pun di situs. Semuanya punya padanan di
+              dropdown menu situs lama, yang ikut hilang saat menunya diratakan
+              jadi satu tingkat. Mesin pencari masih menemukannya lewat
+              sitemap; pengunjung tidak. */}
+          <nav aria-label={nav("more")} className="md:col-span-2">
+            <h2 className="eyebrow">{nav("more")}</h2>
+            <ul className="mt-4 flex flex-col gap-2.5">
+              {secondaryNav.map((item) => (
+                <li key={item.path}>
+                  <Link
+                    href={item.path}
+                    className="text-[15px] text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
+                  >
+                    {nav(item.key)}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
 

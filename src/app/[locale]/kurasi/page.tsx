@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { PageHeader, Section } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
-import { curation, curationLabels } from "@/content/external";
+import { curation, curationLabels, ptkDocuments, ptkDocumentLabels } from "@/content/external";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -37,6 +37,42 @@ export default async function CurationPage({ params }: { params: Promise<{ local
             </li>
           ))}
         </ul>
+
+        {/* Dokumen resmi Lomba Invensi & PTK.
+            Di situs lama keduanya hanya ada di dropdown navbar "Event Info",
+            yang tidak ikut pindah — jadi sejak penulisan ulang, dua berkas ini
+            tidak bisa dijangkau dari mana pun. Tempatnya di sini: halaman ini
+            memang halaman dokumen resmi. */}
+        <div className="mt-10 border-t border-[var(--line)] pt-8">
+          <h2 className="eyebrow">{t("documentsTitle")}</h2>
+          <ul className="mt-4 flex flex-col">
+            {ptkDocuments.map((d) => (
+              <li key={d.key} className="border-b border-[var(--line)] last:border-0">
+                <a
+                  href={d.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4"
+                >
+                  <span className="text-[15.5px] leading-snug font-medium text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--teal)]">
+                    {ptkDocumentLabels[d.key]?.[locale] ?? d.key}
+                  </span>
+                  <span className="flex items-center gap-3">
+                    <span className="tnum font-mono text-[13px] text-[var(--ink-faint)]">
+                      {d.year}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="text-[12px] text-[var(--teal)] transition-transform duration-[var(--gerak-cepat)] group-hover:translate-x-0.5"
+                    >
+                      ↗
+                    </span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* curation.pdf sengaja null: berkas yang ditautkan situs lama
             (Kurasi.pdf) tidak pernah ada di repo, jadi tombolnya selama ini

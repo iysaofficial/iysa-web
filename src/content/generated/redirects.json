@@ -46,12 +46,12 @@
   },
   {
     "source": "/CurationLKTIN",
-    "destination": "/id/kurasi/lktin",
+    "destination": "/id/kurasi",
     "permanent": true
   },
   {
     "source": "/CurationOSPC",
-    "destination": "/id/kurasi/ospc",
+    "destination": "/id/kurasi",
     "permanent": true
   },
   {
@@ -746,12 +746,12 @@
   },
   {
     "source": "/curationlktin",
-    "destination": "/id/kurasi/lktin",
+    "destination": "/id/kurasi",
     "permanent": true
   },
   {
     "source": "/curationospc",
-    "destination": "/id/kurasi/ospc",
+    "destination": "/id/kurasi",
     "permanent": true
   },
   {

@@ -30,15 +30,34 @@ export const primaryNav: NavItem[] = [
   { key: "contact", path: "/kontak" },
 ];
 
-/** Halaman yang harus masuk sitemap tapi tidak perlu tempat di menu utama. */
+/**
+ * Halaman di luar menu utama.
+ *
+ * ── Kenapa daftar ini sekarang juga dirender ─────────────────────────────
+ *
+ * Semula ia hanya memberi makan sitemap, dan akibatnya ada empat halaman yang
+ * TIDAK BISA DIJANGKAU dari mana pun di situs: kalender event, galeri foto,
+ * kurasi, dan event afiliasi. Keempatnya punya padanan di menu situs lama —
+ * di sana mereka duduk di dropdown "Our Events", "Gallery", dan "Event Info".
+ * Penulisan ulang meratakan menunya jadi satu tingkat tanpa memindahkan isi
+ * dropdown-nya ke mana pun.
+ *
+ * Mesin pencari menemukannya lewat sitemap, tapi pengunjung tidak punya satu
+ * pun jalan ke sana. Sekarang daftar ini jadi indeks di kaki halaman, jadi
+ * tiap halaman punya sedikitnya satu tautan masuk.
+ */
+export const secondaryNav: NavItem[] = [
+  { key: "curation", path: "/kurasi" },
+  { key: "calendar", path: "/kalender" },
+  { key: "partners", path: "/mitra" },
+  { key: "affiliateEvents", path: "/event/afiliasi" },
+  { key: "eventSites", path: "/event/situs" },
+  { key: "photos", path: "/galeri/foto" },
+  { key: "expertTeam", path: "/tim/ahli" },
+];
+
 export const secondaryPaths = [
-  "/event/situs",
-  "/event/afiliasi",
-  "/galeri/foto",
-  "/kurasi",
-  "/kurasi/lktin",
-  "/kurasi/ospc",
-  "/tim/ahli",
+  ...secondaryNav.map((n) => n.path),
   "/tim/staf-ahli",
 ];
 

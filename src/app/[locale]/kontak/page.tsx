@@ -51,6 +51,19 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                 )},
               ]}
             />
+
+            {/* Peta kantor — ada di situs lama, hilang di versi pertama situs
+                baru. Dimuat malas: iframe pihak ketiga di paro bawah halaman
+                tidak perlu ikut menahan muat awal. */}
+            <div className="mt-8 aspect-[4/3] w-full overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
+              <iframe
+                src={org.address.mapsEmbed}
+                title={t("office")}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-full w-full"
+              />
+            </div>
           </div>
         </div>
       </Section>

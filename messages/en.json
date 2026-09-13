@@ -17,7 +17,14 @@
     "theme": "Theme",
     "themeLight": "Light",
     "themeDark": "Dark",
-    "themeSystem": "Match system"
+    "themeSystem": "Match system",
+    "curation": "Curation",
+    "calendar": "Event calendar",
+    "affiliateEvents": "Affiliate events",
+    "eventSites": "Event websites",
+    "photos": "Photo gallery",
+    "expertTeam": "Expert team",
+    "more": "More"
   },
   "home": {
     "eyebrow": "Indonesian Young Scientist Association",
@@ -74,7 +81,8 @@
     "curationB3Title": "Scholarships and careers",
     "curationB3Body": "Helps open up scholarship opportunities, and the professional path that follows.",
     "curationB4Title": "Grants for schools",
-    "curationB4Body": "Improves a school’s chances of receiving a BOSKIN grant at primary and secondary level."
+    "curationB4Body": "Improves a school’s chances of receiving a BOSKIN grant at primary and secondary level.",
+    "mediaPartnersTitle": "Media partner"
   },
   "events": {
     "title": "Events",
@@ -232,7 +240,8 @@
     "title": "Curation",
     "lead": "Curation documents and lists of selected work.",
     "openDocument": "Open document",
-    "openFolder": "Open folder"
+    "openFolder": "Open folder",
+    "documentsTitle": "Official documents"
   },
   "calendar": {
     "title": "Event calendar",

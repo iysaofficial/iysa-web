@@ -17,7 +17,14 @@
     "theme": "Tema",
     "themeLight": "Terang",
     "themeDark": "Gelap",
-    "themeSystem": "Ikut sistem"
+    "themeSystem": "Ikut sistem",
+    "curation": "Kurasi",
+    "calendar": "Kalender event",
+    "affiliateEvents": "Event afiliasi",
+    "eventSites": "Situs event",
+    "photos": "Galeri foto",
+    "expertTeam": "Tim ahli",
+    "more": "Lainnya"
   },
   "home": {
     "eyebrow": "Indonesian Young Scientist Association",
@@ -74,7 +81,8 @@
     "curationB3Title": "Beasiswa dan karier",
     "curationB3Body": "Membantu membuka peluang beasiswa, juga jenjang karier profesional berikutnya.",
     "curationB4Title": "Hibah untuk sekolah",
-    "curationB4Body": "Menambah peluang satuan pendidikan mendapat hibah BOSKIN di jenjang dasar dan menengah."
+    "curationB4Body": "Menambah peluang satuan pendidikan mendapat hibah BOSKIN di jenjang dasar dan menengah.",
+    "mediaPartnersTitle": "Mitra media"
   },
   "events": {
     "title": "Event",
@@ -232,7 +240,8 @@
     "title": "Kurasi",
     "lead": "Dokumen kurasi dan daftar karya terpilih.",
     "openDocument": "Buka dokumen",
-    "openFolder": "Buka folder"
+    "openFolder": "Buka folder",
+    "documentsTitle": "Dokumen resmi"
   },
   "calendar": {
     "title": "Kalender event",
