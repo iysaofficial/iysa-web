@@ -67,10 +67,22 @@ export function IysaWordmark({
   return (
     <span className={`flex items-center gap-2.5 ${className}`}>
       <IysaLogo size={size} />
-      <span className="flex items-baseline gap-2">
-        <span className="text-[19px] font-extrabold tracking-[-0.04em] text-[var(--navy)]">
-          IYSA
-        </span>
+      <span className="flex items-center gap-2">
+        {/*
+          Huruf "IYSA" adalah letterform merek yang sesungguhnya, ditelusuri
+          dari berkas lockup dan dipasang sebagai mask supaya warnanya ikut
+          tema. Sebelumnya di sini Plus Jakarta Sans tebal — rapi, tapi bukan
+          huruf IYSA.
+
+          Baris "Indonesian Young Scientist Association" dari lockup aslinya
+          sengaja tidak ikut: pada tinggi navbar ia jadi ~5px dan tak terbaca.
+        */}
+        <span
+          className="wordmark-iysa"
+          style={{ height: Math.round(size * 0.54) }}
+          role="img"
+          aria-label="IYSA"
+        />
         {sub && (
           <span className="hidden text-[11px] leading-none text-[var(--ink-faint)] sm:inline">
             {sub}

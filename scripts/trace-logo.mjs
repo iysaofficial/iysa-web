@@ -36,7 +36,7 @@
  * Yang kedua itu yang dipakai komponen React dan objek 3D-nya, supaya
  * keduanya memakai bentuk yang sama persis dan tidak bisa menyimpang.
  */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
@@ -48,6 +48,13 @@ const ROOT = join(here, "..");
 const SUMBER =
   process.env.LOGO_SRC ??
   "/Users/kimen/Documents/IYSA/Dashboard IYSA/logo iysa tanpa logo type.png";
+
+/**
+ * Lockup lengkap: lambang + huruf "IYSA" + baris keterangan. Dipakai untuk
+ * menelusuri wordmark-nya saja — lihat catatan di bagian bawah berkas ini.
+ */
+const SUMBER_LOCKUP =
+  process.env.LOGO_LOCKUP_SRC ?? "/Users/kimen/Documents/IYSA/Dashboard IYSA/LOGO IYSA.png";
 
 /* ── Kelas warna ────────────────────────────────────────────────────────
  *
@@ -225,3 +232,70 @@ console.log(`
   Urutan lapisan = urutan gambar. Tiap piksel hanya masuk satu kelas, jadi
   lapisannya saling lepas dan menutup bidang yang sama dengan rasternya.
 `);
+
+/* ── Wordmark "IYSA" ────────────────────────────────────────────────────
+ *
+ * Navbar sebelumnya menulis "IYSA" dengan Plus Jakarta Sans tebal — huruf
+ * yang rapi, tapi BUKAN letterform merek IYSA. Pemilik situs menawarkan
+ * berkas lockup lengkapnya; memakainya apa adanya sebagai gambar gagal karena
+ * dua hal, dan keduanya terlihat begitu dirender pada ukuran navbar
+ * sesungguhnya:
+ *
+ *   - baris "Indonesian Young Scientist Association" jadi bubur di 36px
+ *   - seluruh teksnya gelap, jadi hilang ke latar di tema gelap situs ini
+ *
+ * Jadi hurufnya ditelusuri sendiri jadi satu path. Berkasnya dipakai sebagai
+ * CSS mask, bukan gambar: warnanya datang dari `background-color`, sehingga
+ * letterform-nya asli DAN ikut tema. Baris keterangannya sengaja tidak ikut.
+ *
+ * Koordinat potongnya terikat pada berkas lockup 1280×719 yang ada sekarang.
+ * Kalau berkasnya diganti, periksa ulang — skrip ini menolak hasil yang
+ * rasionya jauh dari yang diharapkan alih-alih menulis wordmark yang salah.
+ */
+if (existsSync(SUMBER_LOCKUP)) {
+  const POTONG = { left: 570, top: 110, width: 610, height: 250 };
+
+  const dipotong = await sharp(SUMBER_LOCKUP).extract(POTONG).toBuffer();
+  const dirapikan = await sharp(dipotong).trim({ threshold: 10 }).toBuffer({ resolveWithObject: true });
+  const { data: pikselW, info: infoW } = await sharp(dirapikan.data)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const rasio = infoW.width / infoW.height;
+  if (rasio < 2.5 || rasio > 3.4) {
+    console.error(
+      `\nWordmark hasil potong rasionya ${rasio.toFixed(2)} — di luar rentang wajar (2,5–3,4).\n` +
+        `Koordinat potong kemungkinan tidak cocok lagi dengan berkas lockup.\n`,
+    );
+    process.exit(1);
+  }
+
+  // Untuk CSS mask yang menentukan cuma bentuknya; warnanya datang dari CSS.
+  const maskerW = Buffer.alloc(infoW.width * infoW.height, 255);
+  for (let i = 0, p = 0; i < pikselW.length; i += 4, p++) {
+    if (pikselW[i + 3] > 128) maskerW[p] = 0;
+  }
+
+  const pngW = await sharp(maskerW, {
+    raw: { width: infoW.width, height: infoW.height, channels: 1 },
+  })
+    .png()
+    .toBuffer();
+
+  const svgW = await telusuri(pngW);
+  const { d: dW, aturan: aturanW } = ambilPath(svgW);
+
+  const berkasW =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${infoW.width} ${infoW.height}">` +
+    `<path fill="#000" fill-rule="${aturanW}" d="${dW}"/></svg>\n`;
+
+  writeFileSync(join(ROOT, "public", "media", "logo", "iysa-wordmark.svg"), berkasW);
+
+  console.log(
+    `  public/media/logo/iysa-wordmark.svg      ${(Buffer.byteLength(berkasW) / 1024).toFixed(1)} KB` +
+      `   ${infoW.width}×${infoW.height} (rasio ${rasio.toFixed(2)})\n`,
+  );
+} else {
+  console.log(`  wordmark dilewati — berkas lockup tidak ada di ${SUMBER_LOCKUP}\n`);
+}

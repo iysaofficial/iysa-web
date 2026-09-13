@@ -400,6 +400,54 @@ p, li {
   }
 }
 
+/* ── Lapisan lambang 3D ─────────────────────────────────────────────
+ *
+ * Lambangnya melayang melintasi seluruh halaman, jadi ia pasti melewati
+ * poster event yang penuh warna terang. Dengan pencampuran normal ia terbaca
+ * sebagai noda di sana: cukup pekat untuk mengotori posternya, terlalu pucat
+ * untuk dikenali sebagai lambang.
+ *
+ * `screen` membuatnya berperilaku seperti cahaya, bukan cat. Di atas latar
+ * gelap ia menyala; begitu latarnya terang ia lenyap sendiri, karena screen
+ * atas putih tetap putih. Jadi ia hanya muncul di tempat yang memang punya
+ * ruang untuknya. Di tema terang logikanya dibalik dengan `multiply`, yang
+ * memberi efek cap air setara.
+ */
+.lapisan-atom {
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme="dark"] .lapisan-atom {
+  mix-blend-mode: screen;
+}
+
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    .lapisan-atom {
+      mix-blend-mode: screen;
+    }
+  }
+}
+
+/* ── Wordmark "IYSA" ────────────────────────────────────────────────
+ *
+ * Huruf merek yang sesungguhnya, ditelusuri dari berkas lockup IYSA, dipakai
+ * sebagai MASK — bukan sebagai gambar. Bentuknya datang dari berkas SVG,
+ * warnanya dari `background-color`, jadi ia ikut tema persis seperti teks.
+ *
+ * Sebagai gambar ia gagal: teks lockup-nya gelap dan hilang ke latar di tema
+ * gelap situs ini. Sebagai teks biasa ia juga salah: Plus Jakarta Sans tebal
+ * bukan letterform merek IYSA. Mask menyelesaikan keduanya, dengan ongkos
+ * satu berkas 3,6 KB yang disinggahi peramban.
+ */
+.wordmark-iysa {
+  display: block;
+  aspect-ratio: 576 / 196;
+  background-color: var(--navy);
+  -webkit-mask: url("/media/logo/iysa-wordmark.svg") no-repeat center / contain;
+  mask: url("/media/logo/iysa-wordmark.svg") no-repeat center / contain;
+}
+
 /* Label mono huruf kecil — penanda seksi sepanjang situs. */
 @utility eyebrow {
   font-family: var(--font-mono);

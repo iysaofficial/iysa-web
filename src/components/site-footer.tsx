@@ -9,8 +9,13 @@ export async function SiteFooter() {
   const t = await getTranslations("footer");
   const nav = await getTranslations("nav");
 
+  // `relative z-30`: kaki halaman harus MENUTUPI lapisan lambang 3D yang
+  // melayang di atas isi halaman (lapisannya z-20). Di perhentian terakhirnya,
+  // tiga perempat badan lambang berada di atas garis ini dan seperempatnya
+  // tersembunyi di baliknya — itu hanya mungkin kalau footer punya lapisan
+  // lebih tinggi.
   return (
-    <footer className="mt-24 border-t border-[var(--line)] bg-[var(--bg-sunk)]">
+    <footer className="relative z-30 mt-24 border-t border-[var(--line)] bg-[var(--bg-sunk)]">
       <div className="shell py-14">
         <div className="grid gap-10 md:grid-cols-12">
           {/* Identitas */}

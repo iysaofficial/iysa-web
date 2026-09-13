@@ -70,27 +70,40 @@ const KELAS_KE_NAMA: Record<string, string> = {
 };
 const URUTAN_LAPISAN = ["bola-badan", "teal", "coral", "navy", "bola-benua"];
 
-/**
- * Tempat tambat saat hero sudah tergulir lewat: sudut kanan BAWAH.
- *
- * Percobaan pertama menambat di kanan atas dan hasilnya dua masalah sekaligus,
- * keduanya terlihat begitu dipotret sambil digulir: ia sejajar dengan lambang
- * IYSA di header — dua lambang yang sama dalam satu baris — dan ia menimpa
- * tepi kartu event serta dinding logo mitra. Sudut kanan bawah lapang, jauh
- * dari header, dan tidak mengulang merek yang sudah ada di atas.
- */
-const TAMBAT = { bawah: 24, kanan: 20, sisi: 116 };
+/** Ukuran lambang saat mengambang mengikuti gulir. */
+const MENGAMBANG = 168;
 
 /**
- * Perpindahan ke tambatan dimulai saat bagian atas kotak hero naik melewati
- * garis ini, dan selesai setelah menempuh `PERALIHAN` piksel lagi.
+ * Jalur singgah sepanjang halaman: berganti-ganti tepi kiri dan kanan, selalu
+ * di sekitar tengah layar secara vertikal. Nilainya pecahan dari lebar dan
+ * tinggi layar, mengacu ke SUDUT KIRI ATAS lambang.
  *
- * Pemicunya posisi kotak hero terhadap layar — BUKAN jaraknya ke tambatan.
- * Percobaan pertama memakai jarak ke tambatan dan hasilnya lambang sudah
- * tertambat sejak posisi gulir nol, dengan tempatnya di hero dibiarkan kosong.
+ * Berpindah sisi begini membuat lambang terasa menemani pembaca alih-alih
+ * menempel di satu sudut — dan karena ia selalu di tepi, kolom teks yang
+ * lebarnya dibatasi tidak pernah tertutup badan lambangnya.
+ */
+const JALUR = [
+  { p: 0.08, xf: 0.04, yf: 0.42 },
+  { p: 0.32, xf: 0.82, yf: 0.36 },
+  { p: 0.56, xf: 0.04, yf: 0.46 },
+  { p: 0.80, xf: 0.82, yf: 0.40 },
+];
+
+/**
+ * Perpindahan dari hero ke jalur dimulai saat bagian atas kotak hero naik
+ * melewati garis ini, dan selesai setelah menempuh `PERALIHAN` piksel lagi.
+ *
+ * Pemicunya posisi kotak hero terhadap layar — BUKAN jaraknya ke tujuan.
+ * Percobaan pertama memakai jarak ke tujuan dan hasilnya lambang sudah
+ * berpindah sejak posisi gulir nol, dengan tempatnya di hero dibiarkan kosong.
  */
 const PEMICU = 120;
 const PERALIHAN = 260;
+
+const jepit = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const antara = (a: number, b: number, t: number) => a + (b - a) * t;
+/** Pelunakan tepi supaya perpindahan antar singgahan tidak menyentak. */
+const lunak = (t: number) => t * t * (3 - 2 * t);
 
 function bacaWarna(el: HTMLElement, nama: string, cadangan: string) {
   return getComputedStyle(el).getPropertyValue(nama).trim() || cadangan;
@@ -165,6 +178,9 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       const akar = new THREE.Group();
       scene.add(akar);
       const dibuang: { dispose(): void }[] = [];
+      /* Bahan tiap lapisan disimpan supaya pendar warnanya bisa digerakkan
+         posisi gulir — lihat blok Gerak di bawah. */
+      const bahanLapisan: import("three").MeshStandardMaterial[] = [];
 
       /* Bentuknya diambil dari berkas SVG yang SUDAH diunduh halaman ini
          sebagai lambang cadangan — nol byte tambahan, karena peramban
@@ -198,6 +214,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
           side: THREE.DoubleSide,
         });
         dibuang.push(bahan);
+        bahanLapisan.push(bahan);
 
         for (const b of path.toShapes()) {
           const geo = new THREE.ExtrudeGeometry(b, {
@@ -263,36 +280,69 @@ export function HeroAtom({ className = "" }: { className?: string }) {
          tidak satu pun dari kanvas itu sendiri. */
       let lebarLalu = 0;
 
-      const tempatkan = () => {
+      const tempatkan = (p: number) => {
         const r = kotak.getBoundingClientRect();
         const lebarLayar = window.innerWidth;
-        const menambat = lebarLayar >= 1024;
+        const tinggiLayar = window.innerHeight;
 
-        let x: number;
-        let y: number;
-        let sisi: number;
-
-        let kabur: number;
-
-        if (!menambat) {
-          x = r.left;
-          y = r.top;
-          sisi = r.width;
-          kabur = 1;
-        } else {
-          // 0 selagi lambang masih di tempatnya di hero, 1 saat tertambat penuh.
-          const maju = Math.min(1, Math.max(0, (PEMICU - r.top) / PERALIHAN));
-          const yTambat = window.innerHeight - TAMBAT.bawah - TAMBAT.sisi;
-          const xTambat = lebarLayar - TAMBAT.kanan - TAMBAT.sisi;
-
-          x = r.left + (xTambat - r.left) * maju;
-          y = r.top + (yTambat - r.top) * maju;
-          sisi = r.width + (TAMBAT.sisi - r.width) * maju;
-          // Diredupkan sedikit saat tertambat: ia melayang di atas isi halaman,
-          // jadi ia penanda merek, bukan sesuatu yang meminta perhatian.
-          kabur = 1 - 0.18 * maju;
+        // Di layar sempit lambang tetap duduk di hero dan menggulir bersamanya:
+        // tidak ada ruang tepi untuk ditempati tanpa menutupi bacaan.
+        if (lebarLayar < 1024) {
+          pasang(r.left, r.top, r.width, 1);
+          return;
         }
 
+        /* Titik singgah menurut posisi gulir. Di luar rentang jalur dipakai
+           singgahan terdekat, jadi lambang tidak pernah kehilangan tujuan. */
+        let xf = JALUR[0].xf;
+        let yf = JALUR[0].yf;
+        for (let i = 0; i < JALUR.length - 1; i++) {
+          const a = JALUR[i];
+          const b = JALUR[i + 1];
+          if (p >= a.p && p <= b.p) {
+            const t = lunak((p - a.p) / (b.p - a.p));
+            xf = antara(a.xf, b.xf, t);
+            yf = antara(a.yf, b.yf, t);
+            break;
+          }
+          if (p > b.p) {
+            xf = b.xf;
+            yf = b.yf;
+          }
+        }
+
+        let tujuanX = xf * lebarLayar;
+        let tujuanY = yf * tinggiLayar;
+        let tujuanSisi = MENGAMBANG;
+        let tujuanKabur = 0.42;
+
+        /* ── Perhentian terakhir ──────────────────────────────────────────
+           Begitu kaki halaman masuk layar, lambang bergerak ke tengah secara
+           mendatar dan turun sampai tiga perempat badannya berada DI ATAS
+           garis atas footer — seperempat sisanya tertutup, karena footer
+           diberi lapisan lebih tinggi daripada lapisan lambang. */
+        const footer = document.querySelector("footer");
+        const atapFooter = footer ? footer.getBoundingClientRect().top : Infinity;
+        if (atapFooter < tinggiLayar) {
+          const akhirJalan = lunak(jepit((tinggiLayar - atapFooter) / (tinggiLayar * 0.45)));
+          const sisiAkhir = antara(MENGAMBANG, 230, akhirJalan);
+          tujuanX = antara(tujuanX, lebarLayar / 2 - sisiAkhir / 2, akhirJalan);
+          tujuanY = antara(tujuanY, atapFooter - sisiAkhir * 0.75, akhirJalan);
+          tujuanSisi = sisiAkhir;
+          tujuanKabur = antara(0.42, 0.95, akhirJalan);
+        }
+
+        // 0 selagi lambang masih di tempatnya di hero, 1 saat lepas penuh.
+        const maju = lunak(jepit((PEMICU - r.top) / PERALIHAN));
+        pasang(
+          antara(r.left, tujuanX, maju),
+          antara(r.top, tujuanY, maju),
+          antara(r.width, tujuanSisi, maju),
+          antara(1, tujuanKabur, maju),
+        );
+      };
+
+      const pasang = (x: number, y: number, sisi: number, kabur: number) => {
         layer.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
         layer.style.width = `${Math.round(sisi)}px`;
         layer.style.height = `${Math.round(sisi)}px`;
@@ -335,15 +385,26 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         const kini = performance.now();
         if (!terlihat) return;
 
-        tempatkan();
-
         const jangkauan = Math.max(1, document.body.scrollHeight - window.innerHeight);
-        const kemajuan = Math.min(1, Math.max(0, window.scrollY / jangkauan));
+        const kemajuan = jepit(window.scrollY / jangkauan);
+
+        tempatkan(kemajuan);
+
         // Redam menuju sudut gulir supaya putarannya mulus, bukan menyentak
         // mengikuti tiap kejadian gulir.
         putarGulir += (kemajuan * Math.PI * 4 - putarGulir) * 0.08;
-
         akar.rotation.y = putarGulir + kini * 0.00008;
+
+        /* ── Warna mengikuti gulir ─────────────────────────────────────
+           Pendar tiap lapisan naik-turun sepanjang halaman, dan tiap lapisan
+           diberi beda fase supaya orbit navy, teal, dan coral tidak menyala
+           serempak. Yang bergerak hanya intensitas pendarnya — warna dasarnya
+           tetap warna merek, jadi lambangnya tidak pernah berubah jadi warna
+           lain. */
+        for (let i = 0; i < bahanLapisan.length; i++) {
+          const fase = kemajuan * Math.PI * 2 + i * 0.9;
+          bahanLapisan[i].emissiveIntensity = 0.2 + 0.28 * (0.5 + 0.5 * Math.sin(fase));
+        }
 
         kiniX += (tujuanX - kiniX) * 0.05;
         kiniY += (tujuanY - kiniY) * 0.05;
@@ -397,7 +458,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       <div
         ref={lapisan}
         aria-hidden
-        className="pointer-events-none fixed top-0 left-0 z-30 will-change-transform"
+        className="lapisan-atom pointer-events-none fixed top-0 left-0 z-20 will-change-transform"
         style={{ width: 0, height: 0 }}
       />
     </>
