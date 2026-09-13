@@ -190,13 +190,26 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       io.observe(el);
 
       let raf = 0;
-      const jam = new THREE.Clock();
+
+      /* Selisih waktu dihitung sendiri, bukan dengan THREE.Clock: kelas itu
+         sudah usang di three 0.186 ("This module has been deprecated. Please
+         use THREE.Timer instead") dan memanggilnya mencetak peringatan di
+         konsol setiap pengunjung. Yang dibutuhkan cuma satu pengurangan.
+
+         Selisihnya dibatasi 0,1 detik. Tanpa batas itu, tab yang ditinggal
+         lalu dibuka lagi menghasilkan selisih belasan detik sekaligus, dan
+         objeknya melompat setengah putaran begitu terlihat. */
+      let waktuLalu = performance.now();
 
       const gambar = () => {
         raf = requestAnimationFrame(gambar);
+
+        const kini = performance.now();
+        const d = Math.min((kini - waktuLalu) / 1000, 0.1);
+        waktuLalu = kini;
+
         if (!terlihat) return;
 
-        const d = jam.getDelta();
         akar.rotation.y += d * 0.28;
 
         // Redam menuju sudut tujuan, bukan lompat: gerakannya jadi punya
@@ -210,19 +223,44 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       };
       gambar();
 
+      /* Ukuran terakhir diingat supaya observer tidak memicu dirinya sendiri.
+       *
+       * ResizeObserver mengamati `el`, sedangkan `renderer.setSize()` mengubah
+       * ukuran kanvas YANG ADA DI DALAM `el` — jadi tiap penyesuaian bisa
+       * membangunkan observer lagi. Hasilnya konsol produksi dibanjiri
+       * "ResizeObserver loop completed with undelivered notifications"
+       * belasan kali per muat halaman.
+       *
+       * Dua penjaga: lewati kalau ukurannya tidak benar-benar berubah, dan
+       * kerjakan di frame berikutnya supaya pengubahan tidak terjadi di dalam
+       * callback observer itu sendiri. */
+      let lebarLalu = lebar;
+      let tinggiLalu = tinggi;
+      let rafUkur = 0;
+
       const onResize = () => {
-        const w = el.clientWidth;
-        const h = el.clientHeight;
-        if (w === 0 || h === 0) return;
-        kamera.aspect = w / h;
-        kamera.updateProjectionMatrix();
-        renderer.setSize(w, h);
+        cancelAnimationFrame(rafUkur);
+        rafUkur = requestAnimationFrame(() => {
+          const w = el.clientWidth;
+          const h = el.clientHeight;
+          if (w === 0 || h === 0) return;
+          if (w === lebarLalu && h === tinggiLalu) return;
+          lebarLalu = w;
+          tinggiLalu = h;
+          kamera.aspect = w / h;
+          kamera.updateProjectionMatrix();
+          renderer.setSize(w, h);
+        });
       };
       const ro = new ResizeObserver(onResize);
       ro.observe(el);
 
       bersihkan = () => {
         cancelAnimationFrame(raf);
+        // Pengukuran ulang yang masih terjadwal harus ikut dibatalkan; kalau
+        // tidak, frame itu tetap berjalan dan menyentuh renderer yang sudah
+        // dibuang beberapa baris di bawah.
+        cancelAnimationFrame(rafUkur);
         window.removeEventListener("pointermove", onPointer);
         io.disconnect();
         ro.disconnect();
