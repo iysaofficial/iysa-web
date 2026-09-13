@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 
@@ -7,6 +6,7 @@ import { PageHeader, Section, MoreLink, Pill } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { orgStructure, flattenPeople, type Person } from "@/lib/data";
 import { photoUrl } from "@/lib/assets";
+import { FotoOrang } from "@/components/foto-orang";
 import { experts } from "@/content/profile";
 
 export async function generateMetadata({
@@ -99,47 +99,15 @@ function namaDivisi(jabatan: string) {
  */
 
 /**
- * Bingkai kecil untuk foto kedua dan seterusnya.
- *
- * Tiap orang difoto sampai empat kali — 70 foto untuk 22 orang — dan sampai
- * sekarang hanya yang pertama yang pernah tampil. Situs lama memutar foto-foto
- * itu saat kartunya diklik; di sini TIDAK dibuat komponen klien untuk meniru
- * perilaku itu. Memutar foto berarti mengirim JavaScript ke setiap pengunjung
- * halaman tim demi sesuatu yang bisa ditunjukkan sekaligus tanpa interaksi
- * apa pun, dan foto yang cuma muncul setelah diklik sama saja dengan foto yang
- * tidak ada bagi orang yang tidak tahu harus mengklik.
- *
- * Di kartu kisi bingkainya ditempel DI DALAM foto utama, bukan di bawahnya:
- * hanya sebagian orang punya foto tambahan, dan menambah satu baris di
- * sebagian kartu saja membuat nama dan jabatan tetangganya tidak lagi sebaris.
+ * Pembeda grup radio pemilih foto. Nama saja tidak cukup: satu orang bisa
+ * muncul dua kali di halaman ini — sekali di jajaran pimpinan, sekali di
+ * divisinya — dan dua grup radio bernama sama akan saling mematikan, sehingga
+ * mengklik foto di satu kartu mengubah kartu yang lain.
  */
-function FotoLain({
-  urls,
-  lebar,
-  className = "",
-}: {
-  urls: string[];
-  /** Lebar tiap bingkai sebagai kelas Tailwind — beda per ukuran kartu. */
-  lebar: string;
-  className?: string;
-}) {
-  if (!urls.length) return null;
-  return (
-    // `alt` sengaja kosong: ini orang yang sama dengan foto utama di sebelahnya,
-    // yang sudah membawa namanya. Pembaca layar tidak perlu mendengar nama itu
-    // tiga kali berturut-turut.
-    <div className={`flex gap-px p-px ${className}`}>
-      {urls.map((u) => (
-        <span
-          key={u}
-          className={`relative aspect-[4/5] overflow-hidden bg-[var(--bg-sunk)] ${lebar}`}
-        >
-          <Image src={u} alt="" fill sizes="80px" className="object-cover object-top" />
-        </span>
-      ))}
-    </div>
-  );
-}
+let nomorKartu = 0;
+const idOrang = (p: Person) =>
+  `${p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${++nomorKartu}`;
+
 function KartuOrang({
   person,
   ukuran = "biasa",
@@ -152,12 +120,10 @@ function KartuOrang({
   /** Tata letak mendatar untuk divisi satu orang: foto kecil, teks di sisinya. */
   ringkas?: boolean;
 }) {
-  const photo = photoUrl(person.photo);
-  // Foto selain yang utama. Disaring lewat photoUrl dulu: berkas yang tidak
-  // ada di repo lama mengembalikan null, dan bingkai kosong lebih buruk
-  // daripada bingkai yang tidak pernah dipasang.
-  const lainnya = person.photos
-    .slice(1)
+  /* Disaring lewat photoUrl dulu: berkas yang tidak ada di repo lama
+     mengembalikan null, dan bingkai kosong lebih buruk daripada bingkai yang
+     tidak pernah dipasang. */
+  const semuaFoto = person.photos
     .map((p) => photoUrl(p))
     .filter((u): u is string => Boolean(u));
 
@@ -175,23 +141,14 @@ function KartuOrang({
       // ketimbang memampatkan nama dan jabatan jadi dua huruf per baris.
       <div className="group flex flex-wrap items-center gap-5">
         <div className="relative aspect-[4/5] w-[104px] shrink-0 overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
-          {photo ? (
-            <Image
-              src={photo}
-              alt={person.name}
-              fill
-              sizes="104px"
-              className="object-cover object-top transition-transform duration-[var(--gerak-sedang)] group-hover:scale-[1.03]"
-            />
-          ) : (
-            <span className="absolute inset-0 grid place-items-center font-mono text-[16px] text-[var(--ink-faint)]">
-              {person.name
-                .split(/\s+/)
-                .slice(0, 2)
-                .map((w) => w[0])
-                .join("")}
-            </span>
-          )}
+          <FotoOrang
+            nama={person.name}
+            urls={semuaFoto}
+            id={idOrang(person)}
+            sizes="104px"
+            lebarBingkai="w-[22px]"
+            posisiBingkai="absolute right-1 bottom-1"
+          />
         </div>
         <div>
           <p className="text-[17px] leading-snug font-semibold text-[var(--ink)]">{person.name}</p>
@@ -199,8 +156,6 @@ function KartuOrang({
             {person.position}
           </p>
         </div>
-
-        <FotoLain urls={lainnya} lebar="w-[62px]" className="bg-[var(--line)]" />
       </div>
     );
   }
@@ -208,38 +163,18 @@ function KartuOrang({
   return (
     <div className="group flex flex-col gap-3">
       <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
-        {photo ? (
-          <Image
-            src={photo}
-            alt={person.name}
-            fill
-            sizes={
-              ukuran === "besar"
-                ? "(max-width: 768px) 90vw, 420px"
-                : ukuran === "sedang"
-                  ? "(max-width: 768px) 45vw, 260px"
-                  : "(max-width: 640px) 45vw, 200px"
-            }
-            className="object-cover object-top transition-transform duration-[var(--gerak-sedang)] group-hover:scale-[1.03]"
-          />
-        ) : (
-          // Sekarang semua orang berfoto, tapi penjaga tetap dipasang: satu
-          // orang baru tanpa foto tidak boleh meninggalkan kotak kosong.
-          <span className="absolute inset-0 grid place-items-center font-mono text-[22px] text-[var(--ink-faint)]">
-            {person.name
-              .split(/\s+/)
-              .slice(0, 2)
-              .map((w) => w[0])
-              .join("")}
-          </span>
-        )}
-
-        {/* Bingkainya berlatar --bg, bukan --line: garis rambut yang biasa
-            memisahkan dua kotak putih hilang begitu ia berdiri di atas foto. */}
-        <FotoLain
-          urls={lainnya}
-          lebar={ukuran === "biasa" ? "w-8 sm:w-9" : "w-9 sm:w-11"}
-          className="absolute right-1.5 bottom-1.5 bg-[var(--bg)]"
+        <FotoOrang
+          nama={person.name}
+          urls={semuaFoto}
+          id={idOrang(person)}
+          sizes={
+            ukuran === "besar"
+              ? "(max-width: 768px) 90vw, 420px"
+              : ukuran === "sedang"
+                ? "(max-width: 768px) 45vw, 260px"
+                : "(max-width: 640px) 45vw, 200px"
+          }
+          lebarBingkai={ukuran === "biasa" ? "w-8 sm:w-9" : "w-9 sm:w-11"}
         />
       </div>
 
