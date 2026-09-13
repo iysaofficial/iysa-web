@@ -45,6 +45,7 @@ export function Section({
   children,
   sunk = false,
   action,
+  padat = false,
 }: {
   eyebrow?: string;
   title?: string;
@@ -52,12 +53,19 @@ export function Section({
   children: ReactNode;
   sunk?: boolean;
   action?: ReactNode;
+  /**
+   * Pangkas jarak atas. Dipakai untuk seksi PERTAMA sebuah halaman daftar,
+   * yang berdiri tepat di bawah kepala halaman dan saringannya: dengan jarak
+   * penuh, baris data pertama terdorong ke bawah lipatan dan pengunjung harus
+   * menggulir dulu sebelum melihat isi yang ia datangi.
+   */
+  padat?: boolean;
 }) {
   return (
     <section className={sunk ? "border-y border-[var(--line)] bg-[var(--bg-sunk)]" : ""}>
-      <div className="shell py-14 md:py-20">
+      <div className={`shell pb-14 md:pb-20 ${padat ? "pt-8 md:pt-10" : "pt-14 md:pt-20"}`}>
         {(eyebrow || title) && (
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+          <div className={`flex flex-wrap items-end justify-between gap-4 ${padat ? "mb-6" : "mb-10"}`}>
             <div>
               {eyebrow && <p className="eyebrow">{eyebrow}</p>}
               {title && <h2 className="mt-2 text-title text-[var(--ink)]">{title}</h2>}

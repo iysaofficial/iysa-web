@@ -103,8 +103,13 @@ export async function EventFilters({
     hybrid: t("modeHybrid"),
   };
 
+  /* Satu baris yang membungkus, bukan tiga baris bertumpuk.
+     Tiga kelompok saringan yang masing-masing memakan satu baris penuh
+     menghabiskan ~180px tepat di tempat yang seharusnya sudah memperlihatkan
+     data — di layar laptop 820px, kartu event pertama jadi berada di bawah
+     lipatan. Dijadikan satu baris, ketiganya cukup dalam dua baris pendek. */
   return (
-    <div className="flex flex-col gap-5 border-y border-[var(--line)] py-5">
+    <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
       <FilterGroup
         label={t("filterLevel")}
         options={facets.level}
@@ -125,8 +130,8 @@ export async function EventFilters({
       />
 
       {/* GET biasa — tidak butuh JavaScript sama sekali. */}
-      <form action="/event" method="get" className="flex flex-wrap items-center gap-2">
-        <label htmlFor="cari" className="eyebrow mr-1">
+      <form action="/event" method="get" className="flex flex-1 flex-wrap items-center gap-2">
+        <label htmlFor="cari" className="sr-only">
           {t("search")}
         </label>
         {active.level && <input type="hidden" name="level" value={active.level} />}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 
-import { PageHeader, EmptyState, MoreLink, Section } from "@/components/ui";
+import { EmptyState, MoreLink, Section } from "@/components/ui";
 import { EventCard } from "@/components/event-card";
 import { EventFilters } from "@/components/event-filters";
 import { SeriKartu } from "@/components/seri-kartu";
@@ -122,27 +122,40 @@ export default async function EventsPage({
 
   return (
     <>
-      <PageHeader
-        eyebrow="Event"
-        title={t("title")}
-        lead={t("lead")}
-        aside={
-          <div className="flex flex-col gap-2">
-            <p className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
-              {menyaring ? hasil.length : semua.length}
+      {/* Kepala halaman ringkas — judul, ringkasan, hitungan, dan saringan
+          dalam SATU pita.
+          Sebelumnya kepala halaman penuh (judul raksasa + ringkasan + angka)
+          dan blok saringan berdiri sendiri-sendiri, masing-masing dengan jarak
+          longgar. Hasilnya kartu event pertama berada di y=912 sementara layar
+          laptop cuma 820: halaman daftar yang tidak memperlihatkan satu pun
+          datanya sebelum digulir. */}
+      <header className="border-b border-[var(--line)]">
+        <div className="shell py-8 md:py-10">
+          <div className="grid gap-x-10 gap-y-4 md:grid-cols-12 md:items-end">
+            <div className="md:col-span-5">
+              <p className="eyebrow">Event</p>
+              <h1 className="mt-1.5 text-title text-[var(--navy)]">{t("title")}</h1>
+            </div>
+            <p className="text-[15px] leading-relaxed text-[var(--ink-muted)] md:col-span-4">
+              {t("lead")}
             </p>
-            <p className="text-[13px] text-[var(--ink-faint)]">
-              {menyaring
-                ? `${t("count", { count: hasil.length })} · ${semua.length} ${locale === "id" ? "total" : "in total"}`
-                : `${t("count", { count: semua.length })} · ${t("seriesCount", { count: seri.length })}`}
-            </p>
+            <div className="md:col-span-3 md:text-right">
+              <p className="tnum font-mono text-[26px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
+                {menyaring ? hasil.length : semua.length}
+              </p>
+              <p className="mt-1.5 text-[12.5px] text-[var(--ink-faint)]">
+                {menyaring
+                  ? `${t("count", { count: hasil.length })} · ${semua.length} ${locale === "id" ? "total" : "in total"}`
+                  : `${t("count", { count: semua.length })} · ${t("seriesCount", { count: seri.length })}`}
+              </p>
+            </div>
           </div>
-        }
-      />
 
-      <div className="shell py-10 md:py-14">
-        <EventFilters facets={facets} active={{ level, mode, q }} />
-      </div>
+          <div className="mt-6 border-t border-[var(--line)] pt-5">
+            <EventFilters facets={facets} active={{ level, mode, q }} />
+          </div>
+        </div>
+      </header>
 
       {menyaring ? (
         <div className="shell pb-16">
@@ -167,7 +180,7 @@ export default async function EventsPage({
               seksi terpisah berarti dua judul "Pendaftaran terbuka" di satu
               halaman, yang membingungkan tanpa memberi apa pun. */}
           {(dibuka.length > 0 || terbukaWarisan.length > 0) && (
-            <Section eyebrow={t("nowEyebrow")} title={t("openTitle")} lead={t("openLead")}>
+            <Section eyebrow={t("nowEyebrow")} title={t("openTitle")} lead={t("openLead")} padat>
               {/* Dua kisi terpisah, bukan satu. Kartu dashboard dibangun di
                   sekitar logo dan tanggal; kartu warisan di sekitar poster 3:2
                   yang jauh lebih tinggi. Disatukan dalam satu kisi, baris yang
