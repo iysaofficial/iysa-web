@@ -6,7 +6,6 @@ import type { Locale } from "@/i18n/routing";
 import { Section, StatRow, ButtonLink, MoreLink, Pill } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
-import { PartnerWall } from "@/components/partner-wall";
 import { HeroAtom } from "@/components/hero-atom";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allIssues, allAffiliates } from "@/lib/data";
@@ -89,7 +88,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             items={[
               { value: s.events, label: t("statEvents") },
               { value: s.affiliates, label: t("statAffiliates") },
-              { value: s.partners, label: t("statPartners") },
               { value: `${s.countries}+`, label: t("statCountries") },
               { value: s.issues, label: t("statIssues") },
               { value: s.people, label: t("statPeople") },
@@ -176,16 +174,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           ))}
         </ul>
 
-        {/* Institusi pendukung: 41 logo yang sejak migrasi sudah ada di repo
-            tapi tidak pernah dirender. Angka "41 institusi mitra" di deret
-            statistik di atas selama ini berdiri tanpa bukti apa pun. */}
-        <div className="mt-12">
-          <h3 className="eyebrow">{t("partnersWallTitle")}</h3>
-          <p className="mt-2 mb-6 max-w-[52ch] text-[14.5px] text-[var(--ink-muted)]">
-            {t("partnersWallLead", { count: s.partners })}
-          </p>
-          <PartnerWall />
-        </div>
       </Section>
 
       {/* ── Newsletter ────────────────────────────────────────────── */}

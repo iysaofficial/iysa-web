@@ -275,22 +275,26 @@ p, li {
  * JS yang memberi aba-aba mulai, ada jendela antara halaman terlihat dan
  * skrip jalan, dan di jendela itu animasinya sudah telanjur berjalan.
  * src/components/reveal.tsx yang memasang `data-terlihat`.
+ *
+ * ── Kenapa digerbangi `[data-gerak="aktif"]` ─────────────────────────────
+ *
+ * `rise` mulai dari `opacity: 0`. Menahannya berarti isi halaman TIDAK
+ * TERLIHAT sampai ada yang melepasnya — jadi penahannya hanya boleh menyala
+ * kalau sudah terbukti ada JavaScript yang sanggup melepasnya. Atribut itu
+ * dipasang ThemeScript di <head>, sebelum lukis pertama.
+ *
+ * Tanpa atribut — JS dimatikan, skrip diblokir, galat lebih dulu, jaringan
+ * putus — tidak ada yang ditahan dan halaman tampil utuh.
+ *
+ * Versi sebelumnya memakai `@media (scripting: none)` untuk tujuan yang sama
+ * dan itu SALAH: Chrome melaporkan `scripting: enabled` bahkan ketika
+ * JavaScript dimatikan, jadi pagarnya tidak pernah menyala justru bagi orang
+ * yang membutuhkannya. Ketahuan waktu tangkapan layar tanpa-JS menampilkan
+ * dinding logo yang kosong melompong.
  */
-[data-reveal]:not([data-terlihat]),
-[data-reveal]:not([data-terlihat]) > * {
+:root[data-gerak="aktif"] [data-reveal]:not([data-terlihat]),
+:root[data-gerak="aktif"] [data-reveal]:not([data-terlihat]) > * {
   animation-play-state: paused;
-}
-
-/*
- * Tanpa JavaScript, penahannya dibatalkan. Kalau tidak, seluruh isi yang
- * ditandai berhenti di `opacity: 0` dan halaman tampak kosong selamanya —
- * kegagalan yang jauh lebih buruk daripada animasi yang telanjur selesai.
- */
-@media (scripting: none) {
-  [data-reveal]:not([data-terlihat]),
-  [data-reveal]:not([data-terlihat]) > * {
-    animation-play-state: running;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

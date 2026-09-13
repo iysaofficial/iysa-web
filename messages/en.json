@@ -29,7 +29,6 @@
     "statsEyebrow": "Since November 2018",
     "statEvents": "events held",
     "statAffiliates": "international affiliates",
-    "statPartners": "partner institutions",
     "statCountries": "countries reached",
     "statIssues": "newsletter issues",
     "statPeople": "people on the team",
@@ -48,9 +47,7 @@
     "newsletterEyebrow": "Newsletter",
     "newsletterTitle": "News from IYSA, every month",
     "newsletterBody": "Monthly issues covering event results, registration announcements, and participant stories.",
-    "newsletterAll": "All issues",
-    "partnersWallTitle": "Supporting institutions",
-    "partnersWallLead": "{count} partner institution logos, national and international."
+    "newsletterAll": "All issues"
   },
   "events": {
     "title": "Events",

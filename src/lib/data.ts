@@ -180,6 +180,26 @@ export const videos = () => videosRaw as VideoItem[];
 export const videoYears = () =>
   [...new Set(videos().map((v) => v.year))].filter((y): y is number => y != null).sort((a, b) => b - a);
 
+/**
+ * Logo institusi dari `AffiliationLogo.json` lama.
+ *
+ * **JANGAN dipakai untuk klaim jumlah mitra, dan jangan dirender sebagai
+ * dinding logo.** Datanya rusak di sumbernya, dan sudah diperiksa entri per
+ * entri:
+ *
+ *   41 entri  →  9 berkas unik  →  8 yang bukan placeholder
+ *   26 entri menunjuk `about-logo.png`, yaitu logo IYSA sendiri
+ *   `International[0..6]` identik byte-per-byte dengan `National[0..6]`
+ *   (kampus Indonesia yang sama, dilabeli internasional)
+ *   bentuk entrinya cuma `{id, image}` — tidak ada nama institusi sama sekali
+ *
+ * Dinding logo pernah dibangun dari data ini dan dicabut lagi: hasilnya
+ * memajang lambang IYSA 26 kali sambil mengklaim "41 institusi mitra". Tanpa
+ * nama, entri kosongnya juga tidak bisa diganti inisial.
+ *
+ * Cerita mitra yang jujur sudah ada di `affiliates.json` — 13 afiliasi
+ * internasional bernama, semuanya berlogo, dirender di beranda dan `/mitra`.
+ */
 export const partners = () => partnersRaw as { scope: "national" | "international"; logo: string }[];
 
 export const eventSites = () => sitesRaw as EventSite[];
@@ -199,7 +219,10 @@ export function flattenPeople(nodes: Person[] = orgStructure()): Person[] {
 export const stats = () => ({
   events: events.length,
   affiliates: affiliates.length,
-  partners: partners().length,
+  /* `partners` sengaja TIDAK ada di sini. Menghitung partnersRaw menghasilkan
+     41, padahal 26 entrinya placeholder berisi logo IYSA dan 7 sisanya
+     duplikat — lihat catatan di atas `partners()`. Angka itu pernah tampil
+     sebagai "41 institusi mitra" di beranda dan /profil, dan dicabut. */
   issues: issues.length,
   videos: videos().length,
   people: flattenPeople().length,

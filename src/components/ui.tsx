@@ -194,7 +194,7 @@ export function StatRow({ items }: { items: { value: string | number; label: str
   return (
     <div
       data-reveal
-      className="rise-stagger grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-6"
+      className="rise-stagger grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-5"
     >
       {items.map((s) => (
         <Stat key={s.label} value={s.value} label={s.label} />

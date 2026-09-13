@@ -277,15 +277,33 @@ angka mana yang beda.
 **D. Data sudah dikonversi tapi TIDAK DIRENDER** — asetnya siap, halamannya
 belum ada:
 
-- ~~`partners.json` — 41 logo institusi~~ — **sudah dirender**,
-  `src/components/partner-wall.tsx`, dipakai di beranda. 41 dari 41 terpetakan.
-  Logonya `grayscale` + `opacity-80` dan kembali berwarna saat disentuh: 41
-  palet institusi yang tidak saling kenal, kalau dipasang apa adanya, berteriak
-  lebih keras daripada seluruh halaman dan merampok perhatian dari satu-satunya
-  ajakan coral. `alt` sengaja kosong — `partners.json` cuma `{scope, logo}`,
-  tidak ada nama institusinya, dan menebak nama dari nama berkas ("UINUJ")
-  berarti memasang label salah atas nama institusi orang lain. Daftar bernama
-  yang sebenarnya ada di `/mitra`.
+- **`partners.json` — JANGAN dirender. Datanya rusak di sumbernya.**
+
+  Dinding logo 41 mitra sempat dibangun, dilihat hasilnya, lalu dicabut lagi.
+  Yang tampil: **lambang IYSA sendiri, 26 kali**, di bawah judul "41 institusi
+  mitra". Diperiksa entri per entri di `.old/src/data/home/AffiliationLogo.json`:
+
+  | | |
+  |---|---|
+  | entri | 41 |
+  | berkas unik | 9 |
+  | bukan placeholder | **8** |
+  | menunjuk `about-logo.png` (logo IYSA) | **26** |
+  | `International[0..6]` vs `National[0..6]` | identik byte-per-byte |
+  | bentuk entri | `{id, image}` — **tidak ada nama institusi** |
+
+  Jadi "8 mitra internasional" pun keliru: berkasnya kampus Indonesia yang
+  sama, hanya dilabeli lain. Dan karena tidak ada nama sama sekali, 26 entri
+  kosong itu tidak bisa diganti inisial atau teks — tidak ada yang bisa
+  ditampilkan.
+
+  Angka `stats().partners` ikut dicabut; ia pernah tampil sebagai "41 institusi
+  mitra" di beranda **dan** `/profil`. Cerita mitra yang jujur sudah ada:
+  **13 afiliasi internasional bernama** di `affiliates.json`, semuanya berlogo,
+  dirender di beranda dan `/mitra`.
+
+  Kalau IYSA nanti menyediakan daftar institusi yang benar — nama + logo —
+  dinding logo layak dibangun ulang. Sampai itu ada, jangan.
 - `event-highlights.json` — 5 poster sorotan, masih tidak dipakai
 - `affiliate-sites.json` — 13 entri, masih tidak dipakai
 
@@ -437,9 +455,16 @@ yang ditambahkan.**
    aba-aba mulai, ada jendela antara halaman terlihat dan skrip jalan, dan di
    jendela itu animasinya sudah telanjur berjalan — persis masalah yang mau
    dibereskan.
-2. **Selalu sediakan jalan keluar tanpa JS.** `@media (scripting: none)`
-   melepas penahan `[data-reveal]`. Tanpa itu, halaman tanpa JavaScript
-   berhenti di `opacity: 0` dan tampak kosong selamanya.
+2. **Selalu sediakan jalan keluar tanpa JS — tapi bukan lewat `scripting:`.**
+   Penahan `[data-reveal]` digerbangi `:root[data-gerak="aktif"]`, atribut yang
+   dipasang `ThemeScript` di `<head>`. Tanpa JavaScript atribut itu tidak
+   pernah ada, jadi tidak ada yang ditahan.
+
+   Pola umumnya: **kalau CSS menyembunyikan sesuatu dan hanya JS yang bisa
+   memunculkannya lagi, gerbangnya harus dipasang oleh JS itu sendiri.**
+   `@media (scripting: none)` tidak bisa dipakai untuk ini — Chrome melaporkan
+   `scripting: enabled` bahkan saat JavaScript dimatikan. Tambahkan juga jaring
+   pengaman berbatas waktu, seperti timeout 3 detik di `reveal.tsx`.
 
 **Belum ada:** transisi antar halaman (View Transitions API), parallax,
 skeleton loader.
@@ -502,16 +527,18 @@ Belum ada anggaran formal. **Patokan sekarang, jangan sampai memburuk:**
 
 | | Sebelum pekerjaan aset | Sekarang |
 |---|---|---|
-| **JS muat awal beranda** | 636 KB | **635 KB** |
-| JS di disk (termasuk chunk lazy) | 636 KB | 1.375 KB (three 720 KB, lazy) |
-| CSS | 40 KB | **39 KB** |
-| HTML beranda | 86 KB / 13,9 KB gzip | 169 KB / **19,9 KB gzip** |
+| **JS muat awal beranda** | 636 KB | **622 KB** |
+| JS di disk (termasuk chunk lazy) | 636 KB | ±1.375 KB (three 720 KB, lazy) |
+| CSS | 40 KB | **37 KB** |
+| HTML beranda | 86 KB / 13,9 KB gzip | 94 KB / **16,2 KB gzip** |
 | Seluruh aset gambar | 14 MB | **14 MB** |
 | Halaman ter-render saat build | 305 | **307** |
 
 **Angka yang dijaga adalah baris pertama, bukan kedua.** Total di disk naik
-739 KB karena three, tapi chunk itu tidak pernah ikut muat awal — ukur dengan
-menjumlahkan hanya chunk yang benar-benar dirujuk HTML-nya:
+sekitar 740 KB karena three, tapi muat awal beranda justru **turun** 636 → 622
+KB. Keduanya benar sekaligus, dan itu intinya: chunk three tidak pernah ikut
+muat awal. Ukur dengan menjumlahkan hanya chunk yang benar-benar dirujuk
+HTML-nya, jangan menjumlahkan isi `.next/static`:
 
 ```bash
 F=.next/server/app/id.html; tot=0
@@ -519,10 +546,6 @@ for c in $(grep -o '/_next/static/chunks/[a-zA-Z0-9_.-]*\.js' $F | sort -u); do
   tot=$((tot + $(stat -f%z ".next/${c#/_next/}")))
 done; echo "$((tot/1024)) KB"
 ```
-
-HTML beranda naik 86 → 169 KB mentah karena 41 logo mitra masing-masing
-membawa `srcset` dari pengoptimal gambar Next. Yang sampai ke pengunjung
-19,9 KB gzip, dan gambarnya sendiri `loading="lazy"` bawaan `next/image`.
 
 Menambah framer-motion (~34 KB gzip) atau three.js (~150 KB gzip) adalah
 perubahan besar terhadap angka-angka ini — pertimbangkan `next/dynamic` dan
@@ -568,7 +591,8 @@ echo "mendarat: $ok / 80   gagal: $bad"
    `/api/subscribe` menjawab **503**. Sengaja gagal terang-terangan dan
    menawarkan alamat surel IYSA, bukan diam-diam membuang pesan. Pemilik akan
    memasangnya sendiri.
-3. ~~Bangun dinding logo 41 mitra~~ — **selesai**, `src/components/partner-wall.tsx`
+3. ~~Bangun dinding logo 41 mitra~~ — **dibatalkan**, datanya rusak di sumbernya
+   (26 dari 41 entri berisi logo IYSA sendiri). Lihat bagian 5.D.
 4. ~~Ganti favicon bawaan Next~~ — **selesai**, `npm run build:icons`
 5. ~~Hapus 5 SVG template dari `public/`~~ — **selesai**
 6. ~~Hapus `public/docs/` kosong~~ — **selesai** (dihapus; isi `Kurasi.pdf` kalau
@@ -610,13 +634,27 @@ echo "mendarat: $ok / 80   gagal: $bad"
    meneruskannya. Peramban yang belum mengenalnya memakai delay 0s: semua anak
    muncul bersamaan, animasinya tetap jalan.
 2. ~~`.rise` jalan saat mount, bukan saat masuk viewport.~~ **Diperbaiki.**
-   `src/components/reveal.tsx` + penahan `[data-reveal]:not([data-terlihat])`
-   di `globals.css`. Penahannya di CSS supaya ikut render pertama; kalau JS
-   yang memberi aba-aba mulai, ada jendela di mana animasinya sudah telanjur
-   jalan. `@media (scripting: none)` melepas penahannya — tanpa itu, halaman
-   tanpa JavaScript berhenti di `opacity: 0` selamanya.
+   `src/components/reveal.tsx` + penahan di `globals.css`. Penahannya di CSS
+   supaya ikut render pertama; kalau JS yang memberi aba-aba mulai, ada jendela
+   di mana animasinya sudah telanjur jalan.
    **Pasang `data-reveal` di setiap `.rise-stagger` baru**, kalau tidak ia
    beranimasi saat mount seperti dulu.
+
+   Penahannya digerbangi `:root[data-gerak="aktif"]`, yang dipasang
+   `ThemeScript` sebelum lukis pertama. Sebab `rise` mulai dari `opacity: 0`,
+   jadi menahannya berarti menyembunyikan isi halaman — itu hanya boleh terjadi
+   kalau sudah terbukti ada JavaScript yang sanggup melepasnya lagi.
+
+   > Versi pertama memakai `@media (scripting: none)` sebagai pagar tanpa-JS
+   > dan itu **tidak bekerja**: Chrome melaporkan `scripting: enabled` bahkan
+   > ketika JavaScript dimatikan, jadi pagarnya tidak pernah menyala justru
+   > bagi orang yang membutuhkannya. Diuji dengan halaman kecil berisi ketiga
+   > nilai media feature — hasilnya identik dengan dan tanpa
+   > `--disable-javascript`. Jangan andalkan `scripting:` untuk ini.
+
+   `reveal.tsx` juga punya jaring pengaman 3 detik: apa pun yang masih
+   tertahan dilepas, apa pun sebabnya. Kehilangan animasi jauh lebih ringan
+   daripada kehilangan isinya.
 3. **Rate limiter di memori proses** (`src/lib/ratelimit.ts`) — di Vercel tiap
    instance punya memori sendiri, jadi batas nyata = 5 × jumlah instance per 10
    menit. Cukup menahan naskah sederhana, bukan serangan serius.

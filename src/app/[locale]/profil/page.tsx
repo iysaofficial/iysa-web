@@ -74,7 +74,6 @@ export default async function ProfilePage({
           items={[
             { value: s.events, label: h("statEvents") },
             { value: s.affiliates, label: h("statAffiliates") },
-            { value: s.partners, label: h("statPartners") },
             { value: `${s.countries}+`, label: h("statCountries") },
             { value: s.eventSites, label: locale === "id" ? "situs event" : "event websites" },
             { value: s.people, label: h("statPeople") },
