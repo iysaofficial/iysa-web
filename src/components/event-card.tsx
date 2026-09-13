@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import type { IysaEvent } from "@/lib/data";
 import { posterUrl } from "@/lib/assets";
 import { judulEvent, kotaSingkat, tanggalSah, akronimEvent, tahunEvent } from "@/lib/teks-event";
+import { statusEvent } from "@/lib/event-seri";
 import { Pill } from "./ui";
 
 /**
@@ -42,6 +43,7 @@ export async function EventCard({ event }: { event: IysaEvent }) {
   const judul = judulEvent(event.title);
   const kota = kotaSingkat(event.city);
   const tutup = tanggalSah(event.registrationEnds);
+  const status = statusEvent(event);
 
   const levelLabel =
     event.level === "national"
@@ -131,15 +133,20 @@ export async function EventCard({ event }: { event: IysaEvent }) {
               {event.dates}
             </p>
           )}
-          {event.registrationUrl ? (
+          {/*
+            Label pendaftaran dulu sama untuk dua keadaan yang berlawanan:
+            "Pendaftaran ditutup 19 Juli, 2024" dipakai baik untuk event yang
+            sudah lewat maupun yang pendaftarannya masih dibuka. Sekarang
+            statusnya dihitung dari tanggal, jadi kalimatnya ikut berubah.
+          */}
+          {status === "terbuka" ? (
             <p className="text-[13px] font-medium text-[var(--teal)]">
-              {/* Tanggal penutupan hanya ditampilkan kalau bentuknya masuk akal.
-                  Satu event membawa ", 2026" dan dirender apa adanya jadi
-                  "Pendaftaran ditutup , 2026". */}
-              {tutup ? t("registerEnds", { date: tutup }) : t("register")}
+              {tutup ? t("registerUntil", { date: tutup }) : t("register")}
             </p>
+          ) : status === "akan" ? (
+            <p className="text-[13px] font-medium text-[var(--navy)]">{t("statusUpcoming")}</p>
           ) : (
-            <p className="text-[13px] text-[var(--ink-faint)]">{t("registerClosed")}</p>
+            <p className="text-[13px] text-[var(--ink-faint)]">{t("statusDone")}</p>
           )}
         </div>
       </div>
