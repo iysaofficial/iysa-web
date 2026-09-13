@@ -50,7 +50,18 @@
     "newsletterAll": "All issues",
     "statPartners": "partner institutions",
     "partnersWallTitle": "Supporting institutions",
-    "partnersWallLead": "{count} partner institution logos, national and international."
+    "partnersWallLead": "{count} partner institution logos, national and international.",
+    "curationEyebrow": "Curation",
+    "curationTitle": "Curated by Puspresnas",
+    "curationLead": "Curation is the Indonesian ministry’s official recognition of talent competitions held outside the ministry. IYSA submits each of its competition series for curation.",
+    "curationP1Title": "Submitted per series",
+    "curationP1Body": "Each event series is submitted to Puspresnas on its own, not once for all of them.",
+    "curationP2Title": "Assessed per edition",
+    "curationP2Body": "A curation result applies to the edition assessed, not to the series indefinitely.",
+    "curationP3Title": "Published on SIMT",
+    "curationP3Body": "Results take the form of a one to five star rating, open for anyone to check.",
+    "curationNote": "Achievements from curated competitions are recorded in SIMT, Indonesia’s national talent database.",
+    "curationSimt": "Open SIMT"
   },
   "events": {
     "title": "Events",

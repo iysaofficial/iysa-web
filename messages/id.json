@@ -50,7 +50,18 @@
     "newsletterAll": "Semua terbitan",
     "statPartners": "institusi mitra",
     "partnersWallTitle": "Institusi yang mendukung",
-    "partnersWallLead": "{count} logo institusi mitra, nasional dan internasional."
+    "partnersWallLead": "{count} logo institusi mitra, nasional dan internasional.",
+    "curationEyebrow": "Kurasi",
+    "curationTitle": "Ajang terkurasi Puspresnas",
+    "curationLead": "Kurasi adalah pengakuan resmi kementerian atas ajang talenta yang diselenggarakan di luar kementerian. IYSA mengajukan tiap cabang ajangnya untuk dikurasi.",
+    "curationP1Title": "Diajukan per cabang ajang",
+    "curationP1Body": "Tiap seri event diajukan sendiri ke Puspresnas, bukan sekali untuk seluruhnya.",
+    "curationP2Title": "Dinilai per edisi",
+    "curationP2Body": "Hasil kurasi berlaku untuk edisi yang dinilai, bukan untuk serinya selamanya.",
+    "curationP3Title": "Terbit di SIMT",
+    "curationP3Body": "Hasilnya berupa predikat bintang 1 sampai 5, terbuka untuk dilihat publik.",
+    "curationNote": "Prestasi peserta dari ajang terkurasi tercatat di Sistem Informasi Manajemen Talenta — pangkalan data talenta nasional.",
+    "curationSimt": "Buka SIMT"
   },
   "events": {
     "title": "Event",

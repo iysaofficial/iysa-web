@@ -136,6 +136,55 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </ul>
       </Section>
 
+      {/* ── Kurasi Puspresnas ─────────────────────────────────────────
+          Duduk tepat setelah daftar event: di situlah pengunjung sedang
+          menimbang mau ikut atau tidak, dan pengakuan resmi kementerian
+          adalah yang membedakan ajang IYSA dari lomba biasa.
+
+          Yang ditulis di sini HANYA mekanismenya — apa itu kurasi, bagaimana
+          IYSA mengajukannya, dan di mana hasilnya terbit. Peringkat bintang
+          IYSA sendiri sengaja TIDAK dicantumkan sampai dokumennya ada di
+          tangan: ini klaim atas nama lembaga negara, dan satu angka yang
+          meleset ditanggung IYSA, bukan oleh yang menulisnya. */}
+      <Section eyebrow={t("curationEyebrow")} title={t("curationTitle")} lead={t("curationLead")} sunk>
+        <ol className="grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-3">
+          {(
+            [
+              ["curationP1Title", "curationP1Body"],
+              ["curationP2Title", "curationP2Body"],
+              ["curationP3Title", "curationP3Body"],
+            ] as const
+          ).map(([judul, isi], i) => (
+            <li key={judul} className="flex flex-col gap-2 bg-[var(--bg)] p-6">
+              <span className="tnum font-mono text-[12px] text-[var(--teal)]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="text-[16px] leading-snug font-semibold text-[var(--ink)]">
+                {t(judul)}
+              </h3>
+              <p className="text-[14.5px] leading-relaxed text-[var(--ink-muted)]">{t(isi)}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <p className="max-w-[58ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">
+            {t("curationNote")}
+          </p>
+          <a
+            href="https://simt.kemendikdasmen.go.id/"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-[14px] font-medium text-[var(--teal)]"
+          >
+            {t("curationSimt")}
+            <span aria-hidden className="text-[12px]">
+              ↗
+            </span>
+          </a>
+        </div>
+      </Section>
+
       {/* ── Visi, misi, tujuan ────────────────────────────────────── */}
       <Section eyebrow={t("visionEyebrow")} title={t("visionTitle")} sunk>
         <div className="grid gap-10 md:grid-cols-12 md:gap-12">
