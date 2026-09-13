@@ -112,7 +112,14 @@
     "expertLead": "Professors, lecturers, practitioners, researchers, and teachers of scientific work from leading institutions across Indonesia.",
     "staffTitle": "Expert staff",
     "people": "{count} people",
-    "reportsTo": "Reports to {name}"
+    "reportsTo": "Reports to {name}",
+    "leadershipEyebrow": "Leadership",
+    "leadershipTitle": "Who leads",
+    "divisionsEyebrow": "Divisions",
+    "coordinator": "Coordinator",
+    "members": "{count} members",
+    "divisionOf": "{name} division",
+    "membersWord": "members"
   },
   "partners": {
     "title": "Affiliate partners",

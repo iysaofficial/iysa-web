@@ -112,7 +112,14 @@
     "expertLead": "Profesor, dosen, praktisi, peneliti, dan guru pembina karya ilmiah dari berbagai institusi terkemuka di Indonesia.",
     "staffTitle": "Staf ahli",
     "people": "{count} orang",
-    "reportsTo": "Di bawah {name}"
+    "reportsTo": "Di bawah {name}",
+    "leadershipEyebrow": "Pimpinan",
+    "leadershipTitle": "Yang memimpin",
+    "divisionsEyebrow": "Divisi",
+    "coordinator": "Koordinator",
+    "members": "{count} anggota",
+    "divisionOf": "Divisi {name}",
+    "membersWord": "anggota"
   },
   "partners": {
     "title": "Mitra afiliasi",
