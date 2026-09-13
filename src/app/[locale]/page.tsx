@@ -7,8 +7,10 @@ import { Section, StatRow, ButtonLink, MoreLink, Pill } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
 import { HeroAtom } from "@/components/hero-atom";
-import { statusEvent, waktuEvent } from "@/lib/event-seri";
+import { statusEvent, waktuEvent, kelompokkanSeri } from "@/lib/event-seri";
 import { PartnerWall } from "@/components/partner-wall";
+import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
+import { ambilSemuaSeriDashboard } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allIssues, allAffiliates } from "@/lib/data";
@@ -67,6 +69,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
   const latestIssue = allIssues().find((i) => i.hasPdf);
 
+  /* Edisi yang pendaftarannya benar-benar dibuka menurut dashboard. Ini satu-
+     satunya sumber yang tahu saklarnya, dan sebagian edisi di sini belum
+     pernah ada di data warisan sama sekali. Seri yang belum dipin panitia
+     tidak menjawab, dan beranda diam-diam tampil tanpa blok ini. */
+  const dibuka = [...(await ambilSemuaSeriDashboard(kelompokkanSeri(allEvents()).map((x) => x.akronim))).values()]
+    .filter((e) => e.pendaftaranDibuka)
+    .sort((a, b) => (a.pendaftaranTutup ?? "").localeCompare(b.pendaftaranTutup ?? ""))
+    .slice(0, 3);
+
   return (
     <>
       {/* ── Hero ──────────────────────────────────────────────────── */}
@@ -119,6 +130,26 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           />
         </div>
       </section>
+
+      {/* ── Pendaftaran terbuka ───────────────────────────────────────
+          Mendahului sorotan event. Pengunjung beranda yang datang untuk ikut
+          lomba menanyakan satu hal lebih dulu — mana yang masih bisa saya
+          daftari sekarang — dan hanya dashboard yang tahu jawabannya. */}
+      {dibuka.length > 0 && (
+        <Section eyebrow={t("openNowEyebrow")} title={t("openNowTitle")}>
+          <ul
+            className={`grid gap-px border border-[var(--line)] bg-[var(--line)] ${
+              dibuka.length === 1 ? "" : dibuka.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"
+            }`}
+          >
+            {dibuka.map((e) => (
+              <li key={e.id} className="flex">
+                <EdisiDashboardKartu edisi={e} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
 
       {/* ── Event ─────────────────────────────────────────────────── */}
       <Section
