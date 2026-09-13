@@ -14,7 +14,8 @@
     "migrate": "npm run migrate:content && npm run migrate:assets && npm run migrate:redirects && npm run trace:logo && npm run build:icons",
     "prebuild": "npm run contrast",
     "build:icons": "node scripts/build-icons.mjs",
-    "trace:logo": "node scripts/trace-logo.mjs"
+    "trace:logo": "node scripts/trace-logo.mjs",
+    "tarik:kurasi": "node scripts/tarik-kurasi.mjs"
   },
   "dependencies": {
     "@types/three": "^0.186.0",

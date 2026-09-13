@@ -1,0 +1,11 @@
+{
+  "_sumber": "https://simt.kemendikdasmen.go.id/kurasi/advanced-search",
+  "_api": "https://simt.kemendikdasmen.go.id/api/v2/list-kurasi",
+  "_penyelenggara": "Indonesian Young Scientist Association",
+  "_ditarik": "2026-09-13",
+  "cabang": 595,
+  "seri": 47,
+  "edisi": 159,
+  "tahunAwal": 2020,
+  "tahunAkhir": 2026
+}
