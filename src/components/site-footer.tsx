@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { primaryNav } from "@/lib/nav";
 import { org, addressLine, primaryWhatsapp } from "@/content/org";
 import { SubscribeForm } from "./subscribe-form";
+import { IysaWordmark } from "./iysa-logo";
 
 export async function SiteFooter() {
   const t = await getTranslations("footer");
@@ -14,9 +15,10 @@ export async function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-12">
           {/* Identitas */}
           <div className="md:col-span-4">
-            <p className="text-[19px] font-extrabold tracking-[-0.04em] text-[var(--navy)]">
-              IYSA
-            </p>
+            {/* Lambang di kaki halaman lebih besar daripada di header (36px):
+                di sini ia satu-satunya tanda merek di layar, bukan pendamping
+                navigasi, dan di 36px meridian bola dunianya ikut terbaca. */}
+            <IysaWordmark size={36} />
             <p className="mt-3 max-w-[34ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">
               {t("tagline")}
             </p>
@@ -31,7 +33,7 @@ export async function SiteFooter() {
                 <li key={item.key}>
                   <Link
                     href={item.path}
-                    className="text-[15px] text-[var(--ink-muted)] transition-colors duration-150 hover:text-[var(--teal)]"
+                    className="text-[15px] text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
                   >
                     {nav(item.key)}
                   </Link>
@@ -57,7 +59,7 @@ export async function SiteFooter() {
                   href={org.address.mapsUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="leading-relaxed transition-colors duration-150 hover:text-[var(--teal)]"
+                  className="leading-relaxed transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
                 >
                   {addressLine}
                 </a>
@@ -65,7 +67,7 @@ export async function SiteFooter() {
               <li>
                 <a
                   href={`mailto:${org.email}`}
-                  className="break-all transition-colors duration-150 hover:text-[var(--teal)]"
+                  className="break-all transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
                 >
                   {org.email}
                 </a>
@@ -75,7 +77,7 @@ export async function SiteFooter() {
                   href={`https://wa.me/${primaryWhatsapp.number}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="tnum transition-colors duration-150 hover:text-[var(--teal)]"
+                  className="tnum transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
                 >
                   {primaryWhatsapp.display}
                 </a>
@@ -96,7 +98,7 @@ export async function SiteFooter() {
                     href={s.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono text-[12px] tracking-wide text-[var(--ink-faint)] transition-colors duration-150 hover:text-[var(--teal)]"
+                    className="font-mono text-[12px] tracking-wide text-[var(--ink-faint)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
                   >
                     {s.label}
                   </a>

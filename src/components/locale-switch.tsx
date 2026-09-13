@@ -43,7 +43,7 @@ export function LocaleSwitch() {
                 router.replace(pathname, { locale: l });
               })
             }
-            className={`rounded-full px-2.5 py-1 font-mono text-[11px] font-medium tracking-wider transition-colors duration-150 ${
+            className={`rounded-full px-2.5 py-1 font-mono text-[11px] font-medium tracking-wider transition-colors duration-[var(--gerak-cepat)] ${
               current
                 ? "bg-[var(--navy)] text-[var(--on-navy)]"
                 : "text-[var(--ink-muted)] hover:text-[var(--ink)]"

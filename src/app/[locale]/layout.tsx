@@ -9,6 +9,7 @@ import { routing, type Locale } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeScript } from "@/components/theme-script";
+import { Reveal } from "@/components/reveal";
 import { siteUrl, alternatesFor, organizationJsonLd } from "@/lib/seo";
 import "../globals.css";
 
@@ -65,7 +66,19 @@ export async function generateMetadata({
     },
     twitter: { card: "summary_large_image" },
     robots: { index: true, follow: true },
-    icons: { icon: "/favicon.ico" },
+    /*
+     * `icons` sengaja TIDAK dideklarasikan di sini.
+     *
+     * Deklarasi eksplisit MENGGANTIKAN konvensi berkas, bukan menambahinya.
+     * Selama baris `icons: { icon: "/favicon.ico" }` ada, Next hanya memancarkan
+     * <link> ke favicon.ico dan `src/app/icon.svg` tidak pernah dirujuk sama
+     * sekali — peramban modern kehilangan versi vektor yang ikut tema gelap,
+     * dan permintaan langsung ke /icon.svg malah dilayani halaman 404 lalu
+     * hasilnya ikut tersimpan di cache prerender.
+     *
+     * Dibiarkan kosong, Next menemukan sendiri favicon.ico, icon.svg, dan
+     * apple-icon.png dari src/app/ dan memancarkan ketiganya.
+     */
   };
 }
 
@@ -106,6 +119,10 @@ export default async function LocaleLayout({
           <SiteHeader />
           <main id="isi">{children}</main>
           <SiteFooter />
+          {/* Tidak merender apa pun; hanya melepas tahanan animasi saat
+              elemennya masuk layar. Dipasang di layout supaya berlaku untuk
+              semua halaman tanpa tiap halaman perlu mengingatnya. */}
+          <Reveal />
         </NextIntlClientProvider>
       </body>
     </html>

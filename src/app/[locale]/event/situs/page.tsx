@@ -36,7 +36,7 @@ export default async function EventSitesPage({ params }: { params: Promise<{ loc
             <li key={`${s.name}-${s.url}`} className="bg-[var(--bg)]">
               {s.url ? (
                 <a href={s.url} target="_blank" rel="noreferrer"
-                   className="group flex h-full flex-col gap-2 p-5 transition-colors duration-150 hover:bg-[var(--bg-sunk)]">
+                   className="group flex h-full flex-col gap-2 p-5 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
                   <span className="text-[15px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">{s.name}</span>
                   {s.type && <span className="eyebrow">{s.type}</span>}
                   <span className="mt-1 truncate font-mono text-[11.5px] text-[var(--teal)]">

@@ -7,7 +7,7 @@ import { routing, type Locale } from "@/i18n/routing";
 import { BackLink, ButtonLink, DefList, Pill, Section } from "@/components/ui";
 import { pageMetadata, eventJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { allEvents, eventBySlug } from "@/lib/data";
-import { posterUrl } from "@/lib/assets";
+import { posterUrl, assetUrl } from "@/lib/assets";
 
 /**
  * 61 event yang dulu satu komponen per halaman, kini satu rute.
@@ -64,6 +64,9 @@ export default async function EventDetail({
 
   const t = await getTranslations("events");
   const poster = posterUrl(e.poster);
+  // 27 dari 30 rujukan foto venue benar-benar ada; tiga sisanya null dan
+  // blok fotonya tidak dirender sama sekali.
+  const venue = assetUrl(e.venueImage);
 
   const levelLabel =
     e.level === "international"
@@ -184,9 +187,33 @@ export default async function EventDetail({
             <DefList items={rows} />
           </div>
 
-          {(e.mapsEmbed || e.mapsUrl) && (
+          {(e.mapsEmbed || e.mapsUrl || venue) && (
             <div className="md:col-span-5">
               <p className="eyebrow mb-3">{t("location")}</p>
+
+              {/*
+                Foto venue. Sudah ikut migrasi aset sejak awal — 27 event
+                punya — tapi belum pernah dirender karena rasionya tidak
+                seragam: sebagian potret gedung, sebagian lencana kampus,
+                tersebar di tiga folder berbeda.
+
+                Kotak rasio tetap 16:9 dengan `object-cover` menyelesaikan itu
+                tanpa perlu menyentuh berkasnya: apa pun rasio aslinya, yang
+                tampil selalu pita selebar kolom. Gambar yang terpotong lebih
+                baik daripada baris yang tinggi-rendah acak — dan foto venue
+                di sini keterangan, bukan subjek.
+              */}
+              {venue && (
+                <Image
+                  src={venue}
+                  alt=""
+                  width={640}
+                  height={360}
+                  sizes="(min-width: 768px) 40vw, 100vw"
+                  className="mb-3 aspect-video w-full border border-[var(--line)] object-cover"
+                />
+              )}
+
               {e.mapsEmbed && (
                 <iframe
                   src={e.mapsEmbed}

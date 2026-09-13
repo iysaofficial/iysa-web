@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<style>
+@media (prefers-color-scheme:dark){
+.o-navy{stroke:#7ea3e0}.o-teal{stroke:#4fc4bc}.o-coral{stroke:#ff7a5e}
+.s-navy{fill:#7ea3e0}.s-teal{fill:#4fc4bc}.s-coral{fill:#ff7a5e}
+.bola{fill:#eef2f9}.garis{stroke:#0c1220}
+}
+</style>
+<ellipse class="o-teal" cx="256" cy="256" rx="200" ry="66" fill="none" stroke="#2e9c97" stroke-width="27" transform="rotate(30 256 256)"/>
+<ellipse class="o-coral" cx="256" cy="256" rx="200" ry="66" fill="none" stroke="#ef5138" stroke-width="27" transform="rotate(90 256 256)"/>
+<circle class="bola" cx="256" cy="256" r="54" fill="#0e1726"/>
+<g class="garis" fill="none" stroke="#ffffff" stroke-width="6">
+<line x1="202" y1="256" x2="310" y2="256"/>
+<ellipse cx="256" cy="256" rx="24.3" ry="54"/>
+</g>
+<ellipse class="o-navy" cx="256" cy="256" rx="200" ry="66" fill="none" stroke="#2f5490" stroke-width="27" transform="rotate(-30 256 256)"/>
+<circle class="s-teal" cx="82.8" cy="156.0" r="30" fill="#2e9c97"/>
+<circle class="s-coral" cx="256.0" cy="56.0" r="30" fill="#ef5138"/>
+<circle class="s-navy" cx="429.2" cy="156.0" r="30" fill="#2f5490"/>
+</svg>

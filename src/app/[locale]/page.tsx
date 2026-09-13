@@ -6,6 +6,8 @@ import type { Locale } from "@/i18n/routing";
 import { Section, StatRow, ButtonLink, MoreLink, Pill } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
+import { PartnerWall } from "@/components/partner-wall";
+import { HeroAtom } from "@/components/hero-atom";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allIssues, allAffiliates } from "@/lib/data";
 import { intro, vision, mission, goals } from "@/content/profile";
@@ -67,6 +69,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             </div>
 
             <div className="md:col-span-4 md:pt-4">
+              {/* Lambang IYSA dalam tiga dimensi. Dekoratif sepenuhnya —
+                  aria-hidden, dan three.js baru diunduh setelah beranda
+                  terpasang, jadi ia tidak pernah menahan judul hero tampil. */}
+              <HeroAtom className="mb-8 md:-mt-6 md:ml-auto" />
               <p className="max-w-[40ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">
                 {intro[locale]}
               </p>
@@ -98,7 +104,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         title={t("eventsTitle")}
         action={<MoreLink href="/event">{t("eventsAll")}</MoreLink>}
       >
-        <ul className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
+        <ul
+          data-reveal
+          className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3"
+        >
           {featured.map((e) => (
             <li key={e.slug} className="bg-[var(--bg)]">
               <EventCard event={e} />
@@ -152,18 +161,31 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         title={t("partnersTitle")}
         action={<MoreLink href="/mitra">{`${allAffiliates().length} →`}</MoreLink>}
       >
+        {/* Mitra internasional: bernama, karena tiap satunya punya halaman
+            sendiri berisi profil dan galeri. */}
         <ul className="flex flex-wrap gap-2">
           {allAffiliates().map((a) => (
             <li key={a.slug}>
               <Link
                 href={`/mitra/${a.slug}`}
-                className="inline-flex rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[13.5px] text-[var(--ink-muted)] transition-colors duration-150 hover:border-[var(--teal)] hover:text-[var(--teal)]"
+                className="inline-flex rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[13.5px] text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]"
               >
                 {affiliateNames[a.slug] ?? a.name}
               </Link>
             </li>
           ))}
         </ul>
+
+        {/* Institusi pendukung: 41 logo yang sejak migrasi sudah ada di repo
+            tapi tidak pernah dirender. Angka "41 institusi mitra" di deret
+            statistik di atas selama ini berdiri tanpa bukti apa pun. */}
+        <div className="mt-12">
+          <h3 className="eyebrow">{t("partnersWallTitle")}</h3>
+          <p className="mt-2 mb-6 max-w-[52ch] text-[14.5px] text-[var(--ink-muted)]">
+            {t("partnersWallLead", { count: s.partners })}
+          </p>
+          <PartnerWall />
+        </div>
       </Section>
 
       {/* ── Newsletter ────────────────────────────────────────────── */}

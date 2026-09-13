@@ -42,7 +42,7 @@ export function ThemeToggle() {
             aria-label={o.label}
             title={o.label}
             onClick={() => setTheme(o.value)}
-            className={`grid h-7 w-7 place-items-center rounded-full text-[13px] transition-colors duration-150 ${
+            className={`grid h-7 w-7 place-items-center rounded-full text-[13px] transition-colors duration-[var(--gerak-cepat)] ${
               active
                 ? "bg-[var(--navy)] text-[var(--on-navy)]"
                 : "text-[var(--ink-muted)] hover:text-[var(--ink)]"

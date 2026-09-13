@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
+import { AngkaNaik } from "./angka-naik";
 
 /* ── kerangka halaman ──────────────────────────────────────────────── */
 
@@ -96,7 +97,7 @@ export function ButtonLink({
   external?: boolean;
   className?: string;
 }) {
-  const cls = `inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[14.5px] font-semibold transition-all duration-150 ${toneClass[tone]} ${className}`;
+  const cls = `inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[14.5px] font-semibold transition-all duration-[var(--gerak-cepat)] ${toneClass[tone]} ${className}`;
 
   if (external) {
     return (
@@ -125,7 +126,7 @@ export function MoreLink({ href, children }: { href: string; children: ReactNode
       {children}
       <span
         aria-hidden
-        className="transition-transform duration-150 group-hover:translate-x-0.5"
+        className="transition-transform duration-[var(--gerak-cepat)] group-hover:translate-x-0.5"
       >
         →
       </span>
@@ -137,9 +138,9 @@ export function BackLink({ href, children }: { href: string; children: ReactNode
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-1.5 text-[13.5px] font-medium text-[var(--ink-muted)] transition-colors duration-150 hover:text-[var(--teal)]"
+      className="group inline-flex items-center gap-1.5 text-[13.5px] font-medium text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
     >
-      <span aria-hidden className="transition-transform duration-150 group-hover:-translate-x-0.5">
+      <span aria-hidden className="transition-transform duration-[var(--gerak-cepat)] group-hover:-translate-x-0.5">
         ←
       </span>
       {children}
@@ -179,7 +180,10 @@ export function Stat({ value, label }: { value: string | number; label: string }
   return (
     <div className="flex flex-col gap-1 border-t border-[var(--line)] pt-4">
       <span className="tnum font-mono text-[30px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)] md:text-[38px]">
-        {value}
+        {/* Angka aslinya tetap dirender di server; AngkaNaik hanya mengambil
+            alih kalau elemennya masuk layar dari luar. Tanpa JavaScript,
+            yang tampil tetap angka yang benar. */}
+        <AngkaNaik nilai={value} />
       </span>
       <span className="text-[13px] leading-snug text-[var(--ink-faint)]">{label}</span>
     </div>
@@ -188,7 +192,10 @@ export function Stat({ value, label }: { value: string | number; label: string }
 
 export function StatRow({ items }: { items: { value: string | number; label: string }[] }) {
   return (
-    <div className="rise-stagger grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-6">
+    <div
+      data-reveal
+      className="rise-stagger grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-6"
+    >
       {items.map((s) => (
         <Stat key={s.label} value={s.value} label={s.label} />
       ))}

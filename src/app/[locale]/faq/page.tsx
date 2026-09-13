@@ -42,7 +42,7 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: Lo
                 <details className="group py-5">
                   <summary className="flex cursor-pointer items-start gap-4 text-[16.5px] leading-snug font-semibold text-[var(--ink)] marker:content-none">
                     <span className="flex-1">{item.question}</span>
-                    <span aria-hidden className="mt-0.5 shrink-0 text-[var(--teal)] transition-transform duration-150 group-open:rotate-45">+</span>
+                    <span aria-hidden className="mt-0.5 shrink-0 text-[var(--teal)] transition-transform duration-[var(--gerak-cepat)] group-open:rotate-45">+</span>
                   </summary>
                   <p className="mt-3 max-w-[68ch] text-[15.5px] leading-relaxed text-[var(--ink-muted)]">{item.answer}</p>
                 </details>

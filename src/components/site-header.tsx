@@ -7,6 +7,7 @@ import { primaryNav } from "@/lib/nav";
 import { org } from "@/content/org";
 import { ThemeToggle } from "./theme-toggle";
 import { LocaleSwitch } from "./locale-switch";
+import { IysaWordmark } from "./iysa-logo";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
@@ -19,18 +20,16 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--bg)]/88 backdrop-blur-md">
       <div className="shell flex h-16 items-center justify-between gap-4">
-        {/* Wordmark. Logo lama 24 MB PNG; di sini tipografi yang bekerja. */}
+        {/* Lambang + wordmark. Lambangnya SVG sebaris, bukan <Image>: di 28px
+            ia hanya ~1 KB di dalam HTML, tidak menambah satu pun permintaan
+            jaringan, dan ikut berganti warna saat tema berubah tanpa perlu
+            menukar berkas. */}
         <Link
           href="/"
-          className="flex shrink-0 items-baseline gap-2 transition-opacity duration-150 hover:opacity-80"
+          className="shrink-0 transition-opacity duration-[var(--gerak-cepat)] hover:opacity-80"
           onClick={() => setOpen(false)}
         >
-          <span className="text-[19px] font-extrabold tracking-[-0.04em] text-[var(--navy)]">
-            IYSA
-          </span>
-          <span className="hidden text-[11px] leading-none text-[var(--ink-faint)] sm:inline">
-            Young Scientist
-          </span>
+          <IysaWordmark size={28} sub="Young Scientist" />
         </Link>
 
         {/* Menu utama — hanya layar lebar. */}
@@ -41,7 +40,7 @@ export function SiteHeader() {
                 <Link
                   href={item.path}
                   aria-current={isActive(item.path) ? "page" : undefined}
-                  className={`rounded px-2.5 py-1.5 text-[14px] font-medium transition-colors duration-150 ${
+                  className={`rounded px-2.5 py-1.5 text-[14px] font-medium transition-colors duration-[var(--gerak-cepat)] ${
                     isActive(item.path)
                       ? "text-[var(--navy)]"
                       : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
@@ -68,7 +67,7 @@ export function SiteHeader() {
           */}
           <a
             href={org.dashboardUrl}
-            className="hidden rounded-full bg-[var(--navy)] px-4 py-2 text-[13px] font-semibold text-[var(--on-navy)] transition-opacity duration-150 hover:opacity-90 sm:inline-block"
+            className="hidden rounded-full bg-[var(--navy)] px-4 py-2 text-[13px] font-semibold text-[var(--on-navy)] transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 sm:inline-block"
           >
             {t("dashboard")}
           </a>

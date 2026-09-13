@@ -61,6 +61,16 @@
   --focus: #1f7a74;
 
   --radius: 0.5rem;
+
+  /* ── Token gerak ───────────────────────────────────────────────────
+   * Durasi dan lengkung ditulis sekali di sini. Sebelumnya `duration-150`
+   * ditulis ulang sebagai kelas Tailwind di tiap komponen, jadi tidak ada
+   * satu tempat pun untuk mengubah tempo situs — dan `prefers-reduced-motion`
+   * harus mengejar setiap kemunculannya satu per satu. */
+  --lengkung: cubic-bezier(0.22, 1, 0.36, 1);
+  --gerak-cepat: 150ms;  /* warna saat hover, keadaan tombol */
+  --gerak-sedang: 300ms; /* transformasi, sampul yang membesar */
+  --gerak-naik: 500ms;   /* masuknya elemen ke layar */
 }
 
 :root[data-theme="dark"],
@@ -129,6 +139,47 @@
   }
 }
 
+/* ── Warna lambang ──────────────────────────────────────────────────
+ *
+ * Terpisah dari palet situs, dan itu disengaja. `--navy/--teal/--coral`
+ * dipilih supaya lolos WCAG sebagai TEKS, sehingga lebih gelap dan lebih
+ * redam daripada lambangnya. Lambang tidak memikul beban itu — ia identitas.
+ *
+ * Tapi warna asli logo juga tidak dipakai mentah, karena masing-masing
+ * gagal di salah satu tema (dihitung, bukan dikira):
+ *
+ *   teal asli #30b4b4 di atas putih    2,53:1  → hilang di tema terang
+ *   navy asli #305490 di atas #0c1220  2,49:1  → tenggelam di tema gelap
+ *
+ * Nilai di bawah adalah versi yang digeser seperlunya sampai ketiganya
+ * ≥3:1 di kedua tema tanpa kehilangan rupa aslinya. Angkanya diuji di
+ * scripts/contrast.mjs, di blok yang melaporkan tanpa menggagalkan build:
+ * lambang termasuk pengecualian WCAG 1.4.11 (logotype), jadi ia tidak boleh
+ * ikut menggagalkan, tapi tetap perlu terbaca. */
+:root {
+  --logo-navy: #2f5490;
+  --logo-teal: #2e9c97;
+  --logo-coral: #ef5138;
+  --logo-globe: #0e1726;
+  --logo-globe-garis: #ffffff;
+}
+:root[data-theme="dark"] {
+  --logo-navy: #7ea3e0;
+  --logo-teal: #4fc4bc;
+  --logo-coral: #ff7a5e;
+  --logo-globe: #eef2f9;
+  --logo-globe-garis: #0c1220;
+}
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    --logo-navy: #7ea3e0;
+    --logo-teal: #4fc4bc;
+    --logo-coral: #ff7a5e;
+    --logo-globe: #eef2f9;
+    --logo-globe-garis: #0c1220;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    Dasar
    ═══════════════════════════════════════════════════════════════════ */
@@ -190,19 +241,57 @@ p, li {
 }
 
 .rise {
-  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise var(--gerak-naik) var(--lengkung) both;
 }
 
-/* Menunda anak-anak satu grid supaya terbaca berurutan, bukan serempak. */
+/*
+ * Menunda anak-anak satu grid supaya terbaca berurutan, bukan serempak.
+ *
+ * Dulu daftarnya berhenti di `:nth-child(6)`: grid dengan lebih dari enam
+ * item — 66 event, 41 logo mitra, 22 orang tim — membuat item ketujuh dan
+ * seterusnya muncul serempak tanpa tunda, tepat di tengah urutan yang sudah
+ * berjalan. Terlihat sebagai satu sentakan.
+ *
+ * Sekarang tundanya dihitung, bukan didaftar: `sibling-index()` memberi nomor
+ * urut tiap anak, jadi polanya berlaku untuk grid berisi berapa pun.
+ *
+ * `min()` membatasi di 0,3 detik. Tanpa batas itu, logo mitra ke-41 menunggu
+ * 1,6 detik sebelum muncul — pengunjung sudah menggulir lewat sebelum
+ * animasinya mulai, dan yang terlihat justru gambar yang "terlambat datang".
+ *
+ * Peramban yang belum mengenal `sibling-index()` mengabaikan baris itu dan
+ * memakai `animation-delay` bawaan 0s — semua anak muncul bersamaan dengan
+ * animasi yang tetap berjalan. Turun kelas dengan mulus, bukan rusak.
+ */
 .rise-stagger > * {
-  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise var(--gerak-naik) var(--lengkung) both;
+  animation-delay: min(calc(sibling-index() * 0.04s), 0.3s);
 }
-.rise-stagger > *:nth-child(1) { animation-delay: 0.02s; }
-.rise-stagger > *:nth-child(2) { animation-delay: 0.06s; }
-.rise-stagger > *:nth-child(3) { animation-delay: 0.1s; }
-.rise-stagger > *:nth-child(4) { animation-delay: 0.14s; }
-.rise-stagger > *:nth-child(5) { animation-delay: 0.18s; }
-.rise-stagger > *:nth-child(6) { animation-delay: 0.22s; }
+
+/*
+ * Menahan animasi sampai elemennya masuk layar.
+ *
+ * Penahannya di CSS, bukan di JavaScript, supaya ikut render pertama: kalau
+ * JS yang memberi aba-aba mulai, ada jendela antara halaman terlihat dan
+ * skrip jalan, dan di jendela itu animasinya sudah telanjur berjalan.
+ * src/components/reveal.tsx yang memasang `data-terlihat`.
+ */
+[data-reveal]:not([data-terlihat]),
+[data-reveal]:not([data-terlihat]) > * {
+  animation-play-state: paused;
+}
+
+/*
+ * Tanpa JavaScript, penahannya dibatalkan. Kalau tidak, seluruh isi yang
+ * ditandai berhenti di `opacity: 0` dan halaman tampak kosong selamanya —
+ * kegagalan yang jauh lebih buruk daripada animasi yang telanjur selesai.
+ */
+@media (scripting: none) {
+  [data-reveal]:not([data-terlihat]),
+  [data-reveal]:not([data-terlihat]) > * {
+    animation-play-state: running;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -214,6 +303,12 @@ p, li {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  /* Penahan ikut dilepas: kalau tidak, elemen yang tidak pernah masuk layar
+     tetap tertahan di keadaan awalnya. */
+  [data-reveal]:not([data-terlihat]),
+  [data-reveal]:not([data-terlihat]) > * {
+    animation-play-state: running !important;
   }
 }
 

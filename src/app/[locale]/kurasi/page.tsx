@@ -25,13 +25,13 @@ export default async function CurationPage({ params }: { params: Promise<{ local
           {curation.folders.map((f) => (
             <li key={f.key} className="bg-[var(--bg)]">
               <a href={f.url} target="_blank" rel="noreferrer"
-                 className="group flex h-full flex-col justify-between gap-8 p-7 transition-colors duration-150 hover:bg-[var(--bg-sunk)]">
+                 className="group flex h-full flex-col justify-between gap-8 p-7 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
                 <span className="text-[16.5px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">
                   {curationLabels[f.key]?.[locale] ?? f.key}
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-[var(--teal)]">
                   {t("openFolder")}
-                  <span aria-hidden className="transition-transform duration-150 group-hover:translate-x-0.5">↗</span>
+                  <span aria-hidden className="transition-transform duration-[var(--gerak-cepat)] group-hover:translate-x-0.5">↗</span>
                 </span>
               </a>
             </li>

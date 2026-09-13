@@ -57,9 +57,17 @@ npm test         # BELUM ADA — tidak ada test runner sama sekali
 - Font dimuat lewat `next/font/google` di `src/app/[locale]/layout.tsx`:
   **Plus Jakarta Sans** (400–800) + **JetBrains Mono** (400, 500)
 
-**Library animasi / gambar / 3D: BELUM ADA — nol.** Tidak ada framer-motion,
-motion, gsap, lottie, three, react-spring, rive. Semua animasi saat ini CSS
-murni. Bidang kosong.
+**Library animasi: tidak ada, dan sengaja.** Tidak ada framer-motion, motion,
+gsap, lottie, react-spring, rive. Semua gerakan CSS murni, tokennya di
+`globals.css` (`--gerak-cepat/-sedang/-naik`, `--lengkung`).
+
+**3D: `three` 0.186.0**, dipakai satu tempat saja — `src/components/hero-atom.tsx`,
+lambang IYSA sebagai objek tiga dimensi di hero beranda. Dimuat lewat
+`await import("three")` di dalam `useEffect`, jadi ia masuk chunk terpisah
+720 KB yang **tidak dirujuk sama sekali** oleh HTML beranda: muat awal situs
+tidak bertambah, dan halaman selain beranda tidak pernah mengunduhnya.
+Diverifikasi dengan mencari nama chunk itu di `.next/server/app/id.html` — nol
+kemunculan. Kalau three dipakai di tempat kedua, ulangi pemeriksaan itu.
 
 ---
 
@@ -72,8 +80,7 @@ murni. Bidang kosong.
 └── site/                    ← repo git
     ├── public/
     │   ├── media/           semua aset gambar (14 MB)
-    │   └── docs/            KOSONG (0 byte)
-    ├── scripts/             3 skrip migrasi + uji kontras
+        ├── scripts/             3 skrip migrasi + uji kontras + pembangun ikon
     └── src/
         ├── app/
         │   ├── [locale]/    semua halaman
@@ -86,7 +93,7 @@ murni. Bidang kosong.
         └── lib/             api, assets, data, mail, nav, ratelimit, seo, theme-store
 ```
 
-- **Komponen bersama:** `src/components/` — datar, 10 berkas. **Tidak ada
+- **Komponen bersama:** `src/components/` — datar, 15 berkas. **Tidak ada
   komponen per-halaman**; kalau butuh, buat konvensi baru.
 - **Penamaan:** berkas `kebab-case.tsx`, komponen `PascalCase`, named export
   (bukan default) kecuali `page.tsx`/`layout.tsx`. Segmen rute berbahasa
@@ -95,7 +102,7 @@ murni. Bidang kosong.
   `Section`, `ButtonLink`, `MoreLink`, `BackLink`, `Pill`, `Stat`, `StatRow`,
   `DefList`, `EmptyState`
 
-**Rute yang sudah jadi** (21 `page.tsx`, 305 halaman ter-render):
+**Rute yang sudah jadi** (21 `page.tsx`, 307 halaman ter-render):
 
 `/` · `/profil` · `/event` · `/event/[slug]` · `/event/situs` ·
 `/event/afiliasi` · `/mitra` · `/mitra/[slug]` · `/newsletter` ·
@@ -107,8 +114,8 @@ murni. Bidang kosong.
 
 - `/tim/staf-ahli` — **bukan halaman**, hanya `redirect()` ke `/tim/ahli`.
   Sengaja: di situs lama dua rute ini menampilkan isi yang sama.
-- `/galeri/foto` — hanya 7 kartu tahun berisi tautan ke Google Drive.
-  **Tidak ada satu gambar pun.** Kandidat terkuat untuk dikerjakan.
+- `/galeri/foto` — 7 kartu tahun berisi tautan ke Google Drive, tanpa gambar.
+  **Itu keputusan, bukan sisa kerja** — alasannya di bagian 5.E.
 - `/kalender` — satu `<iframe>` Heyzine, tidak ada apa-apa lagi.
 - `/kurasi` + `/kurasi/[berkas]` — hanya tombol keluar ke Drive.
 
@@ -192,7 +199,7 @@ adanya (animasi hilang kalau dipaksa WebP statis) — saat ini nol GIF terpakai.
 | team | 15 | 772 KB |
 | logo-afiliasi | 14 | 372 KB |
 | national-affiliation | 8 | 176 KB |
-| logo | **2** | 64 KB |
+| logo | **5** | 104 KB |
 | venue | 1 | 12 KB |
 
 ### ⚠ Aset kosong — daftar kerja
@@ -215,9 +222,9 @@ international-youth-physics-olympiad-iypo-2024       ← dulu iypo.WebP
 Catatan: di `.old/public/assets/images/poster/` ADA `yisf2026.png` dan
 `ynsf2026.png` — tahunnya beda, jangan asal pakai tanpa konfirmasi.
 
-**B. Foto venue hilang (3)** — tapi **`venueImage` tidak dirender di halaman
-mana pun saat ini**. Ada di tipe `src/lib/data.ts:44`, tidak dipakai. 19 event
-punya `venueName` tanpa foto; 28 dari 66 punya `mapsEmbed`.
+**B. Foto venue hilang (3)** — `venueImage` **kini dirender** di `/event/[slug]`
+(kotak 16:9 + `object-cover`), 27 dari 30 rujukan ada. 19 event punya
+`venueName` tanpa foto; 28 dari 66 punya `mapsEmbed`.
 
 ```
 global-youth-invention-and-innovation-fair-gyiif-2026   ← rujukan "-" (kosong)
@@ -225,44 +232,108 @@ nasisc-national-agriculture-...-competition             ← sma-taruna-nusantara
 wasisc-world-agriculture-...-competition                ← sma-taruna-nusantara-malang.webp
 ```
 
-**C. Logo IYSA — kekosongan terbesar.** `public/media/logo/` hanya berisi
-**2 berkas**:
+**C. Logo IYSA — SELESAI.** Lambangnya kini SVG yang digambar ulang dari
+geometri, bukan raster.
 
-- `iysa-white-logo.webp` — versi putih (untuk latar gelap)
-- `about-logo.webp` — logo halaman about lama
+Sumber kebenarannya `src/components/iysa-logo.tsx` — tiga orbit elips berjarak
+60°, tiga simpul, bola dunia di pusat. Tidak ada vektor IYSA di mana pun untuk
+dilacak: satu-satunya `.svg` di repo lama (`.old/src/logo.svg`) ternyata **logo
+React bawaan create-react-app** (viewBox 841.9×595.3, `#61DAFB`). Jadi bentuknya
+disusun dari angka, dan itu yang membuatnya tetap tajam dari 16px sampai
+1200px.
 
-**BELUM ADA:** versi gelap/berwarna untuk latar terang · monokrom · favicon ·
-apple-touch-icon · OG fallback image · SVG apa pun. `iysa_logo.WebP` dirujuk
-data lama tapi **tidak ada di repo**.
+Yang perlu diketahui sebelum menyentuhnya:
 
-Konsekuensinya: **logo IYSA tidak ditampilkan di mana pun.** Header dan footer
-memakai **wordmark tipografi** (`<span>IYSA</span>`, Plus Jakarta Sans 800,
-`tracking-[-0.04em]`) di `src/components/site-header.tsx` dan
-`site-footer.tsx`. Keputusan sementara karena logo lama 24 MB PNG dan tidak ada
-versi yang layak.
+- **Urutan gambar membawa kedalaman.** Teal dan coral dulu, lalu bola dunia
+  menutupinya, lalu navy di ATAS bola. Kalau ketiganya digambar sebelum bola,
+  lambangnya jadi rata.
+- **Di bawah 40px meridian bola dunia dibuang otomatis** (`polos`). Diuji
+  dengan merender 32px lalu memperbesarnya tanpa penghalusan — meridiannya
+  jadi kotak abu bergaris.
+- **Warnanya token `--logo-*`, bukan palet situs.** Palet situs dipilih supaya
+  lolos WCAG sebagai teks, jadi lebih gelap. Warna asli logo juga tidak dipakai
+  mentah karena masing-masing gagal di salah satu tema: teal `#30b4b4` hanya
+  2,53:1 di putih, navy `#305490` hanya 2,49:1 di latar gelap. Nilai di
+  `globals.css` sudah digeser sampai ≥3:1 di kedua tema; `npm run contrast`
+  melaporkannya tanpa menggagalkan build (WCAG 1.4.11 mengecualikan logotype).
 
-**Favicon masih bawaan create-next-app** — `src/app/favicon.ico`, 25.931 byte,
-logo Next.js. Harus diganti.
+Ikon dibangun `npm run build:icons` (`scripts/build-icons.mjs`, ikut
+`npm run migrate`): `src/app/icon.svg` (adaptif tema lewat `@media` di dalam
+SVG), `favicon.ico` 32px, `apple-icon.png` 180px, plus
+`public/media/logo/iysa-mark{,-gelap}.svg` dan `.png`.
+
+> **Jangan pakai `var(--x)` di dalam berkas SVG.** Versi pertama `icon.svg`
+> begitu, dan librsvg — yang dipakai sharp, ImageMagick, dan sebagian
+> pratinjau sistem berkas — tidak menyelesaikan custom property: ketiga
+> orbitnya hilang dan yang tersisa empat lingkaran hitam. Warna harfiah di
+> atribut, `@media` hanya menimpa lewat kelas.
+
+Skrip ikon **membaca `iysa-logo.tsx` dan membandingkan angka geometrinya**
+sebelum menulis apa pun; kalau keduanya menyimpang ia berhenti dan menyebut
+angka mana yang beda.
+
+**Favicon sudah diganti** — 25.931 byte (logo Next) → **1.306 byte**.
 
 **D. Data sudah dikonversi tapi TIDAK DIRENDER** — asetnya siap, halamannya
 belum ada:
 
-- **`partners.json` — 41 logo institusi**, semua sudah jadi WebP di
-  `public/media/allimg/` dan `national-affiliation/`. Beranda menampilkan angka
-  "41 institusi mitra" **tanpa satu logo pun**. Dinding logo mitra belum dibuat.
-- `event-highlights.json` — 5 poster sorotan, tidak dipakai
-- `affiliate-sites.json` — 13 entri, tidak dipakai
+- ~~`partners.json` — 41 logo institusi~~ — **sudah dirender**,
+  `src/components/partner-wall.tsx`, dipakai di beranda. 41 dari 41 terpetakan.
+  Logonya `grayscale` + `opacity-80` dan kembali berwarna saat disentuh: 41
+  palet institusi yang tidak saling kenal, kalau dipasang apa adanya, berteriak
+  lebih keras daripada seluruh halaman dan merampok perhatian dari satu-satunya
+  ajakan coral. `alt` sengaja kosong — `partners.json` cuma `{scope, logo}`,
+  tidak ada nama institusinya, dan menebak nama dari nama berkas ("UINUJ")
+  berarti memasang label salah atas nama institusi orang lain. Daftar bernama
+  yang sebenarnya ada di `/mitra`.
+- `event-highlights.json` — 5 poster sorotan, masih tidak dipakai
+- `affiliate-sites.json` — 13 entri, masih tidak dipakai
 
-**E. `/galeri/foto` nol gambar** — 7 kartu tahun berisi angka besar + tautan
-Drive. Tidak ada thumbnail, tidak ada pratinjau.
+**E. `/galeri/foto` tetap nol gambar — dan itu keputusan, bukan sisa kerja.**
 
-**F. Ilustrasi / 3D / grafis: nol.** Tidak ada satu ilustrasi pun di seluruh
-situs. Hero beranda murni tipografi. `EmptyState` hanya teks dalam kotak garis
-putus-putus. Halaman 404 hanya teks.
+Thumbnail per tahun sudah dicoba dua kali dan dibatalkan dua-duanya, karena
+tidak ada satu sumber pun yang menutup ketujuh tahunnya:
 
-**G. Sampah template Next di `public/`:** `file.svg`, `globe.svg`, `next.svg`,
-`vercel.svg`, `window.svg` — hapus. `public/docs/` kosong 0 byte (dibuat untuk
-`Kurasi.pdf` yang ternyata tidak pernah ada di repo lama).
+| Sumber | Menutup |
+|---|---|
+| poster event (`events.json`) | **2 dari 7** — datanya hanya memuat 2024–2026 |
+| sampul newsletter | **4 dari 7** — terbitan baru mulai 2022 |
+
+Hasilnya kartu yang sebagian bergambar dan sebagian kosong, yang terbaca
+sebagai kerusakan — lebih buruk daripada tujuh kartu seragam. Menambalnya
+dengan gambar dari tahun lain bukan pilihan: kartu 2021 berposter 2025 adalah
+keterangan yang salah, dan di halaman arsip justru di situ ia paling
+menyesatkan. Aturan yang sama sudah berlaku untuk lima poster event yang
+hilang.
+
+Kalau dokumentasi fotonya nanti pindah dari Drive, satu gambar sampul per
+tahun bisa diambil dari sana dan halaman ini tinggal merendernya. Alasan
+lengkapnya ada di komentar `src/app/[locale]/galeri/foto/page.tsx`.
+
+**F. Ilustrasi / 3D — ada satu, dan memang cuma satu.**
+`src/components/hero-atom.tsx`: lambang IYSA sebagai objek tiga dimensi di
+hero beranda. Sudut, jari-jari, dan tebalnya diturunkan dari lambang yang sama
+supaya keduanya tidak pelan-pelan menyimpang.
+
+Yang dijaga di komponen itu, jangan dilepas tanpa alasan:
+
+- `prefers-reduced-motion` → three tidak dimuat sama sekali; lambang SVG statis
+  yang tampil, bukan versi 3D yang diam
+- WebGL gagal atau `import("three")` gagal → lambang SVG tetap di tempatnya
+- berhenti menggambar saat keluar layar (IntersectionObserver) — kalau tidak,
+  GPU ponsel berputar sepanjang halaman digulir
+- bukan elemen LCP: kanvasnya kosong sampai three tiba, sementara judul hero
+  sudah dirender di server
+- kemiringan ikut kursor dibatasi **±8°** — lebih dari itu objeknya terasa
+  mengejar pembaca
+
+Selain ini, situs tetap tanpa ilustrasi. `EmptyState` masih teks dalam kotak
+garis putus-putus, halaman 404 masih teks. Itu konsisten dengan brief
+"berani tanpa norak", bukan kekosongan yang belum sempat diisi.
+
+**G. ~~Sampah template Next di `public/`~~ — sudah dihapus.** `file.svg`,
+`globe.svg`, `next.svg`, `vercel.svg`, `window.svg`, dan `public/docs/` kosong.
+Sekarang `public/` hanya berisi `media/`.
 
 ### Soal 136 MB aset situs lama
 
@@ -310,17 +381,32 @@ ev.filter(e=>e.poster&&!has(e.poster)).forEach(e=>console.log("  · "+e.slug));'
 
 ## 6. Motion yang sudah ada
 
-**Library: BELUM ADA.** CSS murni, semua di `src/app/globals.css`.
+**Library: tidak ada.** CSS murni, semua di `src/app/globals.css`. (three.js
+dipakai HANYA untuk objek 3D di hero — lihat bagian 2 — bukan untuk motion.)
 
-**Hanya dua gerakan di seluruh situs**, keputusan sadar (brief klien: "motion
-secukupnya dan bermakna, bukan elemen terbang di mana-mana"):
+**Gerakannya sedikit dan disengaja** (brief klien: "motion secukupnya dan
+bermakna, bukan elemen terbang di mana-mana"):
 
 | | |
 |---|---|
-| `@keyframes rise` | naik 12px + fade, `0.5s cubic-bezier(0.22, 1, 0.36, 1)` |
+| `@keyframes rise` | naik 12px + fade, `var(--gerak-naik)` + `var(--lengkung)` |
 | `.rise` | dipasang per elemen |
-| `.rise-stagger` | menunda anak-anak grid, `nth-child(1..6)` → delay 0,02s–0,22s. **Hanya 6 anak pertama** |
-| transisi warna | `duration-150` di semua hover/state, ditulis inline per komponen |
+| `.rise-stagger` | menunda anak-anak grid lewat `sibling-index()`, dibatasi `min(…, 0.3s)` — berlaku untuk grid berisi berapa pun |
+| `[data-reveal]` | menahan animasi sampai elemennya masuk layar (`src/components/reveal.tsx`) |
+| `AngkaNaik` | angka `Stat` berhitung naik saat masuk layar |
+| transisi | `duration-[var(--gerak-cepat)]` / `-sedang`, token di `globals.css` |
+
+**Token gerak — satu sumber untuk tempo situs:**
+
+```css
+--lengkung:     cubic-bezier(0.22, 1, 0.36, 1);
+--gerak-cepat:  150ms;  /* warna hover, keadaan tombol */
+--gerak-sedang: 300ms;  /* transformasi, sampul membesar */
+--gerak-naik:   500ms;  /* masuknya elemen ke layar */
+```
+
+Sebelumnya `duration-150` ditulis ulang sebagai kelas Tailwind di 31 tempat.
+Sekarang nol — pakai token, jangan tulis angka baru.
 
 **Per komponen yang sudah jalan:**
 
@@ -335,18 +421,28 @@ secukupnya dan bermakna, bukan elemen terbang di mana-mana"):
 - `MoreLink` / `BackLink` — panah geser `translate-x-0.5` saat hover
 - FAQ — tanda `+` berputar 45° via `group-open:rotate-45`
 
-**Aturan bersama: setengah ada.** Durasi/easing `rise` terpusat di
-`globals.css`, tapi `duration-150` hover ditulis ulang di tiap komponen sebagai
-kelas Tailwind — belum jadi token. Kalau mau sistem motion sungguhan, itu yang
-pertama perlu disatukan.
+**Aturan bersama: sudah utuh.** Durasi, easing, dan tunda bertahap semuanya
+token di `globals.css`. Tidak ada angka durasi harfiah tersisa di `src/`.
 
-**`prefers-reduced-motion`: SUDAH ditangani** — `globals.css` mematikan semua
-animasi + transisi jadi `0.01ms` dan `scroll-behavior: auto`. **Hormati ini
-untuk apa pun yang ditambahkan.**
+**`prefers-reduced-motion`: ditangani di tiga lapis.** `globals.css` memendekkan
+semua animasi + transisi jadi `0.01ms` dan `scroll-behavior: auto`; penahan
+`[data-reveal]` ikut dilepas di sana (kalau tidak, elemen yang tak pernah masuk
+layar tertahan selamanya di keadaan awal); `hero-atom.tsx` tidak memuat three
+sama sekali dan `angka-naik.tsx` tidak beranimasi. **Hormati ini untuk apa pun
+yang ditambahkan.**
 
-**Belum ada:** scroll-triggered animation (`.rise` jalan saat mount, bukan saat
-masuk viewport — tidak ada IntersectionObserver), page transition, parallax,
-animasi angka, skeleton loader.
+**Dua jebakan yang sudah kena sekali — jangan ulangi:**
+
+1. **Penahan animasi harus di CSS, bukan JS.** Kalau JavaScript yang memberi
+   aba-aba mulai, ada jendela antara halaman terlihat dan skrip jalan, dan di
+   jendela itu animasinya sudah telanjur berjalan — persis masalah yang mau
+   dibereskan.
+2. **Selalu sediakan jalan keluar tanpa JS.** `@media (scripting: none)`
+   melepas penahan `[data-reveal]`. Tanpa itu, halaman tanpa JavaScript
+   berhenti di `opacity: 0` dan tampak kosong selamanya.
+
+**Belum ada:** transisi antar halaman (View Transitions API), parallax,
+skeleton loader.
 
 ---
 
@@ -404,13 +500,29 @@ animasi angka, skeleton loader.
 
 Belum ada anggaran formal. **Patokan sekarang, jangan sampai memburuk:**
 
-| | |
-|---|---|
-| Total JS chunks | **644 KB** (5 terbesar: 224 / 172 / 112 / 52 / 24 KB) |
-| CSS | **40 KB** |
-| HTML beranda | 86 KB mentah / **13,9 KB gzip** |
-| Seluruh aset gambar | **14 MB** |
-| Halaman ter-render saat build | **305** |
+| | Sebelum pekerjaan aset | Sekarang |
+|---|---|---|
+| **JS muat awal beranda** | 636 KB | **635 KB** |
+| JS di disk (termasuk chunk lazy) | 636 KB | 1.375 KB (three 720 KB, lazy) |
+| CSS | 40 KB | **39 KB** |
+| HTML beranda | 86 KB / 13,9 KB gzip | 169 KB / **19,9 KB gzip** |
+| Seluruh aset gambar | 14 MB | **14 MB** |
+| Halaman ter-render saat build | 305 | **307** |
+
+**Angka yang dijaga adalah baris pertama, bukan kedua.** Total di disk naik
+739 KB karena three, tapi chunk itu tidak pernah ikut muat awal — ukur dengan
+menjumlahkan hanya chunk yang benar-benar dirujuk HTML-nya:
+
+```bash
+F=.next/server/app/id.html; tot=0
+for c in $(grep -o '/_next/static/chunks/[a-zA-Z0-9_.-]*\.js' $F | sort -u); do
+  tot=$((tot + $(stat -f%z ".next/${c#/_next/}")))
+done; echo "$((tot/1024)) KB"
+```
+
+HTML beranda naik 86 → 169 KB mentah karena 41 logo mitra masing-masing
+membawa `srcset` dari pengoptimal gambar Next. Yang sampai ke pengunjung
+19,9 KB gzip, dan gambarnya sendiri `loading="lazy"` bawaan `next/image`.
 
 Menambah framer-motion (~34 KB gzip) atau three.js (~150 KB gzip) adalah
 perubahan besar terhadap angka-angka ini — pertimbangkan `next/dynamic` dan
@@ -456,17 +568,24 @@ echo "mendarat: $ok / 80   gagal: $bad"
    `/api/subscribe` menjawab **503**. Sengaja gagal terang-terangan dan
    menawarkan alamat surel IYSA, bukan diam-diam membuang pesan. Pemilik akan
    memasangnya sendiri.
-3. Bangun dinding logo 41 mitra (aset sudah siap)
-4. Ganti favicon bawaan Next
-5. Hapus 5 SVG template dari `public/`
-6. Hapus `public/docs/` kosong atau isi `Kurasi.pdf`
-7. `.rise` belum scroll-triggered
+3. ~~Bangun dinding logo 41 mitra~~ — **selesai**, `src/components/partner-wall.tsx`
+4. ~~Ganti favicon bawaan Next~~ — **selesai**, `npm run build:icons`
+5. ~~Hapus 5 SVG template dari `public/`~~ — **selesai**
+6. ~~Hapus `public/docs/` kosong~~ — **selesai** (dihapus; isi `Kurasi.pdf` kalau
+   PDF-nya nanti ada)
+7. ~~`.rise` belum scroll-triggered~~ — **selesai**, `src/components/reveal.tsx`
+8. `event-highlights.json` (5 poster sorotan) dan `affiliate-sites.json`
+   (13 entri) masih belum dirender di halaman mana pun
+9. Transisi antar halaman belum ada (View Transitions API belum dipakai)
 
 ### Sengaja ditunda, dengan alasan
 
-- **`venueImage` diekstrak tapi tidak dirender** — 30 event punya, 19 punya nama
-  venue tanpa foto. Kualitas dan rasionya tidak seragam; menampilkannya apa
-  adanya akan berantakan. Menunggu keputusan desain.
+- ~~`venueImage` diekstrak tapi tidak dirender~~ — **sudah dirender** di
+  `/event/[slug]`, 27 dari 30 rujukan benar-benar ada. Masalah rasio yang
+  tidak seragam diselesaikan dengan kotak 16:9 + `object-cover`: apa pun rasio
+  aslinya, yang tampil selalu pita selebar kolom. Foto venue di sini
+  keterangan, bukan subjek — gambar terpotong lebih baik daripada baris
+  tinggi-rendah acak.
 - **Dokumentasi Drive tidak dipindah** (75 tautan). Memindahkan foto
   bertahun-tahun ke penyimpanan lain adalah keputusan IYSA, bukan keputusan
   penulisan ulang situs. Risikonya: tautan mati kalau izin berubah, dan situs
@@ -484,12 +603,20 @@ echo "mendarat: $ok / 80   gagal: $bad"
 
 ### Bug yang diketahui
 
-1. **`.rise-stagger` hanya menunda 6 anak pertama.** Grid dengan lebih dari 6
-   item (event 66, newsletter per tahun, tim 22) — item ke-7 dst. muncul
-   serempak tanpa delay. Terlihat kalau diperhatikan.
-2. **`.rise` jalan saat mount, bukan saat masuk viewport.** Konten jauh di bawah
-   lipatan sudah selesai beranimasi sebelum pengunjung sampai. Perlu
-   IntersectionObserver.
+1. ~~`.rise-stagger` hanya menunda 6 anak pertama.~~ **Diperbaiki.** Tundanya
+   kini dihitung dengan `sibling-index()`, berlaku untuk grid berisi berapa
+   pun, dibatasi `min(…, 0.3s)` supaya item ke-41 tidak menunggu 1,6 detik.
+   Sudah diverifikasi lolos utuh ke CSS produksi — Tailwind 4.3.3
+   meneruskannya. Peramban yang belum mengenalnya memakai delay 0s: semua anak
+   muncul bersamaan, animasinya tetap jalan.
+2. ~~`.rise` jalan saat mount, bukan saat masuk viewport.~~ **Diperbaiki.**
+   `src/components/reveal.tsx` + penahan `[data-reveal]:not([data-terlihat])`
+   di `globals.css`. Penahannya di CSS supaya ikut render pertama; kalau JS
+   yang memberi aba-aba mulai, ada jendela di mana animasinya sudah telanjur
+   jalan. `@media (scripting: none)` melepas penahannya — tanpa itu, halaman
+   tanpa JavaScript berhenti di `opacity: 0` selamanya.
+   **Pasang `data-reveal` di setiap `.rise-stagger` baru**, kalau tidak ia
+   beranimasi saat mount seperti dulu.
 3. **Rate limiter di memori proses** (`src/lib/ratelimit.ts`) — di Vercel tiap
    instance punya memori sendiri, jadi batas nyata = 5 × jumlah instance per 10
    menit. Cukup menahan naskah sederhana, bukan serangan serius.

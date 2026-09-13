@@ -16,7 +16,7 @@ function buildHref(active: Active, patch: Partial<Active>) {
 }
 
 const chip =
-  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] transition-colors duration-150";
+  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] transition-colors duration-[var(--gerak-cepat)]";
 const chipOn = "border-[var(--navy)] bg-[var(--navy)] text-[var(--on-navy)]";
 const chipOff =
   "border-[var(--border)] text-[var(--ink-muted)] hover:border-[var(--teal)] hover:text-[var(--teal)]";
@@ -141,7 +141,7 @@ export async function EventFilters({
         />
         <button
           type="submit"
-          className="rounded-full border border-[var(--border)] px-3.5 py-1.5 text-[13px] font-medium text-[var(--ink)] transition-colors duration-150 hover:border-[var(--teal)] hover:text-[var(--teal)]"
+          className="rounded-full border border-[var(--border)] px-3.5 py-1.5 text-[13px] font-medium text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]"
         >
           {t("search")}
         </button>

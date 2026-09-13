@@ -122,7 +122,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={state === "sending"}
-          className="rounded-full bg-[var(--coral)] px-6 py-2.5 text-[14.5px] font-semibold text-[var(--on-coral)] transition-opacity duration-150 hover:opacity-90 disabled:opacity-60"
+          className="rounded-full bg-[var(--coral)] px-6 py-2.5 text-[14.5px] font-semibold text-[var(--on-coral)] transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 disabled:opacity-60"
         >
           {state === "sending" ? t("sending") : t("send")}
         </button>

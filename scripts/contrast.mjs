@@ -106,6 +106,46 @@ const buttons = (t, mode) => {
   ];
 };
 
+/* ── lambang ───────────────────────────────────────────────────────────
+ *
+ * Warna lambang DILAPORKAN tapi TIDAK menggagalkan build, dan itu bukan
+ * kelonggaran: WCAG 1.4.11 secara eksplisit mengecualikan logotype —
+ * "Logotypes: Text that is part of a logo or brand name has no contrast
+ * requirement." Memaksa lambang lolos ambang teks berarti mengubah warna
+ * merek demi aturan yang memang tidak mengaturnya.
+ *
+ * Tapi lambang yang tidak terlihat tetap lambang yang gagal, jadi angkanya
+ * tetap dicetak. Nilai di globals.css dipilih supaya ketiganya ≥3:1 di kedua
+ * tema — warna asli logo tidak bisa: teal #30b4b4 hanya 2,53:1 di putih, dan
+ * navy #305490 hanya 2,49:1 di latar gelap. */
+
+const lambang = {
+  light: { navy: "#2f5490", teal: "#2e9c97", coral: "#ef5138", globe: "#0e1726" },
+  dark: { navy: "#7ea3e0", teal: "#4fc4bc", coral: "#ff7a5e", globe: "#eef2f9" },
+};
+
+const laporLambang = () => {
+  console.log("\nLAMBANG — dilaporkan, tidak menggagalkan (WCAG 1.4.11 mengecualikan logotype)");
+  console.log("─".repeat(74));
+  for (const [mode, set] of Object.entries(lambang)) {
+    const bg = mode === "light" ? light.bg : dark.bg;
+    const sunk = mode === "light" ? light.bgSunk : dark.bgSunk;
+    for (const [nama, warna] of Object.entries(set)) {
+      const r = ratio(warna, bg);
+      const rs = ratio(warna, sunk);
+      console.log(
+        "  " +
+          `${mode}/${nama}`.padEnd(32) +
+          r.toFixed(2).padStart(7) +
+          rs.toFixed(2).padStart(8) +
+          "   " +
+          (Math.min(r, rs) >= 3 ? "terbaca" : "TIPIS — periksa mata, bukan skrip"),
+      );
+    }
+  }
+  console.log("  " + "(kolom: latar biasa · latar cekung)".padStart(56));
+};
+
 /* ── jalankan ──────────────────────────────────────────────────────── */
 
 let fail = 0;
@@ -134,6 +174,7 @@ const run = (label, tokens, mode) => {
 
 run("TEMA TERANG", light, "light");
 run("TEMA GELAP", dark, "dark");
+laporLambang();
 
 console.log(
   "\n" +

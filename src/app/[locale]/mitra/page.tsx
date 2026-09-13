@@ -56,7 +56,10 @@ export default async function PartnersPage({
       />
 
       <div className="shell py-12 md:py-16">
-        <ul className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
+        <ul
+          data-reveal
+          className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3"
+        >
           {items.map((a) => {
             const logo = logoUrl(a.logo);
             const country = affiliateCountry[a.slug];
@@ -68,7 +71,7 @@ export default async function PartnersPage({
               <li key={a.slug} className="bg-[var(--bg)]">
                 <Link
                   href={`/mitra/${a.slug}`}
-                  className="group flex h-full flex-col gap-4 p-6 transition-colors duration-150 hover:bg-[var(--bg-sunk)]"
+                  className="group flex h-full flex-col gap-4 p-6 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]"
                 >
                   {/* Logo dibatasi tingginya supaya 13 logo berbeda rasio tetap
                       terbaca sebagai satu baris, bukan tinggi-rendah acak. */}
@@ -89,7 +92,7 @@ export default async function PartnersPage({
 
                   {showCountry && <Pill tone="teal">{country[locale]}</Pill>}
 
-                  <h2 className="text-[16.5px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-150 group-hover:text-[var(--navy)]">
+                  <h2 className="text-[16.5px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
                     {name}
                   </h2>
 

@@ -34,7 +34,7 @@ export async function EventCard({ event }: { event: IysaEvent }) {
   return (
     <Link
       href={`/event/${event.slug}`}
-      className="group flex h-full flex-col gap-3 p-6 transition-colors duration-150 hover:bg-[var(--bg-sunk)]"
+      className="group flex h-full flex-col gap-3 p-6 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]"
     >
       <div className="flex flex-wrap items-center gap-2">
         {levelLabel && (
@@ -43,7 +43,7 @@ export async function EventCard({ event }: { event: IysaEvent }) {
         {modeLabel && <Pill>{modeLabel}</Pill>}
       </div>
 
-      <h3 className="text-[17px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-150 group-hover:text-[var(--navy)]">
+      <h3 className="text-[17px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
         {event.title}
       </h3>
 
