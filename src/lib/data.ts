@@ -181,26 +181,26 @@ export const videoYears = () =>
   [...new Set(videos().map((v) => v.year))].filter((y): y is number => y != null).sort((a, b) => b - a);
 
 /**
- * Logo institusi dari `AffiliationLogo.json` lama.
+ * Logo institusi mitra — 59 entri, 30 nasional dan 29 internasional.
  *
- * **JANGAN dipakai untuk klaim jumlah mitra, dan jangan dirender sebagai
- * dinding logo.** Datanya rusak di sumbernya, dan sudah diperiksa entri per
- * entri:
+ * Sumbernya dua komponen situs lama, `National-affiliation.js` dan
+ * `International-affiliation.js`, yang meng-hardcode daftar `<img>`-nya.
+ * Entri yang dikomentari di sana tidak ikut; `scripts/extract-legacy.mjs`
+ * membuangnya lebih dulu dengan `stripComments`.
  *
- *   41 entri  →  9 berkas unik  →  8 yang bukan placeholder
- *   26 entri menunjuk `about-logo.png`, yaitu logo IYSA sendiri
- *   `International[0..6]` identik byte-per-byte dengan `National[0..6]`
- *   (kampus Indonesia yang sama, dilabeli internasional)
- *   bentuk entrinya cuma `{id, image}` — tidak ada nama institusi sama sekali
+ * **Jangan kembali ke `AffiliationLogo.json`.** Berkas itu sisa yang tidak
+ * pernah dipakai komponen mana pun, dan isinya rusak: 41 entri yang hanya
+ * menunjuk 9 berkas, 26 di antaranya `about-logo.png` alias logo IYSA
+ * sendiri, dengan bagian "International" yang identik byte-per-byte dengan
+ * bagian "National". Dinding logo pernah dibangun dari sana dan hasilnya
+ * memajang lambang IYSA 26 kali di bawah judul "41 institusi mitra".
  *
- * Dinding logo pernah dibangun dari data ini dan dicabut lagi: hasilnya
- * memajang lambang IYSA 26 kali sambil mengklaim "41 institusi mitra". Tanpa
- * nama, entri kosongnya juga tidak bisa diganti inisial.
- *
- * Cerita mitra yang jujur sudah ada di `affiliates.json` — 13 afiliasi
- * internasional bernama, semuanya berlogo, dirender di beranda dan `/mitra`.
+ * `legacyName` adalah nama berkasnya, disimpan untuk pelacakan — BUKAN untuk
+ * ditampilkan. Sebagiannya bukan nama institusi sama sekali (`pohon`,
+ * `burung`, `red g`, `img`). Situs lama pun memakai `alt=""` di setiap logo.
  */
-export const partners = () => partnersRaw as { scope: "national" | "international"; logo: string }[];
+export const partners = () =>
+  partnersRaw as { scope: "national" | "international"; logo: string; legacyName: string }[];
 
 export const eventSites = () => sitesRaw as EventSite[];
 
@@ -219,10 +219,11 @@ export function flattenPeople(nodes: Person[] = orgStructure()): Person[] {
 export const stats = () => ({
   events: events.length,
   affiliates: affiliates.length,
-  /* `partners` sengaja TIDAK ada di sini. Menghitung partnersRaw menghasilkan
-     41, padahal 26 entrinya placeholder berisi logo IYSA dan 7 sisanya
-     duplikat — lihat catatan di atas `partners()`. Angka itu pernah tampil
-     sebagai "41 institusi mitra" di beranda dan /profil, dan dicabut. */
+  /* 59 — dihitung dari daftar yang benar-benar tampil di situs lama.
+     Sempat dicabut waktu angkanya masih 41 dan bersumber dari
+     AffiliationLogo.json yang rusak; sekarang sumbernya kedua komponen
+     afiliasi, jadi angkanya bisa dipertanggungjawabkan. */
+  partners: partners().length,
   issues: issues.length,
   videos: videos().length,
   people: flattenPeople().length,

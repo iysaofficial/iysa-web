@@ -257,6 +257,30 @@ Yang perlu diketahui sebelum menyentuhnya:
   `globals.css` sudah digeser sampai ≥3:1 di kedua tema; `npm run contrast`
   melaporkannya tanpa menggagalkan build (WCAG 1.4.11 mengecualikan logotype).
 
+**Ada DUA lambang, dan keduanya memang dipakai:**
+
+| | dari | dipakai di | ukuran |
+|---|---|---|---|
+| `iysa-logo.tsx` | geometri (elips + lingkaran) | header, footer, favicon, apple-icon, `icon.svg` | ~1 KB sebaris |
+| `iysa-mark-traced.svg` | **tracing raster aslinya** | cadangan hero, sumber bentuk objek 3D | 19 KB berkas |
+
+Yang kedua dibangun `npm run trace:logo` (`scripts/trace-logo.mjs`) dari
+`logo iysa tanpa logo type.png` 472×512 — satu-satunya berkas lambang yang
+dimiliki IYSA. potrace hanya bisa memisahkan gelap dari terang, jadi rasternya
+dipecah dulu jadi **lima masker warna** (navy · teal · coral · badan bola
+dunia · benua), masing-masing ditelusuri sendiri, lalu disusun ulang. Karena
+tiap piksel hanya masuk satu kelas, kelimanya saling lepas dan menutup bidang
+yang sama persis dengan rasternya — orbit yang terputus di tempat navy lewat
+di depan ikut terbawa apa adanya.
+
+> **`fill-rule` wajib ikut terbawa.** potrace mengeluarkan lubang — benua di
+> dalam bola dunia — sebagai sub-path dan mengandalkan `evenodd`. Percobaan
+> pertama hanya mengambil atribut `d`, dan aturan bawaan `nonzero` menutup
+> semua lubang: bola dunia berbenua jadi cakram hitam pekat.
+
+Yang geometris tetap dipakai untuk ukuran kecil karena di 32px hasil tracing
+berbutir, dan 19 KB terlalu berat untuk ikut di setiap HTML halaman.
+
 Ikon dibangun `npm run build:icons` (`scripts/build-icons.mjs`, ikut
 `npm run migrate`): `src/app/icon.svg` (adaptif tema lewat `@media` di dalam
 SVG), `favicon.ico` 32px, `apple-icon.png` 180px, plus
@@ -277,33 +301,34 @@ angka mana yang beda.
 **D. Data sudah dikonversi tapi TIDAK DIRENDER** — asetnya siap, halamannya
 belum ada:
 
-- **`partners.json` — JANGAN dirender. Datanya rusak di sumbernya.**
+- **`partners.json` — 59 logo institusi, SUDAH dirender**
+  (`src/components/partner-wall.tsx`, dipakai di beranda). 30 nasional,
+  29 internasional, 59 dari 59 terpetakan.
 
-  Dinding logo 41 mitra sempat dibangun, dilihat hasilnya, lalu dicabut lagi.
-  Yang tampil: **lambang IYSA sendiri, 26 kali**, di bawah judul "41 institusi
-  mitra". Diperiksa entri per entri di `.old/src/data/home/AffiliationLogo.json`:
+  **Sumbernya dua komponen, bukan JSON.** Daftar yang benar-benar tampil di
+  situs lama di-hardcode sebagai `<img>` di `National-affiliation.js` dan
+  `International-affiliation.js` — termasuk 15 entri yang sengaja dikomentari
+  dan karenanya tidak ikut.
 
-  | | |
-  |---|---|
-  | entri | 41 |
-  | berkas unik | 9 |
-  | bukan placeholder | **8** |
-  | menunjuk `about-logo.png` (logo IYSA) | **26** |
-  | `International[0..6]` vs `National[0..6]` | identik byte-per-byte |
-  | bentuk entri | `{id, image}` — **tidak ada nama institusi** |
+  > **Jangan kembali ke `AffiliationLogo.json`.** Berkas itu tidak pernah
+  > dipakai komponen mana pun dan isinya rusak: 41 entri menunjuk hanya 9
+  > berkas, **26 di antaranya `about-logo.png` alias logo IYSA sendiri**, dan
+  > bagian "International"-nya identik byte-per-byte dengan bagian "National".
+  > Dinding pernah dibangun dari sana; hasilnya memajang lambang IYSA 26 kali
+  > di bawah judul "41 institusi mitra". Ketahuan hanya karena dindingnya
+  > dipotret — peta aset melaporkan 41 dari 41 terpetakan, dan HTML memang
+  > memuat 41 `<img>`.
 
-  Jadi "8 mitra internasional" pun keliru: berkasnya kampus Indonesia yang
-  sama, hanya dilabeli lain. Dan karena tidak ada nama sama sekali, 26 entri
-  kosong itu tidak bisa diganti inisial atau teks — tidak ada yang bisa
-  ditampilkan.
+  **Tanpa nama, dan itu disengaja.** `legacyName` hanya nama berkas, sebagian
+  bukan nama institusi sama sekali (`pohon`, `burung`, `red g`, `img`). Situs
+  lama pun memakai `alt=""` di setiap logo. Kalau IYSA menyediakan daftar
+  bernama, petakan lewat berkas di `src/content/`, pola yang sama dengan
+  `affiliateNames`.
 
-  Angka `stats().partners` ikut dicabut; ia pernah tampil sebagai "41 institusi
-  mitra" di beranda **dan** `/profil`. Cerita mitra yang jujur sudah ada:
-  **13 afiliasi internasional bernama** di `affiliates.json`, semuanya berlogo,
-  dirender di beranda dan `/mitra`.
-
-  Kalau IYSA nanti menyediakan daftar institusi yang benar — nama + logo —
-  dinding logo layak dibangun ulang. Sampai itu ada, jangan.
+  **Di tema gelap logonya duduk di ubin terang** (`.sel-logo`), bukan diberi
+  filter. `brightness(0) invert(1)` sempat dicoba dan hasilnya lebih buruk:
+  logo berisian pejal berubah jadi gumpalan bulat tanpa detail. Logo institusi
+  memang dirancang untuk latar terang.
 - `event-highlights.json` — 5 poster sorotan, masih tidak dipakai
 - `affiliate-sites.json` — 13 entri, masih tidak dipakai
 
@@ -330,8 +355,39 @@ lengkapnya ada di komentar `src/app/[locale]/galeri/foto/page.tsx`.
 
 **F. Ilustrasi / 3D — ada satu, dan memang cuma satu.**
 `src/components/hero-atom.tsx`: lambang IYSA sebagai objek tiga dimensi di
-hero beranda. Sudut, jari-jari, dan tebalnya diturunkan dari lambang yang sama
-supaya keduanya tidak pelan-pelan menyimpang.
+hero beranda.
+
+Bentuknya **bukan tiruan**. `SVGLoader` mengurai `iysa-mark-traced.svg` — hasil
+tracing raster aslinya — lalu tiap lapisan di-`ExtrudeGeometry` jadi relief.
+Tiap lapisan diberi pergeseran z sesuai urutan tumpukannya di lambang asli
+(navy paling depan, bola dunia paling belakang), jadi objeknya punya parallax
+sungguhan saat berputar, bukan satu lempeng pipih.
+
+Versi pertama menyusunnya dari tiga torus dan tiga bola. Mendekati, tapi tetap
+tiruan — dan untuk lambang organisasi, "mendekati" bukan standar yang benar.
+
+Tiga hal yang menyelamatkan komponen ini dari kegagalan diam:
+
+1. **Berkas SVG-nya diambil, bukan ditanam sebagai JSON.** Menanamnya membuat
+   Turbopack menyalin 18,7 KB itu ke chunk muat awal DAN chunk lazy; muat awal
+   beranda naik 622 → 656 KB untuk data yang cuma dipakai kalau three jalan.
+   Diambil sebagai berkas, biayanya nol — halaman sudah mengunduhnya sebagai
+   lambang cadangan.
+2. **Nama lapisan dibaca dari atribut `class`**, dengan cadangan ke urutan.
+   Tanpa cadangan itu, satu pemetaan gagal = semua path dilewati = hero kosong.
+3. **Lambang cadangan hanya disembunyikan kalau ada mesh yang benar-benar
+   terbentuk.** Tanpa penjaga ini, kegagalan penguraian menghasilkan kanvas
+   kosong DAN cadangan yang sudah terlanjur dilenyapkan.
+
+`emissive` disetel serendah 0,32 dari warna isiannya: tanpa itu sisi extrude
+yang membelakangi lampu jatuh ke hitam dan lambangnya terbaca sebagai siluet
+gelap, bukan sebagai logo IYSA.
+
+> **Swiftshader tidak bisa dipakai menilai ini.** Tangkapan layar headless
+> dengan `--use-gl=swiftshader` di mesin pengembangan menampilkan seluruh
+> halaman di bawah hero sebagai bidang kosong — artefak perender perangkat
+> lunak, bukan cacat situs (dibuktikan dengan render `--disable-gpu` yang utuh).
+> Nilai objek 3D-nya di peramban sungguhan.
 
 Yang dijaga di komponen itu, jangan dilepas tanpa alasan:
 
@@ -527,12 +583,21 @@ Belum ada anggaran formal. **Patokan sekarang, jangan sampai memburuk:**
 
 | | Sebelum pekerjaan aset | Sekarang |
 |---|---|---|
-| **JS muat awal beranda** | 636 KB | **622 KB** |
-| JS di disk (termasuk chunk lazy) | 636 KB | ±1.375 KB (three 720 KB, lazy) |
+| **JS muat awal beranda** | 636 KB | **637 KB** |
+| JS di disk (termasuk chunk lazy) | 636 KB | ±1.400 KB (three 720 KB, lazy) |
 | CSS | 40 KB | **37 KB** |
-| HTML beranda | 86 KB / 13,9 KB gzip | 94 KB / **16,2 KB gzip** |
-| Seluruh aset gambar | 14 MB | **14 MB** |
+| HTML beranda | 86 KB / 13,9 KB gzip | 161 KB / **21,4 KB gzip** |
+| Seluruh aset gambar | 14 MB | **16 MB** (59 logo mitra) |
 | Halaman ter-render saat build | 305 | **307** |
+
+Muat awal naik 15 KB karena beranda kini memuat gambar: sebelum dinding logo
+mitra ada, halaman itu tidak punya satu pun `next/image`, jadi runtime-nya
+tidak pernah ikut. Itu harga yang dibayar sekali untuk 59 logo.
+
+HTML membengkak 94 → 161 KB karena srcset 59 gambar. Sempat 211 KB waktu
+`sizes` masih dipasang — untuk gambar berukuran tetap sekecil ini, `sizes`
+memaksa Next memancarkan srcset dari seluruh daftar deviceSizes; tanpa `sizes`
+ia cukup memancarkan 1x/2x. Jangan pasang `sizes` di dinding logo.
 
 **Angka yang dijaga adalah baris pertama, bukan kedua.** Total di disk naik
 sekitar 740 KB karena three, tapi muat awal beranda justru **turun** 636 → 622
@@ -591,8 +656,8 @@ echo "mendarat: $ok / 80   gagal: $bad"
    `/api/subscribe` menjawab **503**. Sengaja gagal terang-terangan dan
    menawarkan alamat surel IYSA, bukan diam-diam membuang pesan. Pemilik akan
    memasangnya sendiri.
-3. ~~Bangun dinding logo 41 mitra~~ — **dibatalkan**, datanya rusak di sumbernya
-   (26 dari 41 entri berisi logo IYSA sendiri). Lihat bagian 5.D.
+3. ~~Bangun dinding logo mitra~~ — **selesai**, 59 logo dari daftar yang benar
+   (dua komponen afiliasi, bukan `AffiliationLogo.json`). Lihat bagian 5.D.
 4. ~~Ganti favicon bawaan Next~~ — **selesai**, `npm run build:icons`
 5. ~~Hapus 5 SVG template dari `public/`~~ — **selesai**
 6. ~~Hapus `public/docs/` kosong~~ — **selesai** (dihapus; isi `Kurasi.pdf` kalau

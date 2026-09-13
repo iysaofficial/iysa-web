@@ -47,7 +47,10 @@
     "newsletterEyebrow": "Newsletter",
     "newsletterTitle": "News from IYSA, every month",
     "newsletterBody": "Monthly issues covering event results, registration announcements, and participant stories.",
-    "newsletterAll": "All issues"
+    "newsletterAll": "All issues",
+    "statPartners": "partner institutions",
+    "partnersWallTitle": "Supporting institutions",
+    "partnersWallLead": "{count} partner institution logos, national and international."
   },
   "events": {
     "title": "Events",

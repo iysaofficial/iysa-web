@@ -1,166 +1,297 @@
 [
   {
     "scope": "national",
-    "logo": "./assets/images/logo/National Affiliation/IPB.WebP"
+    "logo": "./assets/images/logo/National Affiliation/IPB.WebP",
+    "legacyName": "IPB"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/National Affiliation/PNM.Webp"
+    "logo": "./assets/images/logo/National Affiliation/unikom.WebP",
+    "legacyName": "unikom"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/National Affiliation/PPI.WebP"
+    "logo": "./assets/images/logo/National Affiliation/UD.WebP",
+    "legacyName": "UD"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/National Affiliation/UD.WebP"
+    "logo": "./assets/images/logo/National Affiliation/i3l.WebP",
+    "legacyName": "i3l"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/National Affiliation/UINN.WebP"
+    "logo": "./assets/images/logo/National Affiliation/UMK.WebP",
+    "legacyName": "UMK"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/National Affiliation/UINUJ.WebP"
+    "logo": "./assets/images/logo/National Affiliation/UP.WebP",
+    "legacyName": "UP"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/National Affiliation/UMK.WebP"
+    "logo": "./assets/images/logo/National Affiliation/UST.WebP",
+    "legacyName": "UST"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/LOGOKEMENAG.png",
+    "legacyName": "LOGOKEMENAG"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/USY.WebP",
+    "legacyName": "USY"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/UTS.WebP",
+    "legacyName": "UTS"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/isb.WebP",
+    "legacyName": "isb"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/FT UNBRAW.png",
+    "legacyName": "FT UNBRAW"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/FT UNDIP.png",
+    "legacyName": "FT UNDIP"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/GISA.png",
+    "legacyName": "GISA"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/HIMITEPA.png",
+    "legacyName": "HIMITEPA"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/ICGI.png",
+    "legacyName": "ICGI"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/IYORA.png",
+    "legacyName": "IYORA"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/LIBERIKA.png",
+    "legacyName": "LIBERIKA"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/MIPA UGM.png",
+    "legacyName": "MIPA UGM"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/PNM.WebP",
+    "legacyName": "PNM"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/POLINES.png",
+    "legacyName": "POLINES"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/RESOLUTION.png",
+    "legacyName": "RESOLUTION"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/TARNUS.png",
+    "legacyName": "TARNUS"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/UDINUS.png",
+    "legacyName": "UDINUS"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/UI.png",
+    "legacyName": "UI"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/UIN YOGYA.png",
+    "legacyName": "UIN YOGYA"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/UUP.WebP",
+    "legacyName": "UUP"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/VOKASI UNDIP.png",
+    "legacyName": "VOKASI UNDIP"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/WARMADEWA.png",
+    "legacyName": "WARMADEWA"
   },
   {
     "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
-  },
-  {
-    "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
-  },
-  {
-    "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
-  },
-  {
-    "scope": "national",
-    "logo": "./assets/images/logo/about-logo.png"
+    "logo": "./assets/images/logo/National Affiliation/YPBI.png",
+    "legacyName": "YPBI"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/IPB.WebP"
+    "logo": "./assets/images/logo/International Affiliation/africa.WebP",
+    "legacyName": "africa"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/PNM.Webp"
+    "logo": "./assets/images/logo/International Affiliation/asia.WebP",
+    "legacyName": "asia"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/PPI.WebP"
+    "logo": "./assets/images/logo/International Affiliation/ayrid.WebP",
+    "legacyName": "ayrid"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/UD.WebP"
+    "logo": "./assets/images/logo/International Affiliation/azs.WebP",
+    "legacyName": "azs"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/UINN.WebP"
+    "logo": "./assets/images/logo/International Affiliation/barrc.WebP",
+    "legacyName": "barrc"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/UINUJ.WebP"
+    "logo": "./assets/images/logo/International Affiliation/buca.WebP",
+    "legacyName": "buca"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/UMK.WebP"
+    "logo": "./assets/images/logo/International Affiliation/burung.WebP",
+    "legacyName": "burung"
   },
   {
     "scope": "international",
-    "logo": "./assets/images/logo/National Affiliation/UMP.WebP"
+    "logo": "./assets/images/logo/International Affiliation/cpc.WebP",
+    "legacyName": "cpc"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/diece.WebP",
+    "legacyName": "diece"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/esi.WebP",
+    "legacyName": "esi"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/fdct.WebP",
+    "legacyName": "fdct"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/gysc.WebP",
+    "legacyName": "gysc"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/hkfi.WebP",
+    "legacyName": "hkfi"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/iarc.WebP",
+    "legacyName": "iarc"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/ibix.WebP",
+    "legacyName": "ibix"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/idea.WebP",
+    "legacyName": "idea"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/ifest.WebP",
+    "legacyName": "ifest"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/ifia.WebP",
+    "legacyName": "ifia"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/img.WebP",
+    "legacyName": "img"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/kiif.WebP",
+    "legacyName": "kiif"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/klesf.WebP",
+    "legacyName": "klesf"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/pmr.WebP",
+    "legacyName": "pmr"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/pohon.WebP",
+    "legacyName": "pohon"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/poshs.WebP",
+    "legacyName": "poshs"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/red g.WebP",
+    "legacyName": "red g"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/red.WebP",
+    "legacyName": "red"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/solacyt.WebP",
+    "legacyName": "solacyt"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/spartakus.WebP",
+    "legacyName": "spartakus"
+  },
+  {
+    "scope": "international",
+    "logo": "./assets/images/logo/International Affiliation/usm.WebP",
+    "legacyName": "usm"
   }
 ]

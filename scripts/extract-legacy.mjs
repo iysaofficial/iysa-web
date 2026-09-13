@@ -330,10 +330,43 @@ function misc() {
   }
   videos.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
 
-  const logoSrc = readJSON("data/home/AffiliationLogo.json");
+  /**
+   * Logo afiliasi diambil dari DUA KOMPONEN, bukan dari AffiliationLogo.json.
+   *
+   * JSON itu sisa yang tidak pernah dipakai, dan isinya rusak: 41 entri yang
+   * hanya menunjuk 9 berkas, 26 di antaranya `about-logo.png` alias logo IYSA
+   * sendiri, dan bagian "International"-nya berisi kampus Indonesia yang sama
+   * persis dengan bagian "National". Merender dari sana menghasilkan lambang
+   * IYSA berulang 26 kali di bawah judul "institusi mitra".
+   *
+   * Yang benar-benar tampil di situs lama di-hardcode sebagai daftar <img> di
+   * `National-affiliation.js` dan `International-affiliation.js` — lengkap
+   * dengan sebagian yang sengaja dikomentari (PPI, UINN, UINUJ, UNY, its,
+   * asti, fna, dan lainnya). `stripComments` membuangnya lebih dulu, jadi yang
+   * ikut hanya yang memang ditampilkan.
+   *
+   * Nama institusinya ada di nama berkas, bukan di data. Disimpan apa adanya
+   * sebagai `legacyName` supaya bisa dilacak; nama tampilan yang rapi
+   * dipetakan di `src/content/partners.ts`, pola yang sama dengan
+   * `affiliateNames`.
+   */
+  const logoAfiliasi = (berkas, scope) => {
+    const isi = stripComments(read(`components/home/${berkas}`));
+    const src = [...isi.matchAll(/src="([^"]+)"/g)].map((m) => m[1]);
+    // Satu berkas bisa muncul dua kali di markah lama (unikom); ambil sekali.
+    return [...new Set(src)].map((logo) => ({
+      scope,
+      logo,
+      legacyName: logo
+        .split("/")
+        .pop()
+        .replace(/\.[^.]+$/, ""),
+    }));
+  };
+
   const partners = [
-    ...(logoSrc.National ?? []).map((r) => ({ scope: "national", logo: r.image })),
-    ...(logoSrc.International ?? []).map((r) => ({ scope: "international", logo: r.image })),
+    ...logoAfiliasi("National-affiliation.js", "national"),
+    ...logoAfiliasi("International-affiliation.js", "international"),
   ];
 
   const sites = (readJSON("data/eventwebsite/EventWebsite.json").EventWebsite ?? []).map((r) => ({

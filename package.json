@@ -11,9 +11,10 @@
     "migrate:content": "node scripts/extract-legacy.mjs",
     "migrate:assets": "node scripts/build-assets.mjs",
     "migrate:redirects": "node scripts/build-redirects.mjs",
-    "migrate": "npm run migrate:content && npm run migrate:assets && npm run migrate:redirects && npm run build:icons",
+    "migrate": "npm run migrate:content && npm run migrate:assets && npm run migrate:redirects && npm run trace:logo && npm run build:icons",
     "prebuild": "npm run contrast",
-    "build:icons": "node scripts/build-icons.mjs"
+    "build:icons": "node scripts/build-icons.mjs",
+    "trace:logo": "node scripts/trace-logo.mjs"
   },
   "dependencies": {
     "@types/three": "^0.186.0",
@@ -30,6 +31,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "potrace": "^2.1.8",
     "sharp": "^0.35.4",
     "tailwindcss": "^4",
     "typescript": "^5"

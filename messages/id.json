@@ -47,7 +47,10 @@
     "newsletterEyebrow": "Newsletter",
     "newsletterTitle": "Kabar dari IYSA, tiap bulan",
     "newsletterBody": "Terbitan bulanan berisi hasil event, pengumuman pendaftaran, dan cerita peserta.",
-    "newsletterAll": "Semua terbitan"
+    "newsletterAll": "Semua terbitan",
+    "statPartners": "institusi mitra",
+    "partnersWallTitle": "Institusi yang mendukung",
+    "partnersWallLead": "{count} logo institusi mitra, nasional dan internasional."
   },
   "events": {
     "title": "Event",

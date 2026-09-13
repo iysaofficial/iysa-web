@@ -162,6 +162,9 @@
   --logo-coral: #ef5138;
   --logo-globe: #0e1726;
   --logo-globe-garis: #ffffff;
+  /* Badan bola dunia — bidang di dalam lingkaran, di belakang benuanya.
+     Dipakai lambang hasil tracing dan objek 3D-nya. */
+  --logo-globe-badan: #f4f7fc;
 }
 :root[data-theme="dark"] {
   --logo-navy: #7ea3e0;
@@ -169,6 +172,7 @@
   --logo-coral: #ff7a5e;
   --logo-globe: #eef2f9;
   --logo-globe-garis: #0c1220;
+  --logo-globe-badan: #0c1220;
 }
 :root:not([data-theme="light"]) {
   @media (prefers-color-scheme: dark) {
@@ -177,6 +181,7 @@
     --logo-coral: #ff7a5e;
     --logo-globe: #eef2f9;
     --logo-globe-garis: #0c1220;
+    --logo-globe-badan: #0c1220;
   }
 }
 
@@ -328,6 +333,60 @@ p, li {
 
   @media (width >= 48rem) {
     padding-inline: 2rem;
+  }
+}
+
+/* ── Logo institusi mitra ───────────────────────────────────────────
+ *
+ * Lima puluh sembilan logo institusi berarti lima puluh sembilan palet yang
+ * tidak saling kenal. Diredam jadi satu bidang, warna aslinya kembali saat
+ * disentuh.
+ *
+ * Di tema gelap peredamannya TIDAK cukup: banyak logo institusi bertinta
+ * gelap di atas latar transparan, dan `grayscale` saja membuatnya hilang sama
+ * sekali di atas #0c1220 — terlihat waktu dinding ini dipotret. Jadi di sana
+ * logonya dibalik jadi siluet putih, yang selalu terbaca berapa pun warna
+ * aslinya. Sentuhan mengembalikan warna asli di kedua tema. */
+.logo-mitra {
+  filter: grayscale(1);
+  opacity: 0.8;
+  transition:
+    filter var(--gerak-sedang) ease,
+    opacity var(--gerak-sedang) ease;
+}
+
+.logo-mitra:hover {
+  filter: none;
+  opacity: 1;
+}
+
+/*
+ * Di tema gelap logonya duduk di ubin terang, bukan diberi filter.
+ *
+ * Sempat dicoba `brightness(0) invert(1)` supaya semuanya jadi siluet putih.
+ * Hasilnya lebih buruk daripada masalahnya: filter itu meratakan seluruh
+ * luminansi, jadi logo berisian pejal berubah jadi gumpalan bulat dan
+ * segilima tanpa detail sama sekali. Hanya logo yang memang berupa garis yang
+ * selamat. Terlihat begitu dindingnya dipotret.
+ *
+ * Ubin terang menyelesaikannya tanpa menyentuh gambarnya: logo institusi
+ * memang dirancang untuk latar terang, dan itu juga yang diminta hampir semua
+ * pedoman merek. Warnanya kembali penuh saat disentuh.
+ */
+.sel-logo {
+  background: transparent;
+  transition: background var(--gerak-sedang) ease;
+}
+
+:root[data-theme="dark"] .sel-logo {
+  background: #e6ebf5;
+}
+
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    .sel-logo {
+      background: #e6ebf5;
+    }
   }
 }
 
