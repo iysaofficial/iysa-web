@@ -123,7 +123,8 @@
     "nowEyebrow": "Now",
     "scheduledEyebrow": "Scheduled",
     "archiveEyebrow": "Archive",
-    "seriesCount": "{count} series"
+    "seriesCount": "{count} series",
+    "fromDashboard": "Logo and imagery from the IYSA dashboard database."
   },
   "newsletter": {
     "title": "Newsletter",

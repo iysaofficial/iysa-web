@@ -21,14 +21,16 @@
  * data lama untuk seri itu, dan otomatis berpindah ke data dashboard begitu
  * IYSA memasang pinnya. Tidak ada yang perlu diubah di sini saat itu terjadi.
  *
- * ── Yang TIDAK tersedia ─────────────────────────────────────────────────
+ * ── Gambar ──────────────────────────────────────────────────────────────
  *
- * Banner/poster tidak dikirim API publik ini — hanya `logo`. Kolom bannernya
- * ada di basis data (`events.image_url`) tapi tidak pernah ikut dirakit. Satu-
- * satunya jalan tanpa token adalah lewat terjemahan event
- * (`banner_image_url`), dan untuk edisi-edisi ini terjemahannya masih kosong.
- * Karena itu gambar besar di kartu event tetap memakai poster warisan situs
- * lama; logo dari dashboard dipakai sebagai penanda merek di sampingnya.
+ * Dua berkas per edisi: `logo` (lambang ajang) dan `banner` (gambar lebar 3:2,
+ * biasanya foto acaranya sendiri — bukan poster). Keduanya disajikan lewat
+ * proxy gambar dashboard, yang menerima `?w=` dari daftar tertutup dan
+ * menjawabnya sebagai WebP.
+ *
+ * Edisi yang bannernya kosong mewarisi banner serinya. Pewarisan itu terjadi
+ * DI BASIS DATA, bukan di sini — supaya dashboard dan situs menyebut gambar
+ * yang sama persis, dan tidak ada dua tempat yang menyimpan aturannya sendiri.
  */
 
 const PANGKAL = "https://api-dashboard.iysa.or.id/api/public/v1";
@@ -57,6 +59,8 @@ export type EdisiDashboard = {
   tahun: string;
   slug: string;
   logo: string | null;
+  /** Gambar lebar 3:2 — foto acara, bukan poster. */
+  banner: string | null;
   mulai: string | null;
   selesai: string | null;
   pendaftaranBuka: string | null;
@@ -157,6 +161,7 @@ export async function ambilSeriDashboard(akronim: string): Promise<EdisiDashboar
     tahun: teks(id.tahun) ?? "",
     slug: teks(id.slug) ?? "",
     logo: teks(id.logo),
+    banner: teks(id.banner),
     mulai,
     selesai,
     pendaftaranBuka: teks(id.pendaftaran_buka),

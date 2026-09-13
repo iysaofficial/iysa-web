@@ -8,6 +8,7 @@ import { EventCard } from "@/components/event-card";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allEvents } from "@/lib/data";
 import { kelompokkanSeri, seriBySlug } from "@/lib/event-seri";
+import { ambilSeriDashboard, gambarDashboard } from "@/lib/dashboard-event";
 
 /**
  * Satu seri beserta seluruh edisinya.
@@ -24,7 +25,9 @@ import { kelompokkanSeri, seriBySlug } from "@/lib/event-seri";
 
 export function generateStaticParams() {
   const seri = kelompokkanSeri(allEvents());
-  return routing.locales.flatMap((locale) => seri.map((s) => ({ locale, slug: s.slug })));
+  return routing.locales.flatMap((locale) =>
+    seri.map((s) => ({ locale, slug: s.slug })),
+  );
 }
 
 export async function generateMetadata({
@@ -67,6 +70,8 @@ export default async function SeriPage({
 
   const t = await getTranslations("events");
 
+  const dash = await ambilSeriDashboard(seri.akronim);
+
   return (
     <>
       <script
@@ -91,6 +96,51 @@ export default async function SeriPage({
         count={seri.edisi.length}
         countLabel={t("editions", { count: seri.edisi.length })}
       />
+
+      {/* Gambar dari dashboard, kalau serinya sudah dipin di sana. Ini
+          satu-satunya tempat di situs yang punya ruang untuk menampilkannya
+          sebesar ini — dan bannernya biasanya foto acaranya sendiri, bukan
+          poster, jadi ia menjawab "seperti apa sih ajang ini" dalam satu
+          pandang. Seri yang belum dipin melewati blok ini tanpa jejak. */}
+      {(dash?.banner || dash?.logo) && (
+        <div className="border-b border-[var(--line)]">
+          <div className="shell py-8">
+            {dash.banner && (
+              <>
+                {/* 5:2, bukan panji tipis. Bannernya foto rombongan peserta dan
+                orangnya ada di separuh bawah bingkai; dipotong lebih ketat,
+                yang tersisa cuma langit-langit aula. Sumbernya 3:2, jadi ini
+                sudah pemotongan paling ringan yang masih muat jadi kepala
+                halaman. */}
+                <div className="relative aspect-[3/2] w-full overflow-hidden bg-[var(--bg-sunk)] sm:aspect-[5/2]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={gambarDashboard(dash.banner, 1280)}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </>
+            )}
+            {dash.logo && (
+              /* Tinggi tetap, lebar mengikuti. Logo ajang IYSA bercampur
+                 bentuknya: sebagian lambang persegi, sebagian lockup
+                 memanjang seperti IYMIA. Dijejalkan ke ubin persegi, yang
+                 memanjang menyusut jadi seujung kuku. */
+              <div
+                className={`inline-flex h-14 items-center rounded bg-white px-3 ${dash.banner ? "mt-5" : ""}`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={gambarDashboard(dash.logo, 256)}
+                  alt=""
+                  className="h-9 w-auto max-w-[220px] object-contain"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <Section>
         <div className="mb-8">

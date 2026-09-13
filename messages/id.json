@@ -123,7 +123,8 @@
     "nowEyebrow": "Sekarang",
     "scheduledEyebrow": "Terjadwal",
     "archiveEyebrow": "Arsip",
-    "seriesCount": "{count} seri"
+    "seriesCount": "{count} seri",
+    "fromDashboard": "Logo dan gambar dari basis data dashboard IYSA."
   },
   "newsletter": {
     "title": "Newsletter",
