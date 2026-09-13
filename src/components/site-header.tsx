@@ -67,7 +67,7 @@ export function SiteHeader() {
           */}
           <a
             href={org.dashboardUrl}
-            className="hidden rounded-full bg-[var(--navy)] px-4 py-2 text-[13px] font-semibold text-[var(--on-navy)] transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 sm:inline-block"
+            className="hidden rounded-full bg-[var(--navy)] px-4 py-2 text-[13px] font-semibold whitespace-nowrap text-[var(--on-navy)] transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 sm:inline-block"
           >
             {t("dashboard")}
           </a>

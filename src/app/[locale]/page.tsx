@@ -7,6 +7,7 @@ import { Section, StatRow, ButtonLink, MoreLink, Pill } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
 import { HeroAtom } from "@/components/hero-atom";
+import { statusEvent, waktuEvent } from "@/lib/event-seri";
 import { PartnerWall } from "@/components/partner-wall";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allIssues, allAffiliates } from "@/lib/data";
@@ -37,10 +38,30 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const t = await getTranslations("home");
   const s = stats();
 
-  // Event yang masih membuka pendaftaran didahulukan; sisanya menyusul.
+  /* Enam event untuk seksi "Yang sedang berjalan".
+   *
+   * Versi sebelumnya mengurutkan menurut ada-tidaknya `registrationUrl` —
+   * dan KE-66 event punya URL pendaftaran, jadi pengurutannya tidak berefek
+   * apa pun. Yang tampil enam event pertama menurut ID internal: semuanya
+   * 2024, semuanya sudah selesai, di bawah judul "Yang sedang berjalan".
+   *
+   * Sekarang urutannya memakai status yang dihitung dari tanggal: pendaftaran
+   * terbuka dulu, lalu yang akan datang, lalu yang paling baru selesai —
+   * masing-masing dari yang paling dekat waktunya. Judulnya jadi benar.
+   */
   const events = allEvents();
+  const peringkat = { terbuka: 0, akan: 1, selesai: 2 } as const;
+  const kini = new Date();
   const featured = [...events]
-    .sort((a, b) => Number(Boolean(b.registrationUrl)) - Number(Boolean(a.registrationUrl)))
+    .sort((a, b) => {
+      const beda = peringkat[statusEvent(a, kini)] - peringkat[statusEvent(b, kini)];
+      if (beda !== 0) return beda;
+      // Dalam kelompok yang sama: yang belum lewat diurut dari yang terdekat,
+      // yang sudah lewat dari yang paling baru.
+      return statusEvent(a, kini) === "selesai"
+        ? waktuEvent(b) - waktuEvent(a)
+        : waktuEvent(a) - waktuEvent(b);
+    })
     .slice(0, 6);
 
   const latestIssue = allIssues().find((i) => i.hasPdf);
