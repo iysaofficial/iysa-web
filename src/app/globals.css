@@ -234,13 +234,34 @@ p, li {
    Motion — hanya dua gerakan di seluruh situs
    ═══════════════════════════════════════════════════════════════════ */
 
+/*
+ * ── Kenapa `rise` TIDAK menyentuh opacity ────────────────────────────────
+ *
+ * Dulu ia beranimasi dari `opacity: 0` dengan `fill: both`. Artinya selama
+ * animasinya belum berjalan, elemennya memakai keadaan awal: TIDAK TERLIHAT.
+ * Kalau animasi CSS tidak pernah maju — apa pun sebabnya — seluruh isi yang
+ * memakai `.rise` dan `.rise-stagger` hilang permanen.
+ *
+ * Itu bukan kemungkinan teoretis. Pengunjung melaporkan halaman kosong saat
+ * digulir, dua kali, di peramban berbeda dan di jendela penyamaran. Dugaan
+ * pertama saya (penahan `[data-reveal]`) memang salah satu cara animasi bisa
+ * tidak maju, tapi membuangnya tidak menutup cara yang lain — dan gejalanya
+ * bertahan.
+ *
+ * Sekarang yang bergerak hanya posisinya. Kalau animasinya tidak pernah
+ * jalan, yang terjadi paling buruk adalah elemen duduk 12px lebih rendah —
+ * terlihat, terbaca, bisa diklik. Tidak ada lagi keadaan di mana isi halaman
+ * bisa lenyap.
+ *
+ * Aturannya untuk ke depan: JANGAN pernah memakai opacity di animasi masuk
+ * yang dipasang lewat kelas. Nilai awal yang menyembunyikan isi selalu
+ * berisiko jadi nilai akhir.
+ */
 @keyframes rise {
   from {
-    opacity: 0;
     transform: translateY(12px);
   }
   to {
-    opacity: 1;
     transform: none;
   }
 }

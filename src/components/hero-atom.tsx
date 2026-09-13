@@ -122,7 +122,24 @@ export function HeroAtom({ className = "" }: { className?: string }) {
 
       let renderer: import("three").WebGLRenderer;
       try {
-        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        /* `preserveDrawingBuffer: true` bukan kemewahan di sini.
+         *
+         * Bawaannya `false`, yang berarti isi kanvas DIBUANG setiap kali
+         * dikomposit. Selama gelung render terus menggambar itu tidak terasa —
+         * tapi begitu gelungnya berhenti satu kali saja, kanvasnya kosong
+         * permanen dan tidak ada yang menggambarnya lagi.
+         *
+         * Itu persis yang dialami pengunjung: lambang tampil sesaat saat
+         * memuat, lalu hilang tepat setelah selesai. Penjaga piksel pun lolos,
+         * karena saat diperiksa memang masih ada isinya.
+         *
+         * Dengan true, bingkai terakhir bertahan di layar apa pun yang terjadi
+         * pada gelungnya. */
+        renderer = new THREE.WebGLRenderer({
+          alpha: true,
+          antialias: true,
+          preserveDrawingBuffer: true,
+        });
       } catch {
         return; // WebGL tidak tersedia
       }
@@ -318,13 +335,24 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       };
       window.addEventListener("pointermove", onPointer, { passive: true });
 
-      // Berhenti saat keluar layar: tidak ada gunanya memutar GPU untuk
-      // sesuatu yang tidak terlihat, dan di ponsel itu terasa di baterai.
-      let terlihat = true;
-      const io = new IntersectionObserver((es) => (terlihat = es[0].isIntersecting), {
-        threshold: 0,
-      });
-      io.observe(el);
+      /* Berhenti menggambar hanya saat TAB-nya tidak terlihat, bukan saat
+         elemennya keluar layar.
+         *
+         * Sebelumnya ini dijaga IntersectionObserver demi baterai. Tapi kalau
+         * observer itu sekali saja melaporkan "tidak terlihat" — dan ia
+         * melaporkan keadaan awal begitu dipasang, sebelum tata letak tentu
+         * sudah tenang — gelungnya berhenti dan kanvasnya tidak pernah
+         * digambar lagi. Penghematan baterainya kecil; harga kegagalannya
+         * adalah lambang yang hilang di layar utama situs.
+         *
+         * `document.hidden` jauh lebih aman: ia hanya menyala saat tab benar-
+         * benar tidak dirender, dan peramban membangunkannya kembali lewat
+         * `visibilitychange`. */
+      let terlihat = !document.hidden;
+      const onVisibilitas = () => {
+        terlihat = !document.hidden;
+      };
+      document.addEventListener("visibilitychange", onVisibilitas);
 
       let raf = 0;
 
@@ -383,7 +411,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         cancelAnimationFrame(raf);
         cancelAnimationFrame(rafUkur);
         window.removeEventListener("pointermove", onPointer);
-        io.disconnect();
+        document.removeEventListener("visibilitychange", onVisibilitas);
         ro.disconnect();
         for (const d of dibuang) d.dispose();
         renderer.dispose();
