@@ -146,7 +146,11 @@ export async function EdisiDashboardKartu({
              mengarahkan semua orang ke dashboard akan membuat mereka mencari
              formulir yang tidak pernah ada di situ. */
           <a
-            href={edisi.pendaftaranUrl ?? org.dashboardUrl}
+            /* Urutannya: formulir khusus dulu, lalu situs resmi ajangnya,
+               baru dasbor. Mengirim pengunjung GYIIF ke dasbor umum berarti
+               menyuruhnya mencari ajangnya sendiri di antara 108 edisi —
+               padahal rumahnya sudah ada dan formulirnya ada di sana. */
+            href={edisi.pendaftaranUrl ?? edisi.situs ?? org.dashboardUrl}
             className="inline-flex items-center gap-1.5 text-[14px] font-medium text-[var(--teal)] underline decoration-1 underline-offset-2"
           >
             {t("register")}

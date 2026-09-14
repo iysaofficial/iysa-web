@@ -66,6 +66,14 @@ export type EdisiDashboard = {
    * dashboard. Lihat catatan `bisaDaftar` di bawah.
    */
   pendaftaranUrl: string | null;
+  /**
+   * Situs resmi ajangnya — gyiif.or.id, iymia.or.id.
+   *
+   * Tujuan tombol daftar kalau ada, sebelum jatuh ke dasbor. Formulirnya
+   * memang ada di sana: ia sisipan yang dilayani dasbor yang sama, jadi
+   * mengantar pengunjung ke rumah ajangnya bukan mengalihkan mereka keluar.
+   */
+  situs: string | null;
   mulai: string | null;
   selesai: string | null;
   pendaftaranBuka: string | null;
@@ -196,6 +204,7 @@ export async function ambilSeriDashboard(akronim: string): Promise<EdisiDashboar
     logo: teks(id.logo),
     banner: teks(id.banner),
     pendaftaranUrl: teks(id.pendaftaran_url),
+    situs: teks(id.situs),
     mulai,
     selesai,
     pendaftaranBuka: teks(id.pendaftaran_buka),
@@ -252,6 +261,7 @@ export async function ambilSemuaSeriDashboard(): Promise<Map<string, EdisiDashbo
       logo: teks(r.logo),
       banner: teks(r.banner),
       pendaftaranUrl: pUrl,
+      situs: teks(r.situs),
       mulai,
       selesai,
       pendaftaranBuka: teks(r.pendaftaran_buka),
