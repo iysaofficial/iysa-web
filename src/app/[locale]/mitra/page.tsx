@@ -4,11 +4,16 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
-import { PageHeader, Pill } from "@/components/ui";
+import { PageHeader, Pill, SelPengisi } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { allAffiliates } from "@/lib/data";
 import { logoUrl } from "@/lib/assets";
-import { affiliateCopy, affiliateCountry, affiliateNames, unverifiedCountry } from "@/content/affiliates";
+import {
+  affiliateCopy,
+  affiliateCountry,
+  affiliateNames,
+  unverifiedCountry,
+} from "@/content/affiliates";
 
 export async function generateMetadata({
   params,
@@ -22,7 +27,11 @@ export async function generateMetadata({
     path: "/mitra",
     title: t("title"),
     description: t("lead"),
-    og: { eyebrow: "IYSA", heading: t("title"), meta: t("count", { count: allAffiliates().length }) },
+    og: {
+      eyebrow: "IYSA",
+      heading: t("title"),
+      meta: t("count", { count: allAffiliates().length }),
+    },
   });
 }
 
@@ -48,9 +57,7 @@ export default async function PartnersPage({
       />
 
       <div className="shell py-12 md:py-16">
-        <ul
-          className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3"
-        >
+        <ul className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
           {items.map((a) => {
             const logo = logoUrl(a.logo);
             const country = affiliateCountry[a.slug];
@@ -77,7 +84,9 @@ export default async function PartnersPage({
                         className="h-12 w-auto object-contain object-left"
                       />
                     ) : (
-                      <span className="eyebrow">{name.slice(0, 3).toUpperCase()}</span>
+                      <span className="eyebrow">
+                        {name.slice(0, 3).toUpperCase()}
+                      </span>
                     )}
                   </div>
 
@@ -94,6 +103,8 @@ export default async function PartnersPage({
               </li>
             );
           })}
+          <SelPengisi jumlah={items.length} kolom={2} />
+          <SelPengisi jumlah={items.length} kolom={3} />
         </ul>
       </div>
     </>

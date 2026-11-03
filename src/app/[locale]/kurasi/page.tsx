@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { PageHeader, Section } from "@/components/ui";
+import { PageHeader, Section, SelPengisi } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { curation, curationLabels, ptkDocuments, ptkDocumentLabels } from "@/content/external";
 
@@ -19,7 +19,7 @@ export default async function CurationPage({ params }: { params: Promise<{ local
 
   return (
     <>
-      <PageHeader eyebrow="Kurasi" title={t("title")} lead={t("lead")} />
+      <PageHeader eyebrow="Puspresnas" title={t("title")} lead={t("lead")} />
       <Section>
         <ul className="grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
           {curation.folders.map((f) => (
@@ -36,6 +36,8 @@ export default async function CurationPage({ params }: { params: Promise<{ local
               </a>
             </li>
           ))}
+          <SelPengisi jumlah={curation.folders.length} kolom={2} />
+          <SelPengisi jumlah={curation.folders.length} kolom={3} />
         </ul>
 
         {/* Dokumen resmi Lomba Invensi & PTK.

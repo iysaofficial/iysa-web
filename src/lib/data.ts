@@ -115,7 +115,21 @@ export type EventSite = { name: string; type: string | null; url: string | null 
 
 /* ── event ─────────────────────────────────────────────────────────── */
 
-const events = eventsRaw as IysaEvent[];
+/**
+ * Perbaikan tingkat event (level) yang salah label pada data warisan:
+ * - I3O 2024 ("Indonesia International IoT Olympiad") kehilangan `level` (`null`)
+ * - NRTC 2025 ("Nasional Research Teacher Competition") tercatat `"international"`
+ */
+const PERBAIKAN_LEVEL_EVENT: Record<string, EventLevel> = {
+  "indonesia-international-iot-olympiad-i3o-2024": "international",
+  "nasional-research-teacher-competition-nrtc-2025": "national",
+};
+
+const events: IysaEvent[] = (eventsRaw as IysaEvent[]).map((e) =>
+  PERBAIKAN_LEVEL_EVENT[e.slug]
+    ? { ...e, level: PERBAIKAN_LEVEL_EVENT[e.slug] }
+    : e,
+);
 
 export const allEvents = (): IysaEvent[] => events;
 

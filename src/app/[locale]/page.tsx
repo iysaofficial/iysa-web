@@ -14,6 +14,7 @@ import { ambilSemuaSeriDashboard } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allIssues, allAffiliates } from "@/lib/data";
+import { judulNewsletter } from "@/lib/teks-event";
 import { intro, vision, mission, goals } from "@/content/profile";
 import { affiliateNames } from "@/content/affiliates";
 import { mediaPartners } from "@/content/external";
@@ -168,6 +169,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               <EventCard event={e} />
             </li>
           ))}
+          <SelPengisi jumlah={featured.length} kolom={2} tampak="block lg:hidden" />
+          <SelPengisi jumlah={featured.length} kolom={3} />
         </ul>
       </Section>
 
@@ -288,7 +291,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             {latestIssue && (
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Pill tone="teal">{latestIssue.year}</Pill>
-                <MoreLink href={`/newsletter/${latestIssue.slug}`}>{latestIssue.title}</MoreLink>
+                <MoreLink href={`/newsletter/${latestIssue.slug}`}>
+                  {judulNewsletter(latestIssue, locale)}
+                </MoreLink>
               </div>
             )}
             <div className="mt-7">

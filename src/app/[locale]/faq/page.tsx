@@ -3,14 +3,15 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { PageHeader, Section, MoreLink } from "@/components/ui";
 import { pageMetadata, faqJsonLd } from "@/lib/seo";
-import { faq, faqGroups } from "@/lib/data";
+import { ambilFaq, ambilGrupFaq } from "@/content/faq";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "faq" });
+  const daftar = ambilFaq(locale);
   return pageMetadata({
     locale, path: "/faq", title: t("title"), description: t("lead"),
-    og: { eyebrow: "IYSA", heading: t("title"), meta: `${faq().length} ${locale === "id" ? "pertanyaan" : "questions"}` },
+    og: { eyebrow: "IYSA", heading: t("title"), meta: `${daftar.length} ${locale === "id" ? "pertanyaan" : "questions"}` },
   });
 }
 
@@ -24,14 +25,21 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: Lo
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("faq");
-  const groups = faqGroups();
+  const daftar = ambilFaq(locale);
+  const groups = ambilGrupFaq(locale);
 
   return (
     <>
       {/* FAQPage structured data — bisa muncul langsung di hasil pencarian. */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faq())) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(daftar)) }} />
 
-      <PageHeader eyebrow="FAQ" title={t("title")} lead={t("lead")} />
+      <PageHeader
+        eyebrow="FAQ"
+        title={t("title")}
+        lead={t("lead")}
+        count={daftar.length}
+        countLabel={locale === "id" ? "pertanyaan umum" : "questions answered"}
+      />
 
       {groups.map((g, i) => (
         <Section key={g.group} eyebrow={GROUP_KEY[g.group] ? t(GROUP_KEY[g.group]) : g.group} sunk={i % 2 === 1}>

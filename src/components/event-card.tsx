@@ -1,9 +1,16 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 import type { IysaEvent } from "@/lib/data";
 import { posterUrl } from "@/lib/assets";
-import { judulEvent, kotaSingkat, tanggalSah, akronimEvent, tahunEvent } from "@/lib/teks-event";
+import {
+  judulEvent,
+  kotaSingkat,
+  formatTanggalEvent,
+  akronimEvent,
+  tahunEvent,
+} from "@/lib/teks-event";
 import { statusEvent } from "@/lib/event-seri";
 import { Pill } from "./ui";
 
@@ -38,11 +45,13 @@ import { Pill } from "./ui";
  */
 export async function EventCard({ event }: { event: IysaEvent }) {
   const t = await getTranslations("events");
+  const locale = (await getLocale()) as Locale;
 
   const poster = posterUrl(event.poster);
   const judul = judulEvent(event.title);
   const kota = kotaSingkat(event.city);
-  const tutup = tanggalSah(event.registrationEnds);
+  const tanggalAcara = formatTanggalEvent(event.dates, locale);
+  const tutup = formatTanggalEvent(event.registrationEnds, locale);
   const status = statusEvent(event);
 
   const levelLabel =
@@ -111,8 +120,8 @@ export async function EventCard({ event }: { event: IysaEvent }) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {levelLabel && (
             <Pill tone={event.level === "international" ? "teal" : "navy"}>{levelLabel}</Pill>
           )}
@@ -121,16 +130,17 @@ export async function EventCard({ event }: { event: IysaEvent }) {
               <Pill>{modeLabel}</Pill>
             </span>
           )}
+          {event.origin === "affiliate" && <Pill tone="navy">{t("originAffiliate")}</Pill>}
         </div>
 
-        <h3 className="text-[16.5px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
+        <h3 className="text-[15px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)] sm:text-[16.5px]">
           {judul}
         </h3>
 
         <div className="mt-auto flex flex-col gap-1 pt-2">
-          {event.dates && (
-            <p className="font-mono text-[12px] leading-snug text-[var(--ink-faint)]">
-              {event.dates}
+          {tanggalAcara && (
+            <p className="font-mono text-[11.5px] leading-snug text-[var(--ink-faint)] sm:text-[12px]">
+              {tanggalAcara}
             </p>
           )}
           {/*

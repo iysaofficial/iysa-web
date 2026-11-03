@@ -56,10 +56,10 @@ export default async function ProfilePage({
           <div className="md:col-span-5">
             <DefList
               items={[
-                { label: t("founded"), value: locale === "id" ? "November 2018" : "November 2018" },
+                { label: t("founded"), value: "November 2018" },
                 { label: t("founder"), value: org.founder },
                 {
-                  label: locale === "id" ? "Badan hukum" : "Legal status",
+                  label: t("legalStatus"),
                   value: org.legalNote[locale],
                 },
               ]}
@@ -76,14 +76,14 @@ export default async function ProfilePage({
             { value: s.affiliates, label: h("statAffiliates") },
             { value: s.partners, label: h("statPartners") },
             { value: `${s.countries}+`, label: h("statCountries") },
-            { value: s.eventSites, label: locale === "id" ? "situs event" : "event websites" },
+            { value: s.eventSites, label: t("statEventSites") },
             { value: s.people, label: h("statPeople") },
           ]}
         />
       </Section>
 
       {/* Visi, misi, tujuan */}
-      <Section eyebrow={t("visionMission")} title={t("visionMission")}>
+      <Section eyebrow={h("visionEyebrow")} title={t("visionMission")}>
         <div className="grid gap-10 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-5">
             <h3 className="eyebrow">{h("vision")}</h3>
@@ -121,7 +121,7 @@ export default async function ProfilePage({
       </Section>
 
       {/* Program — di situs lama cuma deretan akronim tanpa keterangan. */}
-      <Section eyebrow={t("programmes")} title={t("programmes")} lead={t("programmesLead")} sunk>
+      <Section eyebrow={t("programmesEyebrow")} title={t("programmes")} lead={t("programmesLead")} sunk>
         <div className="flex flex-col gap-8">
           {(Object.keys(programmes) as (keyof typeof programmes)[]).map((key) => (
             <div key={key}>

@@ -62,7 +62,7 @@ export async function SeriKartu({ seri, dash }: { seri: Seri; dash?: EdisiDashbo
   return (
     <Link
       href={`/event/seri/${seri.slug}`}
-      className="group flex h-full flex-col gap-2 bg-[var(--bg)] p-5 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]"
+      className="group flex h-full w-full flex-col gap-2 bg-[var(--bg)] p-4 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)] sm:p-5"
     >
       <div className="flex items-baseline justify-between gap-3">
         <span className="flex items-center gap-2.5">

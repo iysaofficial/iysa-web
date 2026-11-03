@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { PageHeader, Section } from "@/components/ui";
+import { PageHeader, Section, BackLink } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { photoUrl } from "@/lib/assets";
 import { experts } from "@/content/profile";
@@ -28,7 +28,10 @@ export default async function ExpertTeamPage({ params }: { params: Promise<{ loc
 
   return (
     <>
-      <PageHeader eyebrow="Tim" title={t("expertTitle")} lead={t("expertLead")} />
+      <div className="shell pt-8">
+        <BackLink href="/tim">{t("title")}</BackLink>
+      </div>
+      <PageHeader eyebrow={t("expertEyebrow")} title={t("expertTitle")} lead={t("expertLead")} />
       <Section>
         <p className="max-w-[66ch] text-[15.5px] leading-relaxed text-[var(--ink-muted)]">{experts[locale]}</p>
         {images.length > 0 && (

@@ -161,9 +161,15 @@ export async function EdisiDashboardKartu({
         ) : (
           <Link
             href={`/event/seri/${edisi.akronim.toLowerCase()}`}
-            className="text-[14px] font-medium text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
+            className="group inline-flex items-center gap-1.5 text-[14px] font-medium text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
           >
             {t("allEditions")}
+            <span
+              aria-hidden
+              className="transition-transform duration-[var(--gerak-cepat)] group-hover:translate-x-0.5"
+            >
+              →
+            </span>
           </Link>
         )}
       </div>

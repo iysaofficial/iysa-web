@@ -20,7 +20,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
   return (
     <>
-      <PageHeader eyebrow="Kontak" title={t("title")} lead={t("lead")} />
+      <PageHeader eyebrow={t("title")} title={t("title")} lead={t("lead")} />
       <Section>
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-7">

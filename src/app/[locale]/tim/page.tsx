@@ -53,29 +53,24 @@ function pimpinan(nodes: Person[]): Person[] {
   return out;
 }
 
-type Divisi = { nama: string; koordinator: Person | null; anggota: Person[] };
+type Divisi = { kunci: string; koordinator: Person; anggota: Person[] };
 
 /**
- * Divisi = simpul di bawah supervisor. Yang punya anak jadi koordinator
- * divisinya; yang tidak punya anak berdiri sendiri sebagai divisi satu orang
- * (di bagan sekarang: IT).
+ * Divisi = simpul di bawah supervisor. Setiap simpul mengepalai divisinya
+ * (koordinator/penanggung jawab divisi) dan ditempatkan di kartu utama kiri
+ * dengan ukuran dan struktur yang seragam, termasuk divisi satu orang (IT).
  */
 function divisiDari(nodes: Person[]): Divisi[] {
   let kini = nodes;
   for (let i = 0; i < 3 && kini.length; i++) kini = kini.flatMap((n) => n.children);
 
-  return (
-    kini
-      .map((n) =>
-        n.children.length
-          ? { nama: namaDivisi(n.position), koordinator: n, anggota: n.children }
-          : { nama: namaDivisi(n.position), koordinator: null, anggota: [n] },
-      )
-      /* Divisi terbesar lebih dulu. Di bagan sekarang IT hanya satu orang;
-         tanpa pengurutan ia muncul mendahului divisi tujuh orang dan halaman
-         dibuka oleh bloknya yang paling tipis. */
-      .sort((a, b) => b.anggota.length - a.anggota.length)
-  );
+  return kini
+    .map((n) => ({
+      kunci: namaDivisi(n.position),
+      koordinator: n,
+      anggota: n.children,
+    }))
+    .sort((a, b) => b.anggota.length - a.anggota.length);
 }
 
 /**
@@ -91,6 +86,49 @@ function namaDivisi(jabatan: string) {
     .trim();
 }
 
+const NAMA_DIVISI_TERJEMAHAN: Record<string, { id: string; en: string }> = {
+  Administration: { id: "Administrasi", en: "Administration" },
+  "Promotion & Publication": { id: "Promosi & Publikasi", en: "Promotion & Publication" },
+  "Research and Development": { id: "Riset & Pengembangan", en: "Research & Development" },
+  IT: { id: "IT", en: "IT" },
+};
+
+function terjemahDivisi(kunci: string, locale: Locale): string {
+  return NAMA_DIVISI_TERJEMAHAN[kunci]?.[locale] ?? kunci;
+}
+
+const JABATAN_TERJEMAHAN: Record<string, { id: string; en: string }> = {
+  "Founder & Owner": { id: "Pendiri & Pemilik", en: "Founder & Owner" },
+  "General Manager": { id: "Manajer Umum", en: "General Manager" },
+  Supervisor: { id: "Supervisor", en: "Supervisor" },
+  "Administration Team Coordinator": {
+    id: "Koordinator Tim Administrasi",
+    en: "Administration Team Coordinator",
+  },
+  "Administration Staff": { id: "Staf Administrasi", en: "Administration Staff" },
+  "Promotion & Publication Team Coordinator": {
+    id: "Koordinator Tim Promosi & Publikasi",
+    en: "Promotion & Publication Team Coordinator",
+  },
+  "Promotion & Publication Staff": {
+    id: "Staf Promosi & Publikasi",
+    en: "Promotion & Publication Staff",
+  },
+  "Research and Development Team Coordinator": {
+    id: "Koordinator Tim Riset & Pengembangan",
+    en: "Research & Development Team Coordinator",
+  },
+  "Research and Development Staff": {
+    id: "Staf Riset & Pengembangan",
+    en: "Research & Development Staff",
+  },
+  "IT Staff": { id: "Staf IT", en: "IT Staff" },
+};
+
+function terjemahJabatan(jabatan: string, locale: Locale): string {
+  return JABATAN_TERJEMAHAN[jabatan.trim()]?.[locale] ?? jabatan;
+}
+
 /* ── Kartu orang ────────────────────────────────────────────────────────
  *
  * Dua puluh dua orang, dua puluh dua foto studio berlatar seragam — aset yang
@@ -98,27 +136,18 @@ function namaDivisi(jabatan: string) {
  * `object-top` supaya wajah tidak pernah terpotong berapa pun tinggi fotonya.
  */
 
-/**
- * Pembeda grup radio pemilih foto. Nama saja tidak cukup: satu orang bisa
- * muncul dua kali di halaman ini — sekali di jajaran pimpinan, sekali di
- * divisinya — dan dua grup radio bernama sama akan saling mematikan, sehingga
- * mengklik foto di satu kartu mengubah kartu yang lain.
- */
-let nomorKartu = 0;
-const idOrang = (p: Person) =>
-  `${p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${++nomorKartu}`;
-
 function KartuOrang({
   person,
   ukuran = "biasa",
   label,
-  ringkas = false,
+  idKartu,
+  locale,
 }: {
   person: Person;
   ukuran?: "besar" | "sedang" | "biasa";
   label?: string;
-  /** Tata letak mendatar untuk divisi satu orang: foto kecil, teks di sisinya. */
-  ringkas?: boolean;
+  idKartu: string;
+  locale: Locale;
 }) {
   /* Disaring lewat photoUrl dulu: berkas yang tidak ada di repo lama
      mengembalikan null, dan bingkai kosong lebih buruk daripada bingkai yang
@@ -134,39 +163,13 @@ function KartuOrang({
         ? "text-[17px] font-semibold text-[var(--ink)]"
         : "text-[14.5px] font-semibold text-[var(--ink)]";
 
-  if (ringkas) {
-    return (
-      // `flex-wrap`: di kartu mendatar bingkai tambahannya berdiri di samping
-      // teks, dan di layar ponsel deretan itu turun ke baris berikutnya
-      // ketimbang memampatkan nama dan jabatan jadi dua huruf per baris.
-      <div className="group flex flex-wrap items-center gap-5">
-        <div className="relative aspect-[4/5] w-[104px] shrink-0 overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
-          <FotoOrang
-            nama={person.name}
-            urls={semuaFoto}
-            id={idOrang(person)}
-            sizes="104px"
-            lebarBingkai="w-[22px]"
-            posisiBingkai="absolute right-1 bottom-1"
-          />
-        </div>
-        <div>
-          <p className="text-[17px] leading-snug font-semibold text-[var(--ink)]">{person.name}</p>
-          <p className="mt-0.5 text-[13px] leading-snug text-[var(--ink-faint)]">
-            {person.position}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="group flex flex-col gap-3">
       <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
         <FotoOrang
           nama={person.name}
           urls={semuaFoto}
-          id={idOrang(person)}
+          id={idKartu}
           sizes={
             ukuran === "besar"
               ? "(max-width: 768px) 90vw, 420px"
@@ -186,7 +189,7 @@ function KartuOrang({
         )}
         <p className={`leading-snug ${namaKelas}`}>{person.name}</p>
         <p className="mt-0.5 text-[12.5px] leading-snug text-[var(--ink-faint)]">
-          {person.position}
+          {terjemahJabatan(person.position, locale)}
         </p>
       </div>
     </div>
@@ -206,7 +209,7 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
   return (
     <>
       <PageHeader
-        eyebrow="Tim"
+        eyebrow={t("title")}
         title={t("title")}
         lead={t("lead")}
         count={total}
@@ -231,9 +234,22 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
             ~460px tinggi dan tiga di antaranya memenuhi hampir dua layar penuh
             sebelum divisi pertama terlihat. */}
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:gap-10">
-          {pendiri && <KartuOrang person={pendiri} ukuran="besar" />}
-          {atasan.map((p) => (
-            <KartuOrang key={`${p.name}-${p.position}`} person={p} ukuran="sedang" />
+          {pendiri && (
+            <KartuOrang
+              person={pendiri}
+              ukuran="besar"
+              idKartu="pimpinan-pendiri"
+              locale={locale}
+            />
+          )}
+          {atasan.map((p, idx) => (
+            <KartuOrang
+              key={`${p.name}-${p.position}`}
+              person={p}
+              ukuran="sedang"
+              idKartu={`pimpinan-${idx}`}
+              locale={locale}
+            />
           ))}
         </div>
       </Section>
@@ -243,61 +259,55 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
           anggotanya di kanan, dengan jumlah anggota sebagai angka mono besar.
           Sebelumnya keempat belas staf ini tercampur dalam satu kisi tanpa
           penanda divisi sama sekali. */}
-      {divisi.map((d, i) => (
-        <Section key={d.nama} sunk={i % 2 === 0}>
-          <div className="mb-9 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="eyebrow">{t("divisionsEyebrow")}</p>
-              <h2 className="mt-2 text-title text-[var(--ink)]">{d.nama}</h2>
+      {divisi.map((d, i) => {
+        const jumlahOrang = 1 + d.anggota.length;
+        const idDivisi = d.kunci.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        return (
+          <Section key={d.kunci} sunk={i % 2 === 0}>
+            <div className="mb-9 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="eyebrow">{t("divisionsEyebrow")}</p>
+                <h2 className="mt-2 text-title text-[var(--ink)]">
+                  {terjemahDivisi(d.kunci, locale)}
+                </h2>
+              </div>
+              <p className="tnum font-mono text-[30px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)] md:text-[38px]">
+                {jumlahOrang}
+                <span className="ml-2.5 font-sans text-[13px] font-normal text-[var(--ink-faint)]">
+                  {jumlahOrang === 1 ? t("memberOne") : t("membersWord")}
+                </span>
+              </p>
             </div>
-            {/* Angkanya sekali saja. Percobaan pertama memasangkan angka mono
-                besar DENGAN `t("members", {count})` yang sudah memuat angka
-                itu juga — di layar terbaca "7  7 anggota". */}
-            <p className="tnum font-mono text-[30px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)] md:text-[38px]">
-              {d.anggota.length}
-              <span className="ml-2.5 font-sans text-[13px] font-normal text-[var(--ink-faint)]">
-                {t("membersWord")}
-              </span>
-            </p>
-          </div>
 
-          {/*
-            Divisi satu orang tidak diberi kisi selebar halaman.
-
-            Zaidan sendirian di divisi IT; dengan tata letak yang sama seperti
-            divisi tujuh orang, lima per enam barisnya kosong — persis cacat
-            yang seksi ini ada untuk memperbaiki. Jadi divisi sekecil itu
-            dirender mendatar: foto kecil di kiri, nama dan jabatan di kanan.
-          */}
-          {d.anggota.length === 1 && !d.koordinator ? (
-            <KartuOrang person={d.anggota[0]} ringkas />
-          ) : (
             <div className="grid gap-8 md:grid-cols-12 md:gap-10">
-              {d.koordinator && (
-                // Di ponsel dibatasi separuh lebar supaya sebanding dengan
-                // kartu anggota di bawahnya; selebar layar ia jadi dua kali
-                // lebih besar dan hierarkinya berubah jadi teriakan.
-                <div className="w-1/2 pr-3 md:col-span-3 md:w-auto md:pr-0">
-                  <KartuOrang person={d.koordinator} ukuran="sedang" label={t("coordinator")} />
-                </div>
+              <div className="w-1/2 pr-3 md:col-span-3 md:w-auto md:pr-0">
+                <KartuOrang
+                  person={d.koordinator}
+                  ukuran="sedang"
+                  label={t("coordinator")}
+                  idKartu={`koord-${idDivisi}`}
+                  locale={locale}
+                />
+              </div>
+              {d.anggota.length > 0 && (
+                <ul className="rise-stagger grid grid-cols-2 gap-6 sm:grid-cols-3 md:col-span-9 lg:grid-cols-4">
+                  {d.anggota.map((p, idx) => (
+                    <li key={`${p.name}-${p.position}`}>
+                      <KartuOrang
+                        person={p}
+                        idKartu={`anggota-${idDivisi}-${idx}`}
+                        locale={locale}
+                      />
+                    </li>
+                  ))}
+                </ul>
               )}
-              <ul
-                className={`rise-stagger grid grid-cols-2 gap-6 sm:grid-cols-3 ${
-                  d.koordinator ? "md:col-span-9 lg:grid-cols-4" : "md:col-span-12 lg:grid-cols-6"
-                }`}
-              >
-                {d.anggota.map((p) => (
-                  <li key={`${p.name}-${p.position}`}>
-                    <KartuOrang person={p} />
-                  </li>
-                ))}
-              </ul>
             </div>
-          )}
-        </Section>
-      ))}
+          </Section>
+        );
+      })}
 
-      <Section eyebrow={t("expertTitle")} title={t("expertTitle")}>
+      <Section eyebrow={t("expertEyebrow")} title={t("expertTitle")}>
         <p className="max-w-[62ch] text-[15.5px] leading-relaxed text-[var(--ink-muted)]">
           {experts[locale]}
         </p>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { PageHeader, Section, BackLink } from "@/components/ui";
+import { PageHeader, Section, BackLink, SelPengisi } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { eventSites } from "@/lib/data";
 
@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "events" });
   return pageMetadata({ locale, path: "/event/situs", title: t("sites"), description: t("sitesLead"),
-    og: { eyebrow: "IYSA", heading: t("sites"), meta: `${eventSites().length} ${locale === "id" ? "domain" : "domains"}` } });
+    og: { eyebrow: "IYSA", heading: t("sites"), meta: `${eventSites().length} ${t("registeredDomains")}` } });
 }
 
 export default async function EventSitesPage({ params }: { params: Promise<{ locale: Locale }> }) {
@@ -17,13 +17,22 @@ export default async function EventSitesPage({ params }: { params: Promise<{ loc
   setRequestLocale(locale);
   const t = await getTranslations("events");
   const sites = eventSites();
+  const labelTipe = (tipe: string | null) => {
+    if (!tipe) return null;
+    if (/interna/i.test(tipe)) return t("levelInternational");
+    if (/nasional|national/i.test(tipe)) return t("levelNational");
+    return tipe;
+  };
 
   return (
     <>
       <div className="shell pt-8"><BackLink href="/event">{t("backToEvents")}</BackLink></div>
-      <PageHeader eyebrow="Ekosistem" title={t("sites")} lead={t("sitesLead")}
+      <PageHeader
+        eyebrow={t("ecosystemEyebrow")}
+        title={t("sites")}
+        lead={t("sitesLead")}
         count={sites.length}
-        countLabel={locale === "id" ? "domain terdaftar" : "registered domains"}
+        countLabel={t("registeredDomains")}
       />
       <Section>
         {/* Satu-satunya tempat seluruh ekosistem domain IYSA tercatat. */}
@@ -34,7 +43,7 @@ export default async function EventSitesPage({ params }: { params: Promise<{ loc
                 <a href={s.url} target="_blank" rel="noreferrer"
                    className="group flex h-full flex-col gap-2 p-5 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
                   <span className="text-[15px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">{s.name}</span>
-                  {s.type && <span className="eyebrow">{s.type}</span>}
+                  {s.type && <span className="eyebrow">{labelTipe(s.type)}</span>}
                   <span className="mt-1 truncate font-mono text-[11.5px] text-[var(--teal)]">
                     {s.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                   </span>
@@ -42,11 +51,13 @@ export default async function EventSitesPage({ params }: { params: Promise<{ loc
               ) : (
                 <div className="flex h-full flex-col gap-2 p-5">
                   <span className="text-[15px] font-semibold text-[var(--ink)]">{s.name}</span>
-                  {s.type && <span className="eyebrow">{s.type}</span>}
+                  {s.type && <span className="eyebrow">{labelTipe(s.type)}</span>}
                 </div>
               )}
             </li>
           ))}
+          <SelPengisi jumlah={sites.length} kolom={2} />
+          <SelPengisi jumlah={sites.length} kolom={3} />
         </ul>
       </Section>
     </>

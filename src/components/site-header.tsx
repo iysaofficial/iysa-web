@@ -44,10 +44,10 @@ export function SiteHeader() {
                 <Link
                   href={item.path}
                   aria-current={isActive(item.path) ? "page" : undefined}
-                  className={`rounded px-2.5 py-1.5 text-[14px] font-medium transition-colors duration-[var(--gerak-cepat)] ${
+                  className={`rounded px-2.5 py-1.5 text-[14px] transition-colors duration-[var(--gerak-cepat)] ${
                     isActive(item.path)
-                      ? "text-[var(--navy)]"
-                      : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                      ? "bg-[var(--bg-sunk)] font-semibold text-[var(--navy)]"
+                      : "font-medium text-[var(--ink-muted)] hover:text-[var(--ink)]"
                   }`}
                 >
                   {t(item.key)}

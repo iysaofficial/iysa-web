@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { PageHeader, Section } from "@/components/ui";
+import { PageHeader, Section, MoreLink, SelPengisi } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { photoFolders } from "@/content/external";
 
@@ -42,7 +42,14 @@ export default async function PhotoGallery({ params }: { params: Promise<{ local
 
   return (
     <>
-      <PageHeader eyebrow="Galeri" title={t("photoTitle")} lead={t("photoLead")} />
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("photoTitle")}
+        lead={t("photoLead")}
+        count={photoFolders.length}
+        countLabel={locale === "id" ? "tahun dokumentasi" : "years of archives"}
+        aside={<MoreLink href="/galeri/video">{t("videoTitle")}</MoreLink>}
+      />
       <Section>
         {/* Dokumentasi foto tetap di Drive. Memindahkannya ke penyimpanan lain
             adalah keputusan IYSA, bukan keputusan penulisan ulang situs. */}
@@ -61,6 +68,8 @@ export default async function PhotoGallery({ params }: { params: Promise<{ local
               </a>
             </li>
           ))}
+          <SelPengisi jumlah={photoFolders.length} kolom={2} />
+          <SelPengisi jumlah={photoFolders.length} kolom={4} />
         </ul>
       </Section>
     </>

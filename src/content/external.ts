@@ -108,7 +108,7 @@ export const ptkDocumentLabels: Record<string, { en: string; id: string }> = {
   },
   guidebook: {
     en: "Guidebook — Lomba Invensi dan PTK",
-    id: "Guidebook Lomba Invensi dan PTK",
+    id: "Buku Panduan Lomba Invensi dan PTK",
   },
 };
 

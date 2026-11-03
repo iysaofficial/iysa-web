@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { logoUrl } from "@/lib/assets";
 import { partners } from "@/lib/data";
+import { SelPengisi } from "./ui";
 
 /**
  * Dinding logo institusi mitra — 59 logo, 30 nasional dan 29 internasional.
@@ -44,52 +45,51 @@ import { partners } from "@/lib/data";
  * memanjang — dan tanpa kotak seragam barisnya jadi tinggi-rendah acak.
  */
 export function PartnerWall({ scope }: { scope?: "national" | "international" }) {
-  const items = partners().filter((p) => (scope ? p.scope === scope : true));
+  const items = partners()
+    .filter((p) => (scope ? p.scope === scope : true))
+    .map((p) => ({ ...p, src: logoUrl(p.logo) }))
+    .filter((p): p is typeof p & { src: string } => Boolean(p.src));
 
   return (
     <ul
       className="rise-stagger grid grid-cols-3 gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-4 lg:grid-cols-6"
     >
-      {items.map((p, i) => {
-        const src = logoUrl(p.logo);
-        // Setiap komponen wajib menangani null; di sini sel-nya tidak
-        // dirender sama sekali, bukan kotak kosong yang terbaca sebagai rusak.
-        if (!src) return null;
+      {items.map((p, i) => (
+        <li key={`${p.logo}-${i}`} className="bg-[var(--bg)]">
+          {/*
+            Tinggi tetap, BUKAN `aspect-[3/2]`.
 
-        return (
-          <li key={`${p.logo}-${i}`} className="bg-[var(--bg)]">
+            Rasio menghasilkan tinggi pecahan — di lebar penuh sekitar
+            114,67px per sel — dan celah `gap-px` 1px yang jatuh di batas
+            subpiksel kadang hilang sama sekali saat dilukis. Akibatnya dua
+            baris tampak menyatu jadi satu blok tinggi tanpa pemisah.
+
+            Terukur di tangkapan produksi: garis pemisah ada di y=2958 dan
+            y=3188 — berjarak 230px untuk baris setinggi 115px, jadi satu
+            garis di antaranya memang tidak pernah tergambar.
+          */}
+          <div className="sel-logo flex h-28 items-center justify-center p-4">
             {/*
-              Tinggi tetap, BUKAN `aspect-[3/2]`.
-
-              Rasio menghasilkan tinggi pecahan — di lebar penuh sekitar
-              114,67px per sel — dan celah `gap-px` 1px yang jatuh di batas
-              subpiksel kadang hilang sama sekali saat dilukis. Akibatnya dua
-              baris tampak menyatu jadi satu blok tinggi tanpa pemisah.
-
-              Terukur di tangkapan produksi: garis pemisah ada di y=2958 dan
-              y=3188 — berjarak 230px untuk baris setinggi 115px, jadi satu
-              garis di antaranya memang tidak pernah tergambar.
+              Tanpa `sizes`, dan itu disengaja. Dengan `sizes`, Next
+              memancarkan srcset penuh dari seluruh daftar deviceSizes untuk
+              SETIAP gambar — 59 logo membuat HTML beranda melar dari 94 KB
+              jadi 211 KB. Untuk gambar berukuran tetap sekecil ini, srcset
+              1x/2x sudah cukup, dan itulah yang dipancarkan Next kalau
+              `sizes` dihilangkan.
             */}
-            <div className="sel-logo flex h-28 items-center justify-center p-4">
-              {/*
-                Tanpa `sizes`, dan itu disengaja. Dengan `sizes`, Next
-                memancarkan srcset penuh dari seluruh daftar deviceSizes untuk
-                SETIAP gambar — 59 logo membuat HTML beranda melar dari 94 KB
-                jadi 211 KB. Untuk gambar berukuran tetap sekecil ini, srcset
-                1x/2x sudah cukup, dan itulah yang dipancarkan Next kalau
-                `sizes` dihilangkan.
-              */}
-              <Image
-                src={src}
-                alt=""
-                width={160}
-                height={96}
-                className="logo-mitra max-h-full w-auto object-contain"
-              />
-            </div>
-          </li>
-        );
-      })}
+            <Image
+              src={p.src}
+              alt=""
+              width={160}
+              height={96}
+              className="logo-mitra max-h-full w-auto object-contain"
+            />
+          </div>
+        </li>
+      ))}
+      <SelPengisi jumlah={items.length} kolom={3} tampak="block sm:hidden" />
+      <SelPengisi jumlah={items.length} kolom={4} tampak="hidden sm:block lg:hidden" />
+      <SelPengisi jumlah={items.length} kolom={6} tampak="hidden lg:block" />
     </ul>
   );
 }

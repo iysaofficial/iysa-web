@@ -128,12 +128,12 @@ export default async function EventsPage({
           pemilik situs menilainya tidak pada tempatnya. Deskripsi halamannya
           tetap hidup di metadata untuk mesin pencari. */}
       <PageHeader
-        eyebrow="Event"
+        eyebrow={t("eyebrow")}
         title={t("title")}
         count={menyaring ? hasil.length : semua.length}
         countLabel={
           menyaring
-            ? `${t("count", { count: hasil.length })} · ${semua.length} ${locale === "id" ? "total" : "in total"}`
+            ? `${t("count", { count: hasil.length })} · ${t("inTotal", { count: semua.length })}`
             : `${t("count", { count: semua.length })} · ${t("seriesCount", { count: seri.length })}`
         }
         bawah={<EventFilters facets={facets} active={{ level, mode, q }} />}
@@ -150,6 +150,8 @@ export default async function EventsPage({
                   <EventCard event={e} />
                 </li>
               ))}
+              <SelPengisi jumlah={hasil.length} kolom={2} tampak="block lg:hidden" />
+              <SelPengisi jumlah={hasil.length} kolom={3} />
             </ul>
           )}
         </div>
@@ -191,6 +193,8 @@ export default async function EventsPage({
                       <EventCard event={e} />
                     </li>
                   ))}
+                  <SelPengisi jumlah={terbukaWarisan.length} kolom={2} tampak="block lg:hidden" />
+                  <SelPengisi jumlah={terbukaWarisan.length} kolom={3} />
                 </ul>
               )}
             </Section>
@@ -204,6 +208,8 @@ export default async function EventsPage({
                     <EventCard event={e} />
                   </li>
                 ))}
+                <SelPengisi jumlah={akanWarisan.length} kolom={2} tampak="block lg:hidden" />
+                <SelPengisi jumlah={akanWarisan.length} kolom={3} />
               </ul>
             </Section>
           )}
@@ -219,6 +225,9 @@ export default async function EventsPage({
                   <SeriKartu seri={s} dash={dariDashboard.get(s.akronim.toUpperCase())} />
                 </li>
               ))}
+              <SelPengisi jumlah={seri.length} kolom={2} tampak="block md:hidden" />
+              <SelPengisi jumlah={seri.length} kolom={3} tampak="hidden md:block xl:hidden" />
+              <SelPengisi jumlah={seri.length} kolom={4} tampak="hidden xl:block" />
             </ul>
           </Section>
         </>

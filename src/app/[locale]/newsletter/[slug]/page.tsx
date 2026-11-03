@@ -8,6 +8,7 @@ import { BackLink, ButtonLink, Pill, Section } from "@/components/ui";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allIssues, issueBySlug } from "@/lib/data";
 import { coverUrl } from "@/lib/assets";
+import { judulNewsletter } from "@/lib/teks-event";
 
 const MONTH: Record<Locale, string[]> = {
   id: ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
@@ -35,6 +36,7 @@ export async function generateMetadata({
   if (!issue) return {};
 
   const t = await getTranslations({ locale, namespace: "newsletter" });
+  const judul = judulNewsletter(issue, locale);
   const label = issue.batch
     ? t("batchOf", { batch: issue.batch, year: issue.year })
     : issue.month
@@ -44,12 +46,12 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: `/newsletter/${issue.slug}`,
-    title: issue.title,
+    title: judul,
     description:
       locale === "id"
         ? `${label} — terbitan newsletter IYSA. ${t("lead")}`
         : `${label} — IYSA newsletter issue. ${t("lead")}`,
-    og: { eyebrow: "Newsletter", heading: issue.title, meta: label },
+    og: { eyebrow: "Newsletter", heading: judul, meta: label },
     type: "article",
   });
 }
@@ -67,6 +69,7 @@ export default async function IssuePage({
 
   const t = await getTranslations("newsletter");
   const cover = coverUrl(issue.cover);
+  const judul = judulNewsletter(issue, locale);
 
   const label = issue.batch
     ? t("batchOf", { batch: issue.batch, year: issue.year })
@@ -88,7 +91,7 @@ export default async function IssuePage({
               [
                 { name: "IYSA", path: "/" },
                 { name: t("title"), path: "/newsletter" },
-                { name: issue.title, path: `/newsletter/${issue.slug}` },
+                { name: judul, path: `/newsletter/${issue.slug}` },
               ],
               locale,
             ),
@@ -108,7 +111,7 @@ export default async function IssuePage({
               {cover ? (
                 <Image
                   src={cover}
-                  alt={issue.title}
+                  alt={judul}
                   fill
                   sizes="(max-width: 768px) 100vw, 30vw"
                   className="object-cover"
@@ -116,7 +119,7 @@ export default async function IssuePage({
                 />
               ) : (
                 <span className="absolute inset-0 grid place-items-center px-4 text-center font-mono text-[12px] text-[var(--ink-faint)]">
-                  {issue.title}
+                  {judul}
                 </span>
               )}
             </div>
@@ -125,7 +128,7 @@ export default async function IssuePage({
               <Pill tone="teal">{label}</Pill>
             </div>
 
-            <h1 className="mt-4 text-title text-[var(--navy)]">{issue.title}</h1>
+            <h1 className="mt-4 text-title text-[var(--navy)]">{judul}</h1>
 
             {/*
               Penghitung pembaca dari situs lama dihapus. Ia memasang Firebase
@@ -148,7 +151,7 @@ export default async function IssuePage({
             {issue.hasPdf && issue.pdfPreview ? (
               <iframe
                 src={issue.pdfPreview}
-                title={issue.title}
+                title={judul}
                 loading="lazy"
                 className="aspect-[3/4] w-full border border-[var(--line)] bg-[var(--bg-sunk)] md:aspect-[4/5]"
                 allow="autoplay"

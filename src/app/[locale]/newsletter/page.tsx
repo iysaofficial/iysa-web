@@ -9,6 +9,7 @@ import { SubscribeForm } from "@/components/subscribe-form";
 import { pageMetadata } from "@/lib/seo";
 import { allIssues, issueYears, issuesByYear } from "@/lib/data";
 import { coverUrl } from "@/lib/assets";
+import { judulNewsletter } from "@/lib/teks-event";
 
 export async function generateMetadata({
   params,
@@ -80,6 +81,7 @@ export default async function NewsletterIndex({
               <ul className="rise-stagger grid gap-7 sm:grid-cols-3 lg:grid-cols-5">
                 {items.map((issue) => {
                   const cover = coverUrl(issue.cover);
+                  const judul = judulNewsletter(issue, locale);
                   return (
                     <li key={issue.slug}>
                       <Link href={`/newsletter/${issue.slug}`} className="group block">
@@ -87,19 +89,19 @@ export default async function NewsletterIndex({
                           {cover ? (
                             <Image
                               src={cover}
-                              alt={issue.title}
+                              alt={judul}
                               fill
                               sizes="(max-width: 640px) 50vw, 20vw"
                               className="object-cover transition-transform duration-[var(--gerak-sedang)] group-hover:scale-[1.03]"
                             />
                           ) : (
                             <span className="absolute inset-0 grid place-items-center px-2 text-center font-mono text-[10.5px] text-[var(--ink-faint)]">
-                              {issue.title}
+                              {judul}
                             </span>
                           )}
                         </div>
                         <p className="mt-3 text-[14px] leading-snug font-medium text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
-                          {issue.title}
+                          {judul}
                         </p>
                         {!issue.hasPdf && (
                           <span className="mt-1.5 inline-block">
@@ -116,7 +118,7 @@ export default async function NewsletterIndex({
         );
       })}
 
-      <Section eyebrow={t("subscribe")} title={t("subscribe")} lead={t("subscribeLead")} sunk>
+      <Section eyebrow={t("subscribeEyebrow")} title={t("subscribeTitle")} lead={t("subscribeLead")} sunk>
         <div className="max-w-md">
           <SubscribeForm />
         </div>

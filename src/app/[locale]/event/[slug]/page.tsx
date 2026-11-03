@@ -8,6 +8,14 @@ import { BackLink, ButtonLink, DefList, Pill, Section } from "@/components/ui";
 import { pageMetadata, eventJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { allEvents, eventBySlug } from "@/lib/data";
 import { posterUrl, assetUrl } from "@/lib/assets";
+import {
+  judulEvent,
+  kotaSingkat,
+  tempatBersih,
+  urlPeta,
+  formatTanggalEvent,
+} from "@/lib/teks-event";
+import { statusEvent } from "@/lib/event-seri";
 
 /**
  * 61 event yang dulu satu komponen per halaman, kini satu rute.
@@ -29,24 +37,27 @@ export async function generateMetadata({
   if (!e) return {};
 
   const t = await getTranslations({ locale, namespace: "events" });
+  const judul = judulEvent(e.title);
+  const kota = kotaSingkat(e.city);
+  const tanggal = formatTanggalEvent(e.dates, locale);
 
   const bits = [
     e.level === "international" ? t("levelInternational") : t("levelNational"),
-    e.dates,
-    e.city ?? (e.mode === "online" ? t("modeOnline") : null),
+    tanggal,
+    kota?.tampil ?? (e.mode === "online" ? t("modeOnline") : null),
   ].filter(Boolean);
 
   return pageMetadata({
     locale,
     path: `/event/${e.slug}`,
-    title: e.title,
+    title: judul,
     // Deskripsi dibangun dari ruas yang ada — tiap halaman dapat kalimatnya
     // sendiri, bukan satu deskripsi global seperti di situs lama.
     description:
       locale === "id"
-        ? `${e.title} — ${bits.join(" · ")}. Diselenggarakan ${e.category ?? "IYSA"}.`
-        : `${e.title} — ${bits.join(" · ")}. Organised by ${e.category ?? "IYSA"}.`,
-    og: { eyebrow: e.category ?? "IYSA", heading: e.title, meta: bits.join(" · ") },
+        ? `${judul} — ${bits.join(" · ")}. Diselenggarakan ${e.category ?? "IYSA"}.`
+        : `${judul} — ${bits.join(" · ")}. Organised by ${e.category ?? "IYSA"}.`,
+    og: { eyebrow: e.category ?? "IYSA", heading: judul, meta: bits.join(" · ") },
     type: "article",
   });
 }
@@ -63,6 +74,13 @@ export default async function EventDetail({
   if (!e) notFound();
 
   const t = await getTranslations("events");
+  const judul = judulEvent(e.title);
+  const kota = kotaSingkat(e.city);
+  const tempat = tempatBersih(e.venueName);
+  const tanggalAcara = formatTanggalEvent(e.dates, locale);
+  const tanggalTutup = formatTanggalEvent(e.registrationEnds, locale);
+  const petaEmbed = urlPeta(e.mapsEmbed);
+  const status = statusEvent(e);
   const poster = posterUrl(e.poster);
   // 27 dari 30 rujukan foto venue benar-benar ada; tiga sisanya null dan
   // blok fotonya tidak dirender sama sekali.
@@ -85,16 +103,20 @@ export default async function EventDetail({
           : null;
 
   const rows = [
-    e.dates && { label: t("dates"), value: e.dates },
+    tanggalAcara && { label: t("dates"), value: tanggalAcara },
     levelLabel && { label: t("level"), value: levelLabel },
     modeLabel && {
       label: t("mode"),
-      value: e.city ? `${modeLabel} · ${e.city}` : modeLabel,
+      value: kota ? `${modeLabel} · ${kota.penuh}` : modeLabel,
     },
     e.category && { label: t("category"), value: e.category },
-    e.venueName && { label: t("venue"), value: e.venueName },
-    e.registrationEnds && { label: t("registerEnds", { date: "" }).replace(/\s*$/, ""), value: e.registrationEnds },
+    tempat && { label: t("venue"), value: tempat },
+    tanggalTutup && { label: t("registrationDeadline"), value: tanggalTutup },
   ].filter(Boolean) as { label: string; value: string }[];
+
+  const adalahSitusResmi =
+    Boolean(e.registrationUrl) &&
+    !/docs\.google\.com\/forms|forms\.gle|bit\.ly/i.test(e.registrationUrl ?? "");
 
   return (
     <>
@@ -110,7 +132,7 @@ export default async function EventDetail({
               [
                 { name: "IYSA", path: "/" },
                 { name: t("title"), path: "/event" },
-                { name: e.title, path: `/event/${e.slug}` },
+                { name: judul, path: `/event/${e.slug}` },
               ],
               locale,
             ),
@@ -131,10 +153,17 @@ export default async function EventDetail({
                   <Pill tone={e.level === "international" ? "teal" : "navy"}>{levelLabel}</Pill>
                 )}
                 {modeLabel && <Pill>{modeLabel}</Pill>}
-                {e.origin === "affiliate" && <Pill tone="coral">{t("filterAll")}</Pill>}
+                {e.origin === "affiliate" && <Pill tone="navy">{t("originAffiliate")}</Pill>}
+                <Pill tone={status === "terbuka" ? "teal" : status === "akan" ? "coral" : "neutral"}>
+                  {status === "terbuka"
+                    ? t("statusOpen")
+                    : status === "akan"
+                      ? t("statusUpcoming")
+                      : t("statusDone")}
+                </Pill>
               </div>
 
-              <h1 className="rise mt-4 text-display text-[var(--navy)]">{e.title}</h1>
+              <h1 className="rise mt-4 text-display text-[var(--navy)]">{judul}</h1>
 
               {e.origin === "affiliate" && (
                 <p className="mt-4 max-w-[52ch] text-[15px] text-[var(--ink-muted)]">
@@ -142,13 +171,20 @@ export default async function EventDetail({
                 </p>
               )}
 
-              <div className="mt-8">
-                {e.registrationUrl ? (
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                {status !== "selesai" && e.registrationUrl ? (
                   <ButtonLink href={e.registrationUrl} tone="primary" external>
                     {t("register")}
                   </ButtonLink>
                 ) : (
-                  <p className="text-[14px] text-[var(--ink-faint)]">{t("registerClosed")}</p>
+                  <>
+                    <p className="text-[14px] text-[var(--ink-faint)]">{t("registerClosed")}</p>
+                    {adalahSitusResmi && e.registrationUrl && (
+                      <ButtonLink href={e.registrationUrl} tone="outline" external>
+                        {t("visitSite")}
+                      </ButtonLink>
+                    )}
+                  </>
                 )}
               </div>
 
@@ -168,7 +204,7 @@ export default async function EventDetail({
               <div className="md:col-span-5">
                 <Image
                   src={poster}
-                  alt={e.title}
+                  alt={judul}
                   width={900}
                   height={1200}
                   sizes="(max-width: 768px) 100vw, 40vw"
@@ -187,7 +223,7 @@ export default async function EventDetail({
             <DefList items={rows} />
           </div>
 
-          {(e.mapsEmbed || e.mapsUrl || venue) && (
+          {(petaEmbed || e.mapsUrl || venue) && (
             <div className="md:col-span-5">
               <p className="eyebrow mb-3">{t("location")}</p>
 
@@ -214,10 +250,10 @@ export default async function EventDetail({
                 />
               )}
 
-              {e.mapsEmbed && (
+              {petaEmbed && (
                 <iframe
-                  src={e.mapsEmbed}
-                  title={e.venueName ?? t("location")}
+                  src={petaEmbed}
+                  title={tempat ?? t("location")}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="aspect-[4/3] w-full border border-[var(--line)]"

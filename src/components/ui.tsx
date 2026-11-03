@@ -297,14 +297,29 @@ export function EmptyState({ title, action }: { title: string; action?: ReactNod
  * titik henti, jadi dua himpunan disiapkan dan masing-masing hanya tampil di
  * lebar yang membutuhkannya.
  */
-export function SelPengisi({ jumlah, kolom }: { jumlah: number; kolom: 2 | 3 }) {
+export function SelPengisi({
+  jumlah,
+  kolom,
+  tampak,
+  as: Tag = "li",
+}: {
+  jumlah: number;
+  kolom: 2 | 3 | 4 | 6;
+  tampak?: string;
+  as?: "li" | "div";
+}) {
   const sisa = (kolom - (jumlah % kolom)) % kolom;
   if (sisa === 0) return null;
-  const tampak = kolom === 3 ? "hidden lg:block" : "hidden sm:block lg:hidden";
+  const kelasTampak =
+    tampak ?? (kolom === 2 ? "hidden sm:block lg:hidden" : "hidden lg:block");
   return (
     <>
       {Array.from({ length: sisa }).map((_, i) => (
-        <li key={`pengisi-${kolom}-${i}`} aria-hidden className={`bg-[var(--bg)] ${tampak}`} />
+        <Tag
+          key={`pengisi-${kolom}-${i}`}
+          aria-hidden
+          className={`bg-[var(--bg)] ${kelasTampak}`}
+        />
       ))}
     </>
   );

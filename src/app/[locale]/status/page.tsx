@@ -47,40 +47,56 @@ export default async function StatusPage({
   const health = await apiHealth();
   const s = stats();
 
+  const id = locale === "id";
+
   return (
     <>
-      <PageHeader eyebrow="Internal" title="Status" lead="Halaman diagnostik. Tidak diindeks." />
+      <PageHeader
+        eyebrow="Internal"
+        title="Status"
+        lead={id ? "Halaman diagnostik. Tidak diindeks." : "Internal diagnostics page. Not indexed."}
+      />
 
-      <Section eyebrow="API dasbor" title="Sumber data">
+      <Section eyebrow={id ? "API dasbor" : "Dashboard API"} title={id ? "Sumber data" : "Data sources"}>
         <DefList
           items={[
-            { label: "Basis", value: <code className="font-mono text-[13px]">{apiConfig.base}</code> },
+            { label: id ? "Basis" : "Base URL", value: <code className="font-mono text-[13px]">{apiConfig.base}</code> },
             { label: "Slug", value: <code className="font-mono text-[13px]">{apiConfig.slug}</code> },
             {
               label: "/health",
               value: (
                 <span className="flex flex-wrap items-center gap-2">
-                  <Pill tone={health.ok ? "teal" : "coral"}>{health.ok ? "hidup" : "mati"}</Pill>
+                  <Pill tone={health.ok ? "teal" : "coral"}>
+                    {health.ok ? (id ? "hidup" : "online") : id ? "mati" : "offline"}
+                  </Pill>
                   <code className="font-mono text-[12px] text-[var(--ink-faint)]">{health.detail}</code>
                 </span>
               ),
             },
             {
-              label: "Data event",
+              label: id ? "Data event" : "Event data",
               value: (
                 <span className="flex flex-wrap items-center gap-2">
-                  <Pill tone="coral">cuplikan statis</Pill>
+                  <Pill tone="coral">{id ? "cuplikan statis" : "static snapshot"}</Pill>
                   <span className="text-[13.5px] text-[var(--ink-muted)]">
-                    API publik menjawab &quot;seri belum menetapkan edisi yang disiarkan&quot;
+                    {id
+                      ? "API publik dikombinasikan dengan arsip statis warisan"
+                      : "Public API combined with static legacy archive"}
                   </span>
                 </span>
               ),
             },
             {
-              label: "Surel (Resend)",
+              label: id ? "Surel (Resend)" : "Email (Resend)",
               value: (
                 <Pill tone={mailConfigured() ? "teal" : "coral"}>
-                  {mailConfigured() ? "terkonfigurasi" : "belum diset"}
+                  {mailConfigured()
+                    ? id
+                      ? "terkonfigurasi"
+                      : "configured"
+                    : id
+                      ? "belum diset"
+                      : "not set"}
                 </Pill>
               ),
             },
@@ -88,17 +104,20 @@ export default async function StatusPage({
         />
       </Section>
 
-      <Section eyebrow="Isi" title="Yang terbawa dari situs lama" sunk>
+      <Section eyebrow={id ? "Isi" : "Content"} title={id ? "Yang terbawa dari situs lama" : "Migrated legacy content"} sunk>
         <DefList
           items={[
-            { label: "Event", value: `${s.events}` },
-            { label: "Terbitan", value: `${allIssues().length} (${allIssues().filter((i) => !i.hasPdf).length} tanpa PDF)` },
-            { label: "Mitra", value: `${s.affiliates}` },
-            { label: "Orang", value: `${s.people}` },
-            { label: "Video", value: `${s.videos}` },
-            { label: "Situs event", value: `${s.eventSites}` },
-            { label: "Aset terpetakan", value: `${assetStats().mapped}` },
-            { label: "Redirect aktif", value: `${(legacyRedirects as unknown[]).length}` },
+            { label: id ? "Event" : "Events", value: `${s.events}` },
+            {
+              label: id ? "Terbitan" : "Issues",
+              value: `${allIssues().length} (${allIssues().filter((i) => !i.hasPdf).length} ${id ? "tanpa PDF" : "without PDF"})`,
+            },
+            { label: id ? "Mitra" : "Affiliates", value: `${s.affiliates}` },
+            { label: id ? "Orang" : "People", value: `${s.people}` },
+            { label: id ? "Video" : "Videos", value: `${s.videos}` },
+            { label: id ? "Situs event" : "Event sites", value: `${s.eventSites}` },
+            { label: id ? "Aset terpetakan" : "Mapped assets", value: `${assetStats().mapped}` },
+            { label: id ? "Redirect aktif" : "Active redirects", value: `${(legacyRedirects as unknown[]).length}` },
           ]}
         />
       </Section>

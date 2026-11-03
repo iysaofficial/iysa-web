@@ -75,7 +75,7 @@ export function ContactForm() {
             required
             maxLength={200}
             autoComplete="email"
-            placeholder="nama@sekolah.sch.id"
+            placeholder={t("emailPlaceholder")}
             disabled={state === "sending"}
             className={field}
           />

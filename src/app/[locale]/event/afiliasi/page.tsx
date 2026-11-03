@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { PageHeader, Section, BackLink, MoreLink } from "@/components/ui";
+import { PageHeader, Section, BackLink, MoreLink, SelPengisi } from "@/components/ui";
 import { EventCard } from "@/components/event-card";
 import { pageMetadata } from "@/lib/seo";
 import { eventsByOrigin } from "@/lib/data";
@@ -19,17 +19,28 @@ export default async function AffiliateEventsPage({ params }: { params: Promise<
   setRequestLocale(locale);
   const t = await getTranslations("events");
   const p = await getTranslations("partners");
-  const items = eventsByOrigin("affiliate");
+  // Saring duplikat E-NNOVATE 2025 (legacyId 1 dan 5 memiliki judul, tanggal, dan poster identik)
+  const items = eventsByOrigin("affiliate").filter(
+    (e) => e.slug !== "international-innovation-summit-2025-e-nnovate-2",
+  );
 
   return (
     <>
       <div className="shell pt-8"><BackLink href="/event">{t("backToEvents")}</BackLink></div>
-      <PageHeader eyebrow="Event" title={p("title")} lead={t("affiliateNote")} />
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={p("title")}
+        lead={t("affiliateNote")}
+        count={items.length}
+        countLabel={t("count", { count: items.length })}
+      />
       <Section action={<MoreLink href="/mitra">{p("backToPartners")}</MoreLink>}>
         <ul className="grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
           {items.map((e) => (
             <li key={e.slug} className="bg-[var(--bg)]"><EventCard event={e} /></li>
           ))}
+          <SelPengisi jumlah={items.length} kolom={2} />
+          <SelPengisi jumlah={items.length} kolom={3} />
         </ul>
       </Section>
     </>

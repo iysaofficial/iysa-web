@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
 
-import { PageHeader, Section, BackLink } from "@/components/ui";
+import { PageHeader, Section, BackLink, SelPengisi } from "@/components/ui";
 import { EventCard } from "@/components/event-card";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allEvents } from "@/lib/data";
@@ -153,6 +153,8 @@ export default async function SeriPage({
               <EventCard event={e} />
             </li>
           ))}
+          <SelPengisi jumlah={seri.edisi.length} kolom={2} tampak="block lg:hidden" />
+          <SelPengisi jumlah={seri.edisi.length} kolom={3} />
         </ul>
       </Section>
     </>

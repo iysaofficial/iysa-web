@@ -8,7 +8,12 @@ import { BackLink, ButtonLink, Pill, Section } from "@/components/ui";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allAffiliates, affiliateBySlug } from "@/lib/data";
 import { assetUrl, logoUrl } from "@/lib/assets";
-import { affiliateCopy, affiliateCountry, affiliateNames, unverifiedCountry } from "@/content/affiliates";
+import {
+  affiliateCopy,
+  affiliateCountry,
+  affiliateNames,
+  unverifiedCountry,
+} from "@/content/affiliates";
 
 /** 13 komponen React → satu rute. */
 export function generateStaticParams() {
@@ -35,11 +40,15 @@ export async function generateMetadata({
     path: `/mitra/${a.slug}`,
     title: name,
     // Deskripsi dipotong di batas kata, bukan di tengah kata.
-    description: copy.replace(/\s+/g, " ").slice(0, 300).replace(/\s\S*$/, ""),
+    description: copy
+      .replace(/\s+/g, " ")
+      .slice(0, 300)
+      .replace(/\s\S*$/, ""),
     og: {
       eyebrow: "IYSA",
       heading: name,
-      meta: country && !unverifiedCountry.has(a.slug) ? country[locale] : undefined,
+      meta:
+        country && !unverifiedCountry.has(a.slug) ? country[locale] : undefined,
     },
     type: "article",
   });
@@ -65,7 +74,9 @@ export default async function AffiliateDetail({
 
   // Foto dokumentasi acara; hanya MIYIO yang punya (dua buah). Yang berkasnya
   // tidak ada di repo lama disaring di sini, bukan dirender jadi kotak 404.
-  const dokumentasi = a.images.map((p) => assetUrl(p)).filter((u): u is string => Boolean(u));
+  const dokumentasi = a.images
+    .map((p) => assetUrl(p))
+    .filter((u): u is string => Boolean(u));
 
   /**
    * Judul seksi tautan mengikuti isinya.
@@ -77,6 +88,29 @@ export default async function AffiliateDetail({
    */
   const adaGaleri = a.links.some((l) => l.url.includes("/drive/folders/"));
   const judulTautan = adaGaleri ? t("gallery") : t("links");
+
+  const labelTautan = (judulAsli: string | null) => {
+    if (!judulAsli) return t("openGallery");
+    // Perbaikan salah salin di data warisan: halaman PISF menuliskan "Gallery BYSCC"
+    const bersih =
+      a.slug === "phatthalung-international-science-fair" &&
+      /BYSCC/i.test(judulAsli)
+        ? judulAsli.replace(/BYSCC/gi, "PISF")
+        : judulAsli;
+    if (locale === "id") {
+      return bersih
+        .replace(/^Gallery\b/i, "Galeri")
+        .replace(/^Press Release\b/i, "Siaran Pers")
+        .replace(/^Guidebook\b/i, "Buku Panduan");
+    }
+    return bersih;
+  };
+
+  const judulVideo = a.sections[0]
+    ? locale === "id"
+      ? a.sections[0].replace(/^After Event\b/i, "Dokumentasi")
+      : a.sections[0]
+    : t("afterEvent");
 
   return (
     <>
@@ -105,7 +139,9 @@ export default async function AffiliateDetail({
           <div className="grid gap-8 md:grid-cols-12 md:gap-12">
             <div className="md:col-span-8">
               {showCountry && <Pill tone="teal">{country[locale]}</Pill>}
-              <h1 className="rise mt-4 text-display text-[var(--navy)]">{name}</h1>
+              <h1 className="rise mt-4 text-display text-[var(--navy)]">
+                {name}
+              </h1>
               <div className="prose-ink mt-6 text-lead">
                 {copy.split("\n\n").map((para, i) => (
                   <p key={i}>{para}</p>
@@ -131,7 +167,7 @@ export default async function AffiliateDetail({
 
       {/* Video after-event, kalau ada. */}
       {a.videos.length > 0 && (
-        <Section eyebrow={t("afterEvent")} title={a.sections[0] ?? t("afterEvent")}>
+        <Section eyebrow={t("afterEvent")} title={judulVideo}>
           <ul className="grid gap-8 md:grid-cols-2">
             {a.videos.map((id) => (
               <li key={id}>
@@ -156,7 +192,7 @@ export default async function AffiliateDetail({
           memanen <img> pertama sebagai logo sehingga keduanya ikut tertinggal
           waktu migrasi. */}
       {dokumentasi.length > 0 && (
-        <Section eyebrow={t("documentation")} title={t("documentation")}>
+        <Section eyebrow={t("documentationEyebrow")} title={t("documentation")}>
           {/* Rasio 4/5 mengikuti berkasnya (1080×1350), bukan sebaliknya:
               dengan bingkai mendatar, baris bawah kedua gambar — nama sekolah
               dan asal delegasi — terpotong habis. Lebarnya dibatasi supaya dua
@@ -185,11 +221,11 @@ export default async function AffiliateDetail({
           "Buka galeri di Google Drive", jadi satu-satunya cara tahu bahwa
           sebuah tombol membuka siaran pers dan bukan galeri adalah mengkliknya. */}
       {a.links.length > 0 && (
-        <Section eyebrow={judulTautan} title={judulTautan} sunk>
+        <Section eyebrow={t("resourcesEyebrow")} title={judulTautan} sunk>
           <div className="flex flex-wrap gap-3">
             {a.links.map((l) => (
               <ButtonLink key={l.url} href={l.url} tone="outline" external>
-                {l.title ?? t("openGallery")}
+                {labelTautan(l.title)}
               </ButtonLink>
             ))}
           </div>

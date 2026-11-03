@@ -65,7 +65,11 @@ export function SubscribeForm({ compact = false }: { compact?: boolean }) {
         <button
           type="submit"
           disabled={state === "sending"}
-          className="shrink-0 rounded bg-[var(--coral)] px-4 py-2 text-[14px] font-semibold text-[var(--on-coral)] transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 disabled:opacity-60"
+          className={`shrink-0 rounded-full px-5 py-2 text-[14px] font-semibold transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 disabled:opacity-60 ${
+            compact
+              ? "bg-[var(--navy)] text-[var(--on-navy)]"
+              : "bg-[var(--coral)] text-[var(--on-coral)]"
+          }`}
         >
           {state === "sending" ? t("subscribing") : t("subscribeCta")}
         </button>
