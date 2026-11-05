@@ -98,6 +98,7 @@ function terjemahDivisi(kunci: string, locale: Locale): string {
 }
 
 const JABATAN_TERJEMAHAN: Record<string, { id: string; en: string }> = {
+  "Owner & Founder": { id: "Pendiri & Pemilik", en: "Owner & Founder" },
   "Founder & Owner": { id: "Pendiri & Pemilik", en: "Founder & Owner" },
   "General Manager": { id: "Manajer Umum", en: "General Manager" },
   Supervisor: { id: "Supervisor", en: "Supervisor" },
@@ -129,23 +130,36 @@ function terjemahJabatan(jabatan: string, locale: Locale): string {
   return JABATAN_TERJEMAHAN[jabatan.trim()]?.[locale] ?? jabatan;
 }
 
-/* ── Kartu orang ────────────────────────────────────────────────────────
+/* ── Kartu orang (Tata Letak Hybrid) ────────────────────────────────────
  *
- * Dua puluh dua orang, dua puluh dua foto studio berlatar seragam — aset yang
- * sebelumnya tidak dimanfaatkan. Semuanya dalam rasio yang sama, dengan
- * `object-top` supaya wajah tidak pernah terpotong berapa pun tinggi fotonya.
+ * Menggabungkan keunggulan editorial grid situs baru dengan hierarki visual
+ * jelas antara Pimpinan/Koordinator dan Staf:
+ * - Pimpinan, Koordinator Divisi, dan IT tampil dalam kartu TEGAK (potret 4:5)
+ *   di sebelah kiri dengan lencana peran.
+ * - Staf divisi tampil dalam kartu MENDATAR (foto di kiri, nama & jabatan di
+ *   kanan) dalam kisi 2 kolom di sebelah kanan, sehingga hierarki langsung
+ *   terbaca dan ruang kanan terisi seimbang.
+ * - Seluruh bingkai foto diberi gradasi studio halus berbasis `--navy` agar
+ *   aset foto PNG transparan tampil hidup baik di tema terang maupun gelap.
  */
+
+const LATAR_STUDIO =
+  "bg-[var(--bg-sunk)] bg-gradient-to-b from-[var(--navy)]/[0.06] to-[var(--navy)]/[0.18]";
 
 function KartuOrang({
   person,
   ukuran = "biasa",
+  orientasi = "tegak",
   label,
+  nadaLabel = "teal",
   idKartu,
   locale,
 }: {
   person: Person;
   ukuran?: "besar" | "sedang" | "biasa";
+  orientasi?: "tegak" | "mendatar";
   label?: string;
+  nadaLabel?: "teal" | "navy";
   idKartu: string;
   locale: Locale;
 }) {
@@ -156,39 +170,72 @@ function KartuOrang({
     .map((p) => photoUrl(p))
     .filter((u): u is string => Boolean(u));
 
+  if (orientasi === "mendatar") {
+    return (
+      <div className="group flex h-full items-stretch border border-[var(--line)] bg-[var(--bg)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--border)]">
+        <div
+          className={`relative aspect-[4/5] w-[112px] shrink-0 overflow-hidden border-r border-[var(--line)] sm:w-[132px] ${LATAR_STUDIO}`}
+        >
+          <FotoOrang
+            nama={person.name}
+            urls={semuaFoto}
+            id={idKartu}
+            sizes="(max-width: 640px) 112px, 132px"
+            posisiIndikator="top-2 left-2"
+          />
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col justify-center px-4 py-3.5 sm:px-5 sm:py-4">
+          {label && (
+            <span className="mb-1.5 inline-block">
+              <Pill tone={nadaLabel}>{label}</Pill>
+            </span>
+          )}
+          <p className="text-[15.5px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)] sm:text-[16.5px]">
+            {person.name}
+          </p>
+          <p className="mt-1 text-[12.5px] leading-snug text-[var(--ink-muted)] sm:text-[13px]">
+            {terjemahJabatan(person.position, locale)}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const namaKelas =
     ukuran === "besar"
-      ? "text-title text-[var(--navy)]"
+      ? "text-[18px] sm:text-[20px] font-bold text-[var(--navy)]"
       : ukuran === "sedang"
-        ? "text-[17px] font-semibold text-[var(--ink)]"
-        : "text-[14.5px] font-semibold text-[var(--ink)]";
+        ? "text-[16.5px] sm:text-[17.5px] font-semibold text-[var(--ink)]"
+        : "text-[15px] font-semibold text-[var(--ink)]";
 
   return (
-    <div className="group flex flex-col gap-3">
-      <div className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
+    <div className="group flex h-full flex-col border border-[var(--line)] bg-[var(--bg)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--border)]">
+      <div
+        className={`relative aspect-[4/5] overflow-hidden border-b border-[var(--line)] ${LATAR_STUDIO}`}
+      >
         <FotoOrang
           nama={person.name}
           urls={semuaFoto}
           id={idKartu}
           sizes={
             ukuran === "besar"
-              ? "(max-width: 768px) 90vw, 420px"
+              ? "(max-width: 768px) 90vw, 380px"
               : ukuran === "sedang"
-                ? "(max-width: 768px) 45vw, 260px"
+                ? "(max-width: 768px) 60vw, 280px"
                 : "(max-width: 640px) 45vw, 200px"
           }
-          lebarBingkai={ukuran === "biasa" ? "w-8 sm:w-9" : "w-9 sm:w-11"}
+          posisiIndikator="top-2.5 right-2.5"
         />
       </div>
 
-      <div>
+      <div className="flex flex-1 flex-col justify-center p-4 sm:p-5">
         {label && (
-          <span className="mb-1.5 inline-block">
-            <Pill tone="teal">{label}</Pill>
+          <span className="mb-2 inline-block">
+            <Pill tone={nadaLabel}>{label}</Pill>
           </span>
         )}
         <p className={`leading-snug ${namaKelas}`}>{person.name}</p>
-        <p className="mt-0.5 text-[12.5px] leading-snug text-[var(--ink-faint)]">
+        <p className="mt-1 text-[12.5px] leading-snug text-[var(--ink-muted)] sm:text-[13px]">
           {terjemahJabatan(person.position, locale)}
         </p>
       </div>
@@ -216,24 +263,9 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
         countLabel={t("people", { count: total })}
       />
 
-      {/* ── Pimpinan ───────────────────────────────────────────────────
-          Satu pita terkomposisi, bukan tiga pita berisi satu orang. Pendiri
-          mengambil lima kolom dengan namanya dalam ukuran judul; dua atasan
-          berikutnya berbagi sisanya. */}
+      {/* ── Pimpinan ─────────────────────────────────────────────────── */}
       <Section eyebrow={t("leadershipEyebrow")} title={t("leadershipTitle")}>
-        {/*
-          Tiga kartu berukuran sama dalam satu baris.
-
-          Percobaan pertama memberi pendiri lima kolom dan dua lainnya berbagi
-          tujuh — hasilnya fotonya jauh lebih tinggi daripada dua tetangganya
-          dan meninggalkan lubang kosong besar di kanan bawah. Penonjolan
-          pendiri sekarang lewat ukuran namanya, bukan ukuran fotonya; barisnya
-          jadi rata dan terbaca sebagai satu kesatuan.
-        */}
-        {/* Dua kolom di ponsel, bukan satu. Selebar layar, tiap foto jadi
-            ~460px tinggi dan tiga di antaranya memenuhi hampir dua layar penuh
-            sebelum divisi pertama terlihat. */}
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:gap-10">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-8">
           {pendiri && (
             <KartuOrang
               person={pendiri}
@@ -254,11 +286,7 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
         </div>
       </Section>
 
-      {/* ── Divisi ─────────────────────────────────────────────────────
-          Tiap divisi jadi bloknya sendiri: koordinator ditonjolkan di kiri,
-          anggotanya di kanan, dengan jumlah anggota sebagai angka mono besar.
-          Sebelumnya keempat belas staf ini tercampur dalam satu kisi tanpa
-          penanda divisi sama sekali. */}
+      {/* ── Divisi (Hybrid: Koordinator/IT Vertikal di Kiri, Staf Horizontal 2 Kolom di Kanan) ── */}
       {divisi.map((d, i) => {
         const jumlahOrang = 1 + d.anggota.length;
         const idDivisi = d.kunci.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -279,22 +307,25 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
               </p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-12 md:gap-10">
-              <div className="w-1/2 pr-3 md:col-span-3 md:w-auto md:pr-0">
+            <div className="grid items-start gap-6 md:grid-cols-12 md:gap-8">
+              <div className="w-full max-w-[260px] md:col-span-4 md:max-w-none lg:col-span-3">
                 <KartuOrang
                   person={d.koordinator}
                   ukuran="sedang"
+                  orientasi="tegak"
                   label={t("coordinator")}
+                  nadaLabel="teal"
                   idKartu={`koord-${idDivisi}`}
                   locale={locale}
                 />
               </div>
               {d.anggota.length > 0 && (
-                <ul className="rise-stagger grid grid-cols-2 gap-6 sm:grid-cols-3 md:col-span-9 lg:grid-cols-4">
+                <ul className="rise-stagger grid grid-cols-1 gap-4 sm:grid-cols-2 md:col-span-8 lg:col-span-9 lg:gap-5">
                   {d.anggota.map((p, idx) => (
                     <li key={`${p.name}-${p.position}`}>
                       <KartuOrang
                         person={p}
+                        orientasi="mendatar"
                         idKartu={`anggota-${idDivisi}-${idx}`}
                         locale={locale}
                       />

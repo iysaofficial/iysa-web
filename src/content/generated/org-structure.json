@@ -1,6 +1,6 @@
 [
   {
-    "name": "Deni Irawan, M. Pd",
+    "name": "Deni Irawan, M.Pd",
     "position": "Owner & Founder",
     "photo": "/assets/images/allimg/pa_den_r1nzbs.png",
     "photos": [
@@ -8,7 +8,7 @@
     ],
     "children": [
       {
-        "name": "Anggraini, A. Md",
+        "name": "Anggraini, A.Md",
         "position": "General Manager",
         "photo": "/assets/images/allimg/bu_en2_ejstat.png",
         "photos": [
@@ -46,18 +46,6 @@
                 ],
                 "children": [
                   {
-                    "name": "Risnawati",
-                    "position": "Administration Staff",
-                    "photo": "/assets/images/allimg/risna_sejmjx.png",
-                    "photos": [
-                      "/assets/images/allimg/risna_sejmjx.png",
-                      "/assets/images/allimg/63.png",
-                      "/assets/images/allimg/64.png",
-                      "/assets/images/allimg/62.png"
-                    ],
-                    "children": []
-                  },
-                  {
                     "name": "Nur Azizah, S.M",
                     "position": "Administration Staff",
                     "photo": "/assets/images/allimg/azizah_dcmxes.png",
@@ -87,6 +75,16 @@
                       "/assets/images/allimg/khansa1_ler8ob.png",
                       "/assets/images/allimg/khansa2_vghfvd.png",
                       "/assets/images/allimg/khansa3_jgqjft.png"
+                    ],
+                    "children": []
+                  },
+                  {
+                    "name": "Adhe Alvita Wisyandri, S.Ak",
+                    "position": "Administration Staff",
+                    "photo": "/assets/images/allimg/vita 1.png",
+                    "photos": [
+                      "/assets/images/allimg/vita 1.png",
+                      "/assets/images/allimg/vita 2.png"
                     ],
                     "children": []
                   },
@@ -169,6 +167,16 @@
                     "photos": [
                       "/assets/images/allimg/49.png",
                       "/assets/images/allimg/48.png"
+                    ],
+                    "children": []
+                  },
+                  {
+                    "name": "Rangga Saputra",
+                    "position": "Promotion and Publication Staff",
+                    "photo": "/assets/images/allimg/rangga 1.png",
+                    "photos": [
+                      "/assets/images/allimg/rangga 1.png",
+                      "/assets/images/allimg/rangga 2.png"
                     ],
                     "children": []
                   },

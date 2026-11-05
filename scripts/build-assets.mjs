@@ -26,7 +26,11 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const OLD_PUBLIC = join(here, "..", "..", ".old", "public");
+const OLD_CANDIDATES = [
+  join(here, "..", "..", ".old", "public"),
+  join(here, "..", "..", "Iysa", "public"),
+];
+const OLD_PUBLIC = OLD_CANDIDATES.find((d) => existsSync(d)) ?? OLD_CANDIDATES[0];
 const GEN = join(here, "..", "src", "content", "generated");
 const OUT = join(here, "..", "public", "media");
 
@@ -35,10 +39,13 @@ const readJSON = (f) => JSON.parse(readFileSync(join(GEN, f), "utf8"));
 /* ── 1. Kumpulkan rujukan ──────────────────────────────────────────── */
 
 const refs = new Set();
-const note = (p) => {
+const teamRefs = new Set();
+const note = (p, isTeam = false) => {
   if (typeof p !== "string" || !p.trim()) return;
   if (/^https?:/i.test(p)) return; // aset luar, bukan urusan skrip ini
-  refs.add(p.replace(/^\.?\//, "")); // "./assets/images/x.png" → "assets/images/x.png"
+  const clean = p.replace(/^\.?\//, ""); // "./assets/images/x.png" → "assets/images/x.png"
+  refs.add(clean);
+  if (isTeam) teamRefs.add(clean);
 };
 
 for (const e of readJSON("events.json")) {
@@ -60,7 +67,7 @@ for (const h of readJSON("event-highlights.json")) note(h.poster);
 // halaman tim, jadi berkasnya harus ikut dikonversi juga.
 const walkPeople = (nodes) => {
   for (const n of nodes) {
-    for (const p of n.photos ?? [n.photo]) note(p);
+    for (const p of n.photos ?? [n.photo]) note(p, true);
     walkPeople(n.children ?? []);
   }
 };
@@ -68,7 +75,7 @@ walkPeople(readJSON("org-structure.json"));
 
 // expertTeam.json hanya nama berkas, tanpa folder.
 for (const f of readJSON("expert-images.json")) {
-  if (typeof f === "string") note(`assets/images/team/${f}`);
+  if (typeof f === "string") note(`assets/images/team/${f}`, true);
 }
 
 // Logo IYSA dipakai footer & header versi lama; simpan keduanya.
@@ -78,9 +85,10 @@ note("assets/images/logo/iysa_logo.WebP");
 /* ── 2. Aturan ukuran per folder ───────────────────────────────────── */
 
 const widthFor = (rel) => {
+  if (teamRefs.has(rel)) return 1400;
   if (rel.includes("/poster/")) return 1400;
   if (rel.includes("/newsletter/")) return 1000;
-  if (rel.includes("/team/")) return 800;
+  if (rel.includes("/team/")) return 1200;
   if (rel.includes("/venue/")) return 1200;
   if (rel.includes("/logo")) return 600; // logo & "logo afiliasi"
   return 1200;
@@ -148,15 +156,22 @@ const wrongExt = [];
 for (const rel of [...refs].sort()) {
   if (rel === "-" || rel.length < 4) continue; // rujukan kosong di data lama
 
+  const stem = outName(rel);
+  const existingWebp = join(OUT, `${stem}.webp`);
   const src = resolve(rel);
   if (!src) {
+    if (existsSync(existingWebp)) {
+      outBytes += statSync(existingWebp).size;
+      map[rel] = `/media/${stem}.webp`;
+      copied++;
+      continue;
+    }
     missing.push(rel);
     continue;
   }
   if (!src.endsWith(rel)) wrongExt.push(`${rel} → ${basename(src)}`);
 
   const ext = extname(src).toLowerCase(); // dari berkas nyata, bukan rujukan
-  const stem = outName(rel);
   mkdirSync(join(OUT, dirname(stem)), { recursive: true });
 
   inBytes += statSync(src).size;
@@ -172,11 +187,23 @@ for (const rel of [...refs].sort()) {
   }
 
   const dest = join(OUT, `${stem}.webp`);
+  const isTeamPhoto = teamRefs.has(rel);
+  const forceAll = process.argv.includes("--all");
+  if (!isTeamPhoto && !forceAll && existsSync(dest)) {
+    outBytes += statSync(dest).size;
+    map[rel] = `/media/${stem}.webp`;
+    copied++;
+    continue;
+  }
   try {
     await sharp(src)
       .rotate() // hormati EXIF orientation sebelum resize
       .resize({ width: widthFor(rel), withoutEnlargement: true })
-      .webp({ quality: 82, effort: 5 })
+      .webp(
+        isTeamPhoto
+          ? { quality: 96, alphaQuality: 100, smartSubsample: false, effort: 4 }
+          : { quality: 82, effort: 4 },
+      )
       .toFile(dest);
     outBytes += statSync(dest).size;
     map[rel] = `/media/${stem}.webp`;

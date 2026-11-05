@@ -40,7 +40,7 @@ export default async function ExpertTeamPage({ params }: { params: Promise<{ loc
           >
             {images.map((src) => (
               <li key={src} className="relative aspect-[4/5] overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
-                <Image src={src} alt="" fill sizes="(max-width: 640px) 45vw, 200px" className="object-cover" />
+                <Image src={src} alt="" fill unoptimized className="object-cover" />
               </li>
             ))}
           </ul>
