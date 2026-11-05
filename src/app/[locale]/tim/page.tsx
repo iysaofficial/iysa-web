@@ -89,6 +89,8 @@ function namaDivisi(jabatan: string) {
 const NAMA_DIVISI_TERJEMAHAN: Record<string, { id: string; en: string }> = {
   Administration: { id: "Administrasi", en: "Administration" },
   "Promotion & Publication": { id: "Promosi & Publikasi", en: "Promotion & Publication" },
+  "Promotion and Publication": { id: "Promosi & Publikasi", en: "Promotion & Publication" },
+  "Research & Development": { id: "Riset & Pengembangan", en: "Research & Development" },
   "Research and Development": { id: "Riset & Pengembangan", en: "Research & Development" },
   IT: { id: "IT", en: "IT" },
 };
@@ -111,13 +113,29 @@ const JABATAN_TERJEMAHAN: Record<string, { id: string; en: string }> = {
     id: "Koordinator Tim Promosi & Publikasi",
     en: "Promotion & Publication Team Coordinator",
   },
+  "Promotion and Publication Team Coordinator": {
+    id: "Koordinator Tim Promosi & Publikasi",
+    en: "Promotion & Publication Team Coordinator",
+  },
   "Promotion & Publication Staff": {
     id: "Staf Promosi & Publikasi",
     en: "Promotion & Publication Staff",
   },
+  "Promotion and Publication Staff": {
+    id: "Staf Promosi & Publikasi",
+    en: "Promotion & Publication Staff",
+  },
+  "Research & Development Team Coordinator": {
+    id: "Koordinator Tim Riset & Pengembangan",
+    en: "Research & Development Team Coordinator",
+  },
   "Research and Development Team Coordinator": {
     id: "Koordinator Tim Riset & Pengembangan",
     en: "Research & Development Team Coordinator",
+  },
+  "Research & Development Staff": {
+    id: "Staf Riset & Pengembangan",
+    en: "Research & Development Staff",
   },
   "Research and Development Staff": {
     id: "Staf Riset & Pengembangan",
@@ -313,7 +331,11 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
                   person={d.koordinator}
                   ukuran="sedang"
                   orientasi="tegak"
-                  label={t("coordinator")}
+                  label={
+                    /coordinator/i.test(d.koordinator.position) || d.anggota.length > 0
+                      ? t("coordinator")
+                      : undefined
+                  }
                   nadaLabel="teal"
                   idKartu={`koord-${idDivisi}`}
                   locale={locale}
