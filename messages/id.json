@@ -163,7 +163,9 @@
     "count": "{count} terbitan",
     "backToNewsletter": "Semua terbitan",
     "issueOf": "Terbitan {month} {year}",
-    "batchOf": "Edisi Batch {batch} · {year}"
+    "batchOf": "Edisi Batch {batch} · {year}",
+    "readPdf": "Baca PDF",
+    "readPdfLead": "{pages, plural, =0 {Terbitan ini dibuka sebagai PDF di tab baru.} other {Terbitan ini dibuka sebagai PDF ({pages} halaman) di tab baru.}}"
   },
   "team": {
     "title": "Tim",
@@ -261,7 +263,27 @@
     "lead": "Dokumen kurasi dan daftar karya terpilih.",
     "openDocument": "Buka dokumen",
     "openFolder": "Buka folder",
-    "documentsTitle": "Dokumen resmi"
+    "documentsTitle": "Dokumen resmi",
+    "seriesEyebrow": "Puspresnas",
+    "seriesTitle": "Proses kurasi per ajang",
+    "seriesLead": "Linimasa pengajuan kurasi ke Puspresnas untuk tiap ajang IYSA, dicatat tim RnD di dasbor.",
+    "seriesCount": "{count} ajang",
+    "stepOf": "Langkah {n} dari {total}",
+    "notStarted": "Belum dijalani",
+    "preparation": "Persiapan",
+    "preparationLead": "Pengajuan kurasi ke Puspresnas untuk edisi ini sedang disiapkan.",
+    "edition": "Edisi {tahun}",
+    "documents": "Dokumen kurasi",
+    "documentsCount": "{count} dokumen",
+    "noDocuments": "Belum ada dokumen yang diterbitkan untuk edisi ini.",
+    "viewDocuments": "Lihat dokumen",
+    "archiveTitle": "Arsip folder Drive",
+    "ratingStars": "{n} bintang",
+    "unavailable": "Data kurasi belum bisa dimuat dari dasbor. Coba lagi sebentar lagi.",
+    "documentation": "Dokumentasi",
+    "administration": "Administrasi",
+    "openPdf": "Buka PDF",
+    "latestStatus": "Status terakhir"
   },
   "calendar": {
     "title": "Kalender event",

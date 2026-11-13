@@ -6,8 +6,7 @@ import { routing, type Locale } from "@/i18n/routing";
 
 import { BackLink, ButtonLink, Pill, Section } from "@/components/ui";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
-import { allIssues, issueBySlug } from "@/lib/data";
-import { coverUrl } from "@/lib/assets";
+import { semuaTerbitan, terbitanBySlug, sampulTerbitan, pdfTerbitan } from "@/lib/newsletter";
 import { judulNewsletter } from "@/lib/teks-event";
 
 const MONTH: Record<Locale, string[]> = {
@@ -20,11 +19,16 @@ const MONTH: Record<Locale, string[]> = {
  * membaca kunci JSON yang berbeda. Menambah terbitan baru sekarang berarti
  * menambah satu baris data, bukan menulis berkas dan mendaftarkan rute.
  */
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const { terbitan } = await semuaTerbitan();
   return routing.locales.flatMap((locale) =>
-    allIssues().map((i) => ({ locale, slug: i.slug })),
+    terbitan.map((i) => ({ locale, slug: i.slug })),
   );
 }
+
+/** Terbitan baru di dasbor tetap bisa dibuka sebelum build berikutnya. */
+export const dynamicParams = true;
+export const revalidate = 900;
 
 export async function generateMetadata({
   params,
@@ -32,7 +36,7 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const issue = issueBySlug(slug);
+  const issue = await terbitanBySlug(slug);
   if (!issue) return {};
 
   const t = await getTranslations({ locale, namespace: "newsletter" });
@@ -64,11 +68,11 @@ export default async function IssuePage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const issue = issueBySlug(slug);
+  const issue = await terbitanBySlug(slug);
   if (!issue) notFound();
 
   const t = await getTranslations("newsletter");
-  const cover = coverUrl(issue.cover);
+  const cover = sampulTerbitan(issue);
   const judul = judulNewsletter(issue, locale);
 
   const label = issue.batch
@@ -77,9 +81,10 @@ export default async function IssuePage({
       ? t("issueOf", { month: MONTH[locale][issue.month], year: issue.year })
       : String(issue.year);
 
-  // Tautan Drive dari data lama berupa /preview — bentuk yang bisa disematkan.
-  // Untuk unduhan, /view yang benar.
-  const viewUrl = issue.driveId ? `https://drive.google.com/file/d/${issue.driveId}/view` : null;
+  // PDF dari dasbor bila ada; kalau tidak, tautan Drive lama (/preview untuk
+  // disematkan, /view untuk diunduh).
+  const pdf = pdfTerbitan(issue);
+  const viewUrl = pdf.unduh;
 
   return (
     <>
@@ -137,7 +142,7 @@ export default async function IssuePage({
               keputusan apa pun.
             */}
 
-            {issue.hasPdf && viewUrl && (
+            {viewUrl && (
               <div className="mt-6">
                 <ButtonLink href={viewUrl} tone="primary" external>
                   {t("download")}
@@ -148,14 +153,21 @@ export default async function IssuePage({
 
           {/* Pembaca PDF */}
           <div className="md:col-span-8">
-            {issue.hasPdf && issue.pdfPreview ? (
+            {pdf.sematan ? (
               <iframe
-                src={issue.pdfPreview}
+                src={pdf.sematan}
                 title={judul}
                 loading="lazy"
                 className="aspect-[3/4] w-full border border-[var(--line)] bg-[var(--bg-sunk)] md:aspect-[4/5]"
                 allow="autoplay"
               />
+            ) : viewUrl ? (
+              <div className="flex aspect-[4/5] flex-col items-center justify-center gap-5 border border-dashed border-[var(--border)] px-8">
+                <p className="max-w-[36ch] text-center text-[15px] leading-relaxed text-[var(--ink-muted)]">
+                  {t("readPdfLead", { pages: issue.halaman ?? 0 })}
+                </p>
+                <ButtonLink href={viewUrl} tone="navy" external>{t("readPdf")}</ButtonLink>
+              </div>
             ) : (
               /*
                 Lima terbitan awal 2022 tercatat di situs lama tanpa tautan PDF

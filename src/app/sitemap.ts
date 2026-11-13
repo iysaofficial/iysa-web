@@ -2,7 +2,9 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { siteUrl } from "@/lib/seo";
 import { allStaticPaths } from "@/lib/nav";
-import { allEvents, allIssues, allAffiliates } from "@/lib/data";
+import { allEvents, allAffiliates } from "@/lib/data";
+import { semuaTerbitan } from "@/lib/newsletter";
+import { semuaSeriKurasi } from "@/lib/kurasi";
 import { curation } from "@/content/external";
 
 /**
@@ -13,8 +15,9 @@ import { curation } from "@/content/external";
  * versi Indonesia dan Inggris terindeks sebagai halaman setara dan bukan
  * sebagai duplikat.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const [{ terbitan }, seriKurasi] = await Promise.all([semuaTerbitan(), semuaSeriKurasi()]);
 
   const paths: { path: string; priority: number }[] = [
     ...allStaticPaths
@@ -24,9 +27,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       .map((p) => ({ path: p, priority: p === "/" ? 1 : 0.7 })),
 
     ...allEvents().map((e) => ({ path: `/event/${e.slug}`, priority: 0.8 })),
-    ...allIssues().map((i) => ({ path: `/newsletter/${i.slug}`, priority: 0.5 })),
+    ...terbitan.map((i) => ({ path: `/newsletter/${i.slug}`, priority: 0.5 })),
     ...allAffiliates().map((a) => ({ path: `/mitra/${a.slug}`, priority: 0.6 })),
     ...curation.folders.map((f) => ({ path: `/kurasi/${f.key}`, priority: 0.4 })),
+    ...seriKurasi.map((s) => ({ path: `/kurasi/${s.slug}`, priority: 0.5 })),
   ];
 
   return paths.flatMap(({ path, priority }) =>

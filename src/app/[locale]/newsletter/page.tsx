@@ -7,8 +7,7 @@ import type { Locale } from "@/i18n/routing";
 import { PageHeader, Pill, Section } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { pageMetadata } from "@/lib/seo";
-import { allIssues, issueYears, issuesByYear } from "@/lib/data";
-import { coverUrl } from "@/lib/assets";
+import { semuaTerbitan, sampulTerbitan } from "@/lib/newsletter";
 import { judulNewsletter } from "@/lib/teks-event";
 
 export async function generateMetadata({
@@ -18,12 +17,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "newsletter" });
+  const { terbitan } = await semuaTerbitan();
   return pageMetadata({
     locale,
     path: "/newsletter",
     title: t("title"),
     description: t("lead"),
-    og: { eyebrow: "IYSA", heading: t("title"), meta: t("count", { count: allIssues().length }) },
+    og: { eyebrow: "IYSA", heading: t("title"), meta: t("count", { count: terbitan.length }) },
   });
 }
 
@@ -36,7 +36,8 @@ export default async function NewsletterIndex({
   setRequestLocale(locale);
 
   const t = await getTranslations("newsletter");
-  const years = issueYears();
+  const { terbitan } = await semuaTerbitan();
+  const years = [...new Set(terbitan.map((i) => i.year))].sort((a, b) => b - a);
 
   return (
     <>
@@ -44,8 +45,8 @@ export default async function NewsletterIndex({
         eyebrow="Newsletter"
         title={t("title")}
         lead={t("lead")}
-        count={allIssues().length}
-        countLabel={t("count", { count: allIssues().length })}
+        count={terbitan.length}
+        countLabel={t("count", { count: terbitan.length })}
         aside={
           <>
             {/* Tautan lompat per tahun — 48 terbitan terlalu banyak untuk digulir buta. */}
@@ -65,7 +66,7 @@ export default async function NewsletterIndex({
       />
 
       {years.map((year) => {
-        const items = issuesByYear(year);
+        const items = terbitan.filter((i) => i.year === year);
         return (
           <section key={year} id={`tahun-${year}`} className="scroll-mt-20">
             <div className="shell py-12">
@@ -80,7 +81,7 @@ export default async function NewsletterIndex({
 
               <ul className="rise-stagger grid gap-7 sm:grid-cols-3 lg:grid-cols-5">
                 {items.map((issue) => {
-                  const cover = coverUrl(issue.cover);
+                  const cover = sampulTerbitan(issue);
                   const judul = judulNewsletter(issue, locale);
                   return (
                     <li key={issue.slug}>

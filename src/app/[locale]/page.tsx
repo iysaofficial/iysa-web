@@ -13,7 +13,8 @@ import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
 import { ambilSemuaSeriDashboard } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
 import { pageMetadata } from "@/lib/seo";
-import { stats, allEvents, allIssues, allAffiliates } from "@/lib/data";
+import { stats, allEvents, allAffiliates } from "@/lib/data";
+import { semuaTerbitan } from "@/lib/newsletter";
 import { judulNewsletter } from "@/lib/teks-event";
 import { intro, vision, mission, goals } from "@/content/profile";
 import { affiliateNames } from "@/content/affiliates";
@@ -69,7 +70,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     })
     .slice(0, 6);
 
-  const latestIssue = allIssues().find((i) => i.hasPdf);
+  const { terbitan } = await semuaTerbitan();
+  const latestIssue = terbitan.find((i) => i.hasPdf);
 
   /* Edisi yang pendaftarannya benar-benar dibuka menurut dashboard. Ini satu-
      satunya sumber yang tahu saklarnya, dan sebagian edisi di sini belum
@@ -126,7 +128,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               { value: s.affiliates, label: t("statAffiliates") },
               { value: s.partners, label: t("statPartners") },
               { value: `${s.countries}+`, label: t("statCountries") },
-              { value: s.issues, label: t("statIssues") },
+              { value: terbitan.length, label: t("statIssues") },
               { value: s.people, label: t("statPeople") },
             ]}
           />
