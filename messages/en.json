@@ -163,7 +163,9 @@
     "count": "{count} issues",
     "backToNewsletter": "All issues",
     "issueOf": "{month} {year} issue",
-    "batchOf": "Batch {batch} Edition · {year}"
+    "batchOf": "Batch {batch} Edition · {year}",
+    "readPdf": "Read PDF",
+    "readPdfLead": "{pages, plural, =0 {This issue opens as a PDF in a new tab.} other {This issue opens as a PDF ({pages} pages) in a new tab.}}"
   },
   "team": {
     "title": "Team",
@@ -261,7 +263,27 @@
     "lead": "Curation documents and lists of selected work.",
     "openDocument": "Open document",
     "openFolder": "Open folder",
-    "documentsTitle": "Official documents"
+    "documentsTitle": "Official documents",
+    "seriesEyebrow": "Puspresnas",
+    "seriesTitle": "Curation process by event",
+    "seriesLead": "Timeline of each IYSA event's curation submission to Puspresnas, recorded by the RnD team in the dashboard.",
+    "seriesCount": "{count} events",
+    "stepOf": "Step {n} of {total}",
+    "notStarted": "Not started",
+    "preparation": "Preparation",
+    "preparationLead": "The curation submission to Puspresnas for this edition is being prepared.",
+    "edition": "{tahun} edition",
+    "documents": "Curation documents",
+    "documentsCount": "{count} documents",
+    "noDocuments": "No documents have been published for this edition yet.",
+    "viewDocuments": "View documents",
+    "archiveTitle": "Drive folder archive",
+    "ratingStars": "{n} stars",
+    "unavailable": "Curation data could not be loaded from the dashboard. Please try again shortly.",
+    "documentation": "Documentation",
+    "administration": "Administration",
+    "openPdf": "Open PDF",
+    "latestStatus": "Latest status"
   },
   "calendar": {
     "title": "Event calendar",

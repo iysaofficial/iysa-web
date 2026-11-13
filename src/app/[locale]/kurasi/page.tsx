@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { PageHeader, Section, SelPengisi } from "@/components/ui";
+import Image from "next/image";
+import { Link } from "@/i18n/navigation";
+import { PageHeader, Section, SelPengisi, EmptyState } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { curation, curationLabels, ptkDocuments, ptkDocumentLabels } from "@/content/external";
+import { semuaSeriKurasi, adaCatatan, ringkasEdisi, WARNA_NADA, tanggalKurasi } from "@/lib/kurasi";
+
+export const revalidate = 900;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -17,10 +22,62 @@ export default async function CurationPage({ params }: { params: Promise<{ local
   setRequestLocale(locale);
   const t = await getTranslations("curation");
 
+  const seri = await semuaSeriKurasi();
+
   return (
     <>
-      <PageHeader eyebrow="Puspresnas" title={t("title")} lead={t("lead")} />
-      <Section>
+      <PageHeader eyebrow="Puspresnas" title={t("title")} lead={t("lead")}
+        count={seri.length || undefined} countLabel={seri.length ? t("seriesCount", { count: seri.length }) : undefined} />
+
+      {/* Proses kurasi per ajang — dari dasbor (kurasi_progres). */}
+      <Section eyebrow={t("seriesEyebrow")} title={t("seriesTitle")} lead={t("seriesLead")} padat>
+        {seri.length === 0 ? (
+          <EmptyState title={t("unavailable")} />
+        ) : (
+          <ul className="grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
+            {seri.map((s) => {
+              const terbaru = s.edisi.find(adaCatatan);
+              const r = terbaru ? ringkasEdisi(terbaru) : null;
+              const k = r?.terakhir;
+              return (
+                <li key={s.slug} className="bg-[var(--bg)]">
+                  <Link href={`/kurasi/${s.slug}`}
+                    className="group flex h-full flex-col gap-5 p-6 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-12 w-12 shrink-0">
+                        {s.logo && <Image src={s.logo} alt="" fill sizes="48px" className="object-contain" />}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-mono text-[12px] tracking-wide text-[var(--ink-faint)]">{s.akronim}</p>
+                        <p className="text-[15.5px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">{s.nama}</p>
+                      </div>
+                    </div>
+                    {terbaru && k && (
+                      <div className="mt-auto text-[13px]">
+                        <p className="text-[var(--ink-faint)]">{t("latestStatus")} · {t("edition", { tahun: terbaru.tahun })}</p>
+                        <p className="mt-1 leading-snug text-[var(--ink)]">
+                          <span aria-hidden className="mr-2 inline-block h-2 w-2 rounded-full align-middle" style={{ background: WARNA_NADA[k.nada] }} />
+                          {k.label}{k.status ? ` — ${k.status}` : ""}
+                        </p>
+                        {k.terjadi_pada && <p className="tnum mt-0.5 text-[var(--ink-muted)]">{tanggalKurasi(k.terjadi_pada, locale)}</p>}
+                      </div>
+                    )}
+                    <div className="flex flex-wrap gap-1.5">
+                      {s.edisi.map((e) => (
+                        <span key={e.tahun} className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-[11.5px] text-[var(--ink-muted)]">{e.tahun}</span>
+                      ))}
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+            <SelPengisi jumlah={seri.length} kolom={2} />
+            <SelPengisi jumlah={seri.length} kolom={3} />
+          </ul>
+        )}
+      </Section>
+
+      <Section eyebrow={t("archiveTitle")}>
         <ul className="grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
           {curation.folders.map((f) => (
             <li key={f.key} className="bg-[var(--bg)]">
