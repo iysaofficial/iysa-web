@@ -15,22 +15,25 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 @theme {
-  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", sans-serif;
-  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Pasangan tipografi klasik:
+     - Georgia (serif) untuk judul, subjudul, kutipan visi, akronim, dan angka besar editorial.
+     - Arial (sans-serif) untuk teks isi, navigasi, tombol, lencana, label seksi, dan metadata. */
+  --font-serif: Georgia, "Times New Roman", Times, serif;
+  --font-sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-mono: Arial, "Helvetica Neue", Helvetica, sans-serif;
 
   /* Skala tipografi — rasio 1,25 dengan dua langkah besar untuk judul. */
   --text-hero: clamp(2.25rem, 1.2rem + 5.2vw, 4.5rem);
-  --text-hero--line-height: 1.03;
-  --text-hero--letter-spacing: -0.035em;
+  --text-hero--line-height: 1.05;
+  --text-hero--letter-spacing: -0.02em;
 
   --text-display: clamp(1.75rem, 1.1rem + 3vw, 3rem);
-  --text-display--line-height: 1.08;
-  --text-display--letter-spacing: -0.03em;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.015em;
 
   --text-title: clamp(1.375rem, 1.1rem + 1.2vw, 1.875rem);
   --text-title--line-height: 1.2;
-  --text-title--letter-spacing: -0.02em;
+  --text-title--letter-spacing: -0.01em;
 
   --text-lead: clamp(1.0625rem, 1rem + 0.5vw, 1.3125rem);
   --text-lead--line-height: 1.6;
@@ -209,6 +212,7 @@ body {
 }
 
 h1, h2, h3, h4 {
+  font-family: var(--font-serif);
   color: var(--ink);
   text-wrap: balance;
   font-weight: 700;
@@ -454,18 +458,18 @@ summary {
   mask: url("/media/logo/iysa-wordmark.svg") no-repeat center / contain;
 }
 
-/* Label mono huruf kecil — penanda seksi sepanjang situs. */
+/* Label sans huruf kapital kecil — penanda seksi sepanjang situs. */
 @utility eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.6875rem;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
 }
 
 @utility tnum {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* Prosa panjang: lebar baca dibatasi, bukan selebar kolom. */

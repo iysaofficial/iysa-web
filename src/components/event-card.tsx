@@ -104,14 +104,14 @@ export async function EventCard({ event }: { event: IysaEvent }) {
             />
             <div>
               <p
-                className={`font-mono text-[38px] leading-none font-medium tracking-[-0.04em] ${
+                className={`font-serif text-[38px] leading-none font-bold tracking-[-0.02em] ${
                   event.level === "international" ? "text-[var(--teal)]" : "text-[var(--navy)]"
                 }`}
               >
                 {akronimEvent(event.title)}
               </p>
               {tahunEvent(event.title) && (
-                <p className="tnum mt-3 font-mono text-[13px] tracking-[0.08em] text-[var(--ink-faint)]">
+                <p className="tnum mt-3 font-sans text-[13px] font-bold tracking-[0.08em] text-[var(--ink-faint)]">
                   {tahunEvent(event.title)}
                 </p>
               )}
@@ -133,13 +133,13 @@ export async function EventCard({ event }: { event: IysaEvent }) {
           {event.origin === "affiliate" && <Pill tone="navy">{t("originAffiliate")}</Pill>}
         </div>
 
-        <h3 className="text-[15px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)] sm:text-[16.5px]">
+        <h3 className="font-serif text-[15.5px] leading-snug font-bold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)] sm:text-[17px]">
           {judul}
         </h3>
 
         <div className="mt-auto flex flex-col gap-1 pt-2">
           {tanggalAcara && (
-            <p className="font-mono text-[11.5px] leading-snug text-[var(--ink-faint)] sm:text-[12px]">
+            <p className="font-sans text-[12px] leading-snug text-[var(--ink-faint)]">
               {tanggalAcara}
             </p>
           )}

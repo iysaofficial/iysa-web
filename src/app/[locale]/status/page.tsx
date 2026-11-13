@@ -60,8 +60,8 @@ export default async function StatusPage({
       <Section eyebrow={id ? "API dasbor" : "Dashboard API"} title={id ? "Sumber data" : "Data sources"}>
         <DefList
           items={[
-            { label: id ? "Basis" : "Base URL", value: <code className="font-mono text-[13px]">{apiConfig.base}</code> },
-            { label: "Slug", value: <code className="font-mono text-[13px]">{apiConfig.slug}</code> },
+            { label: id ? "Basis" : "Base URL", value: <code className="font-sans text-[13px]">{apiConfig.base}</code> },
+            { label: "Slug", value: <code className="font-sans text-[13px]">{apiConfig.slug}</code> },
             {
               label: "/health",
               value: (
@@ -69,7 +69,7 @@ export default async function StatusPage({
                   <Pill tone={health.ok ? "teal" : "coral"}>
                     {health.ok ? (id ? "hidup" : "online") : id ? "mati" : "offline"}
                   </Pill>
-                  <code className="font-mono text-[12px] text-[var(--ink-faint)]">{health.detail}</code>
+                  <code className="font-sans text-[12px] text-[var(--ink-faint)]">{health.detail}</code>
                 </span>
               ),
             },

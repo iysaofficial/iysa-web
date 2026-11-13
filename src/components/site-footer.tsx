@@ -24,7 +24,7 @@ export async function SiteFooter() {
                 di sini ia satu-satunya tanda merek di layar, bukan pendamping
                 navigasi, dan di 36px meridian bola dunianya ikut terbaca. */}
             <IysaWordmark size={36} />
-            <p className="mt-3 max-w-[34ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">
+            <p className="mt-3 max-w-[34ch] font-serif text-[15px] leading-relaxed text-[var(--ink-muted)]">
               {t("tagline")}
             </p>
             <p className="eyebrow mt-5">{org.name}</p>
@@ -126,7 +126,7 @@ export async function SiteFooter() {
                     href={s.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono text-[12px] tracking-wide text-[var(--ink-faint)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
+                    className="font-sans text-[12px] font-bold tracking-wide text-[var(--ink-faint)] transition-colors duration-[var(--gerak-cepat)] hover:text-[var(--teal)]"
                   >
                     {s.label}
                   </a>
@@ -136,7 +136,7 @@ export async function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-[var(--line)] pt-6 font-mono text-[11.5px] text-[var(--ink-faint)] sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-2 border-t border-[var(--line)] pt-6 font-sans text-[12px] text-[var(--ink-faint)] sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {org.shortName}. {t("rights")}
           </p>

@@ -60,7 +60,7 @@ export default async function PhotoGallery({ params }: { params: Promise<{ local
             <li key={f.year} className="bg-[var(--bg)]">
               <a href={f.url} target="_blank" rel="noreferrer"
                  className="group flex h-full flex-col justify-between gap-6 p-7 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
-                <span className="tnum font-mono text-[34px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">{f.year}</span>
+                <span className="tnum font-serif text-[34px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)]">{f.year}</span>
                 <span className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-[var(--teal)]">
                   {t("openFolder", { year: f.year })}
                   <span aria-hidden className="transition-transform duration-[var(--gerak-cepat)] group-hover:translate-x-0.5">↗</span>

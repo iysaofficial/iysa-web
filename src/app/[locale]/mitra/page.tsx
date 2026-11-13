@@ -92,7 +92,7 @@ export default async function PartnersPage({
 
                   {showCountry && <Pill tone="teal">{country[locale]}</Pill>}
 
-                  <h2 className="text-[16.5px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
+                  <h2 className="font-serif text-[17px] leading-snug font-bold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
                     {name}
                   </h2>
 

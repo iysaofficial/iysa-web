@@ -87,10 +87,10 @@ export async function KurasiPanel() {
         <div className="grid gap-10 md:grid-cols-12 md:gap-14">
           {/* Klaim dan buktinya */}
           <div className="md:col-span-7">
-            <p className="font-mono text-[11px] font-medium tracking-[0.14em] text-[var(--on-navy)]/70 uppercase">
+            <p className="font-sans text-[11px] font-bold tracking-[0.14em] text-[var(--on-navy)]/70 uppercase">
               {t("curationEyebrow")}
             </p>
-            <h2 className="mt-2 text-title">{t("curationTitle")}</h2>
+            <h2 className="mt-2 font-serif text-title">{t("curationTitle")}</h2>
             <p className="mt-4 max-w-[56ch] leading-relaxed text-[var(--on-navy)]/85">
               {t("curationLead")}
             </p>
@@ -100,7 +100,7 @@ export async function KurasiPanel() {
             <dl className="mt-9 grid grid-cols-3 gap-x-6 gap-y-4">
               {angka.map((a) => (
                 <div key={a.label} className="border-t border-[var(--on-navy)]/25 pt-3">
-                  <dd className="tnum font-mono text-[30px] leading-none font-medium tracking-[-0.03em] md:text-[38px]">
+                  <dd className="tnum font-serif text-[30px] leading-none font-bold tracking-[-0.02em] md:text-[38px]">
                     {a.nilai}
                   </dd>
                   <dt className="mt-1.5 text-[13px] leading-snug text-[var(--on-navy)]/70">
@@ -126,7 +126,7 @@ export async function KurasiPanel() {
           {/* Skala predikat */}
           <div className="md:col-span-5">
             <div className="border border-[var(--on-navy)]/25 p-6">
-              <h3 className="font-mono text-[11px] font-medium tracking-[0.14em] text-[var(--on-navy)]/70 uppercase">
+              <h3 className="font-sans text-[11px] font-bold tracking-[0.14em] text-[var(--on-navy)]/70 uppercase">
                 {t("curationScaleTitle")}
               </h3>
               <ul className="mt-4 flex flex-col">
@@ -143,7 +143,7 @@ export async function KurasiPanel() {
                     <span className="flex-1 text-[14px]">
                       {t(`curationScale${s.bintang}`)}
                     </span>
-                    <span className="tnum font-mono text-[12.5px] text-[var(--on-navy)]/70">
+                    <span className="tnum font-sans text-[12.5px] font-bold text-[var(--on-navy)]/70">
                       {s.nilai}
                     </span>
                   </li>
@@ -161,7 +161,7 @@ export async function KurasiPanel() {
         <ul className="mt-12 grid gap-px border border-[var(--on-navy)]/25 bg-[var(--on-navy)]/25 sm:grid-cols-2 lg:grid-cols-4">
           {manfaat.map(([judul, isi]) => (
             <li key={judul} className="flex flex-col gap-2 bg-[var(--navy)] p-6">
-              <h3 className="text-[15px] leading-snug font-semibold">{t(judul)}</h3>
+              <h3 className="font-serif text-[15.5px] leading-snug font-bold">{t(judul)}</h3>
               <p className="text-[14px] leading-relaxed text-[var(--on-navy)]/80">{t(isi)}</p>
             </li>
           ))}

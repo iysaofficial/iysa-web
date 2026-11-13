@@ -54,7 +54,7 @@ export default async function NewsletterIndex({
                 <a
                   key={y}
                   href={`#tahun-${y}`}
-                  className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-[11.5px] text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]"
+                  className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-sans text-[11.5px] font-bold text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]"
                 >
                   {y}
                 </a>
@@ -70,7 +70,7 @@ export default async function NewsletterIndex({
           <section key={year} id={`tahun-${year}`} className="scroll-mt-20">
             <div className="shell py-12">
               <div className="mb-8 flex items-end justify-between gap-4 border-b border-[var(--line)] pb-4">
-                <h2 className="tnum font-mono text-[26px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
+                <h2 className="tnum font-serif text-[28px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)]">
                   {year}
                 </h2>
                 <p className="text-[13px] text-[var(--ink-faint)]">
@@ -95,12 +95,12 @@ export default async function NewsletterIndex({
                               className="object-cover transition-transform duration-[var(--gerak-sedang)] group-hover:scale-[1.03]"
                             />
                           ) : (
-                            <span className="absolute inset-0 grid place-items-center px-2 text-center font-mono text-[10.5px] text-[var(--ink-faint)]">
+                            <span className="absolute inset-0 grid place-items-center px-2 text-center font-serif text-[11.5px] font-bold text-[var(--ink-faint)]">
                               {judul}
                             </span>
                           )}
                         </div>
-                        <p className="mt-3 text-[14px] leading-snug font-medium text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
+                        <p className="mt-3 font-serif text-[14.5px] leading-snug font-bold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)]">
                           {judul}
                         </p>
                         {!issue.hasPdf && (

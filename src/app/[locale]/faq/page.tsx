@@ -48,9 +48,9 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: Lo
               <li key={item.question} className="border-b border-[var(--line)] last:border-0">
                 {/* <details> — terbuka di hasil cetak dan tanpa JavaScript. */}
                 <details className="group py-5">
-                  <summary className="flex cursor-pointer items-start gap-4 text-[16.5px] leading-snug font-semibold text-[var(--ink)] marker:content-none">
+                  <summary className="flex cursor-pointer items-start gap-4 font-serif text-[17px] leading-snug font-bold text-[var(--ink)] marker:content-none">
                     <span className="flex-1">{item.question}</span>
-                    <span aria-hidden className="mt-0.5 shrink-0 text-[var(--teal)] transition-transform duration-[var(--gerak-cepat)] group-open:rotate-45">+</span>
+                    <span aria-hidden className="mt-0.5 shrink-0 font-sans text-[var(--teal)] transition-transform duration-[var(--gerak-cepat)] group-open:rotate-45">+</span>
                   </summary>
                   <p className="mt-3 max-w-[68ch] text-[15.5px] leading-relaxed text-[var(--ink-muted)]">{item.answer}</p>
                 </details>
@@ -62,7 +62,7 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: Lo
 
       <Section>
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--line)] pt-8">
-          <p className="text-[16.5px] font-semibold text-[var(--ink)]">{t("stillAsking")}</p>
+          <p className="font-serif text-[17px] font-bold text-[var(--ink)]">{t("stillAsking")}</p>
           <MoreLink href="/kontak">{t("contactUs")}</MoreLink>
         </div>
       </Section>

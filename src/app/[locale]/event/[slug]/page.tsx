@@ -191,7 +191,7 @@ export default async function EventDetail({
               {e.hashtags.length > 0 && (
                 <ul className="mt-8 flex flex-wrap gap-x-3 gap-y-1.5">
                   {e.hashtags.map((h) => (
-                    <li key={h} className="font-mono text-[12px] text-[var(--ink-faint)]">
+                    <li key={h} className="font-sans text-[12px] text-[var(--ink-faint)]">
                       {h}
                     </li>
                   ))}

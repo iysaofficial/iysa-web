@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 
 import { routing, type Locale } from "@/i18n/routing";
 import { SiteHeader } from "@/components/site-header";
@@ -12,25 +11,6 @@ import { GulirHalus } from "@/components/gulir-halus";
 import { ThemeScript } from "@/components/theme-script";
 import { siteUrl, alternatesFor, organizationJsonLd } from "@/lib/seo";
 import "../globals.css";
-
-/**
- * Satu keluarga huruf untuk seluruh situs, plus satu mono untuk angka dan
- * label. Situs lama memuat Poppins lengkap dengan tujuh timbangan; di sini
- * `subset` dan `display: swap` memastikan teks terbaca sebelum font tiba.
- */
-const sans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-jakarta",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-jetbrains",
-  weight: ["400", "500"],
-});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -98,7 +78,7 @@ export default async function LocaleLayout({
   const t = await getTranslations("nav");
 
   return (
-    <html lang={locale} className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <ThemeScript />
         <script
@@ -108,7 +88,7 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd(locale as Locale)) }}
         />
       </head>
-      <body className={`${sans.variable} ${mono.variable} antialiased`}>
+      <body className="antialiased">
         <NextIntlClientProvider>
           <GulirHalus />
           <a

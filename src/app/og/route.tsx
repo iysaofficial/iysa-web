@@ -33,7 +33,7 @@ export async function GET(req: Request) {
         style={{
           width: "100%", height: "100%", display: "flex", flexDirection: "column",
           justifyContent: "space-between", background: "#FFFFFF",
-          padding: "64px 72px", fontFamily: "sans-serif",
+          padding: "64px 72px", fontFamily: "Arial, sans-serif",
         }}
       >
         {/* Pita tiga warna — proporsi yang sama dengan peran warnanya di situs. */}
@@ -44,10 +44,10 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ fontSize: 22, letterSpacing: 4, textTransform: "uppercase", color: MUTED }}>
+          <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", color: MUTED }}>
             {eyebrow}
           </div>
-          <div style={{ fontSize: size, fontWeight: 800, letterSpacing: -2.5, lineHeight: 1.05, color: NAVY }}>
+          <div style={{ fontFamily: "Georgia, serif", fontSize: size, fontWeight: 700, letterSpacing: -1.5, lineHeight: 1.05, color: NAVY }}>
             {heading}
           </div>
           {meta && <div style={{ fontSize: 26, color: MUTED }}>{meta}</div>}

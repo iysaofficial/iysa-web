@@ -208,7 +208,7 @@ function KartuOrang({
               <Pill tone={nadaLabel}>{label}</Pill>
             </span>
           )}
-          <p className="text-[15.5px] leading-snug font-semibold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)] sm:text-[16.5px]">
+          <p className="font-serif text-[16px] leading-snug font-bold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--navy)] sm:text-[17px]">
             {person.name}
           </p>
           <p className="mt-1 text-[12.5px] leading-snug text-[var(--ink-muted)] sm:text-[13px]">
@@ -221,10 +221,10 @@ function KartuOrang({
 
   const namaKelas =
     ukuran === "besar"
-      ? "text-[18px] sm:text-[20px] font-bold text-[var(--navy)]"
+      ? "font-serif text-[18.5px] sm:text-[20.5px] font-bold text-[var(--navy)]"
       : ukuran === "sedang"
-        ? "text-[16.5px] sm:text-[17.5px] font-semibold text-[var(--ink)]"
-        : "text-[15px] font-semibold text-[var(--ink)]";
+        ? "font-serif text-[17px] sm:text-[18px] font-bold text-[var(--ink)]"
+        : "font-serif text-[15.5px] font-bold text-[var(--ink)]";
 
   return (
     <div className="group flex h-full flex-col border border-[var(--line)] bg-[var(--bg)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--border)]">
@@ -317,7 +317,7 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
                   {terjemahDivisi(d.kunci, locale)}
                 </h2>
               </div>
-              <p className="tnum font-mono text-[30px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)] md:text-[38px]">
+              <p className="tnum font-serif text-[30px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)] md:text-[38px]">
                 {jumlahOrang}
                 <span className="ml-2.5 font-sans text-[13px] font-normal text-[var(--ink-faint)]">
                   {jumlahOrang === 1 ? t("memberOne") : t("membersWord")}

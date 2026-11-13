@@ -70,7 +70,7 @@ export function FotoOrang({
 
   if (foto.length === 0) {
     return (
-      <span className="absolute inset-0 grid place-items-center font-mono text-[22px] text-[var(--ink-faint)]">
+      <span className="absolute inset-0 grid place-items-center font-serif text-[22px] font-bold text-[var(--ink-faint)]">
         {nama
           .split(/\s+/)
           .slice(0, 2)

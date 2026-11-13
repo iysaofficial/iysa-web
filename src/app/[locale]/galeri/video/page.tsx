@@ -36,7 +36,7 @@ export default async function VideoGallery({ params }: { params: Promise<{ local
           <div className="flex flex-col gap-3 md:items-end">
             <nav aria-label={t("year")} className="flex flex-wrap gap-1.5 md:justify-end">
               {years.map((y) => (
-                <a key={y} href={`#tahun-${y}`} className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-[11.5px] text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]">{y}</a>
+                <a key={y} href={`#tahun-${y}`} className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-sans text-[11.5px] font-bold text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]">{y}</a>
               ))}
             </nav>
             <MoreLink href="/galeri/foto">{t("photoTitle")}</MoreLink>
@@ -48,7 +48,7 @@ export default async function VideoGallery({ params }: { params: Promise<{ local
         <Section key={year} sunk={i % 2 === 1}>
           <div id={`tahun-${year}`} className="scroll-mt-20">
             <div className="mb-8 flex items-end justify-between gap-4 border-b border-[var(--line)] pb-4">
-              <h2 className="tnum font-mono text-[26px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">{year}</h2>
+              <h2 className="tnum font-serif text-[28px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)]">{year}</h2>
               <p className="text-[13px] text-[var(--ink-faint)]">{t("count", { count: all.filter((v) => v.year === year).length })}</p>
             </div>
             <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -67,10 +67,10 @@ export default async function VideoGallery({ params }: { params: Promise<{ local
                           className="h-full w-full"
                         />
                       ) : (
-                        <span className="grid h-full place-items-center font-mono text-[11px] text-[var(--ink-faint)]">—</span>
+                        <span className="grid h-full place-items-center font-sans text-[11px] text-[var(--ink-faint)]">—</span>
                       )}
                     </div>
-                    <p className="text-[15px] leading-snug font-medium text-[var(--ink)]">{judul}</p>
+                    <p className="font-serif text-[15.5px] leading-snug font-bold text-[var(--ink)]">{judul}</p>
                     {v.description && <p className="text-[13.5px] leading-relaxed text-[var(--ink-muted)]">{v.description}</p>}
                   </li>
                 );

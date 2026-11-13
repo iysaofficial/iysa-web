@@ -67,7 +67,7 @@ export function PageHeader({
             <div className="md:col-span-4 md:text-right">
               {count !== undefined && (
                 <>
-                  <p className="tnum font-mono text-[26px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
+                  <p className="tnum font-serif text-[28px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)]">
                     {count}
                   </p>
                   {countLabel && (
@@ -221,7 +221,7 @@ export function Pill({
   };
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10.5px] font-medium tracking-[0.07em] uppercase ${map[tone]}`}
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-sans text-[10.5px] font-bold tracking-[0.07em] uppercase ${map[tone]}`}
     >
       {children}
     </span>
@@ -229,13 +229,14 @@ export function Pill({
 }
 
 /**
- * Angka besar mono. Salah satu dari dua sumber "keberanian" di situs ini —
- * yang lain skala tipografi judul. Tidak ada gradien, tidak ada elemen terbang.
+ * Angka besar editorial (Georgia). Salah satu dari dua sumber "keberanian" di
+ * situs ini — yang lain skala tipografi judul. Tidak ada gradien, tidak ada
+ * elemen terbang.
  */
 export function Stat({ value, label }: { value: string | number; label: string }) {
   return (
     <div className="flex flex-col gap-1 border-t border-[var(--line)] pt-4">
-      <span className="tnum font-mono text-[30px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)] md:text-[38px]">
+      <span className="tnum font-serif text-[30px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)] md:text-[38px]">
         {/* Angka aslinya tetap dirender di server; AngkaNaik hanya mengambil
             alih kalau elemennya masuk layar dari luar. Tanpa JavaScript,
             yang tampil tetap angka yang benar. */}

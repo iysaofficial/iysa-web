@@ -121,7 +121,7 @@ export function IysaWordmark({
           aria-label="IYSA"
         />
         {sub && (
-          <span className="hidden text-[11px] leading-none text-[var(--ink-faint)] sm:inline">
+          <span className="hidden font-serif text-[11.5px] leading-none italic text-[var(--ink-faint)] sm:inline">
             {sub}
           </span>
         )}

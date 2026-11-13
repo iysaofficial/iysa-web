@@ -87,7 +87,7 @@ export default async function ProfilePage({
         <div className="grid gap-10 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-5">
             <h3 className="eyebrow">{h("vision")}</h3>
-            <p className="mt-3 text-lead leading-snug text-[var(--ink)]">{vision[locale]}</p>
+            <p className="mt-3 font-serif text-lead leading-snug text-[var(--ink)]">{vision[locale]}</p>
           </div>
           <div className="md:col-span-7 grid gap-8 sm:grid-cols-2">
             <div>
@@ -95,7 +95,7 @@ export default async function ProfilePage({
               <ol className="mt-3 flex flex-col gap-3">
                 {mission.map((m, i) => (
                   <li key={i} className="flex gap-3 text-[15px] text-[var(--ink-muted)]">
-                    <span className="tnum shrink-0 font-mono text-[12px] text-[var(--teal)]">
+                    <span className="tnum shrink-0 font-sans text-[12px] font-bold text-[var(--teal)]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     {m[locale]}
@@ -108,7 +108,7 @@ export default async function ProfilePage({
               <ol className="mt-3 flex flex-col gap-3">
                 {goals.map((g, i) => (
                   <li key={i} className="flex gap-3 text-[15px] text-[var(--ink-muted)]">
-                    <span className="tnum shrink-0 font-mono text-[12px] text-[var(--teal)]">
+                    <span className="tnum shrink-0 font-sans text-[12px] font-bold text-[var(--teal)]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     {g[locale]}
@@ -130,7 +130,7 @@ export default async function ProfilePage({
                 {programmes[key].map((p) => (
                   <li
                     key={p}
-                    className="rounded border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1 font-mono text-[12px] text-[var(--ink-muted)]"
+                    className="rounded border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1 font-sans text-[12px] font-bold tracking-wide text-[var(--ink-muted)]"
                   >
                     {p}
                   </li>

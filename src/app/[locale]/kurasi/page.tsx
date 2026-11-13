@@ -26,7 +26,7 @@ export default async function CurationPage({ params }: { params: Promise<{ local
             <li key={f.key} className="bg-[var(--bg)]">
               <a href={f.url} target="_blank" rel="noreferrer"
                  className="group flex h-full flex-col justify-between gap-8 p-7 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
-                <span className="text-[16.5px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">
+                <span className="font-serif text-[17px] leading-snug font-bold text-[var(--ink)] group-hover:text-[var(--navy)]">
                   {curationLabels[f.key]?.[locale] ?? f.key}
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-[var(--teal)]">
@@ -56,11 +56,11 @@ export default async function CurationPage({ params }: { params: Promise<{ local
                   rel="noreferrer"
                   className="group flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4"
                 >
-                  <span className="text-[15.5px] leading-snug font-medium text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--teal)]">
+                  <span className="font-serif text-[16px] leading-snug font-bold text-[var(--ink)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--teal)]">
                     {ptkDocumentLabels[d.key]?.[locale] ?? d.key}
                   </span>
                   <span className="flex items-center gap-3">
-                    <span className="tnum font-mono text-[13px] text-[var(--ink-faint)]">
+                    <span className="tnum font-sans text-[13px] text-[var(--ink-faint)]">
                       {d.year}
                     </span>
                     <span

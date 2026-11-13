@@ -81,11 +81,11 @@ export async function SeriKartu({ seri, dash }: { seri: Seri; dash?: EdisiDashbo
               />
             </span>
           )}
-          <span className="font-mono text-[19px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--teal)]">
+          <span className="font-serif text-[19px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--teal)]">
             {seri.akronim}
           </span>
         </span>
-        <span className="tnum shrink-0 font-mono text-[11.5px] text-[var(--ink-faint)]">
+        <span className="tnum shrink-0 font-sans text-[11.5px] text-[var(--ink-faint)]">
           {t("editions", { count: seri.edisi.length })}
         </span>
       </div>
@@ -99,7 +99,7 @@ export async function SeriKartu({ seri, dash }: { seri: Seri; dash?: EdisiDashbo
       {/* Didorong ke dasar kartu supaya baris tahun tiap kartu sejajar,
           betapa pun berbedanya panjang namanya. */}
       <div className="mt-auto flex items-center justify-between gap-3 pt-1.5">
-        <span className="tnum font-mono text-[12px] text-[var(--ink-faint)]">{rentang}</span>
+        <span className="tnum font-sans text-[12px] text-[var(--ink-faint)]">{rentang}</span>
         {tanda && (
           <span className={`flex items-center gap-1.5 text-[11.5px] font-medium ${tanda.warna}`}>
             <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${tanda.titik}`} />

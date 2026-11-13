@@ -42,15 +42,15 @@ export default async function EventSitesPage({ params }: { params: Promise<{ loc
               {s.url ? (
                 <a href={s.url} target="_blank" rel="noreferrer"
                    className="group flex h-full flex-col gap-2 p-5 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
-                  <span className="text-[15px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">{s.name}</span>
+                  <span className="font-serif text-[16px] leading-snug font-bold text-[var(--ink)] group-hover:text-[var(--navy)]">{s.name}</span>
                   {s.type && <span className="eyebrow">{labelTipe(s.type)}</span>}
-                  <span className="mt-1 truncate font-mono text-[11.5px] text-[var(--teal)]">
+                  <span className="mt-1 truncate font-sans text-[12px] text-[var(--teal)]">
                     {s.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                   </span>
                 </a>
               ) : (
                 <div className="flex h-full flex-col gap-2 p-5">
-                  <span className="text-[15px] font-semibold text-[var(--ink)]">{s.name}</span>
+                  <span className="font-serif text-[16px] font-bold text-[var(--ink)]">{s.name}</span>
                   {s.type && <span className="eyebrow">{labelTipe(s.type)}</span>}
                 </div>
               )}

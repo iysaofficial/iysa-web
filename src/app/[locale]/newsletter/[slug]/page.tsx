@@ -118,7 +118,7 @@ export default async function IssuePage({
                   priority
                 />
               ) : (
-                <span className="absolute inset-0 grid place-items-center px-4 text-center font-mono text-[12px] text-[var(--ink-faint)]">
+                <span className="absolute inset-0 grid place-items-center px-4 text-center font-serif text-[13px] font-bold text-[var(--ink-faint)]">
                   {judul}
                 </span>
               )}

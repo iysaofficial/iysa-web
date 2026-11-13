@@ -94,13 +94,13 @@ export async function EdisiDashboardKartu({
           ) : null}
 
           <div className="min-w-0 flex-1">
-            <p className="font-mono text-[15px] leading-none font-medium tracking-[-0.03em] text-[var(--navy)]">
+            <p className="font-sans text-[12px] leading-none font-bold tracking-[0.08em] text-[var(--navy)] uppercase">
               {edisi.akronim}{" "}
               <span className="tnum text-[var(--ink-faint)]">
                 {edisi.tahun}
               </span>
             </p>
-            <h3 className="mt-2 text-[16px] leading-snug font-semibold text-[var(--ink)]">
+            <h3 className="mt-2 font-serif text-[16.5px] leading-snug font-bold text-[var(--ink)]">
               {edisi.nama}
             </h3>
           </div>

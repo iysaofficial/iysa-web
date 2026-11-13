@@ -67,7 +67,7 @@ function FilterGroup<T extends string>({
             className={`${chip} ${on ? chipOn : chipOff}`}
           >
             {labels[value]}
-            <span className={`tnum font-mono text-[10.5px] ${on ? "opacity-70" : "opacity-55"}`}>
+            <span className={`tnum font-sans text-[10.5px] font-bold ${on ? "opacity-70" : "opacity-55"}`}>
               {count}
             </span>
           </Link>
