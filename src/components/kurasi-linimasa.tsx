@@ -18,7 +18,7 @@ export async function KurasiLinimasa({ edisi, locale }: { edisi: EdisiKurasi; lo
 
   return (
     <div>
-      <p className="tnum font-mono text-[12px] text-[var(--ink-faint)]">{t("stepOf", { n: nomor, total })}</p>
+      <p className="tnum font-sans text-[12px] font-bold text-[var(--ink-faint)]">{t("stepOf", { n: nomor, total })}</p>
       <ol className="mt-4 flex flex-col">
         {edisi.isi.map((k, i) => {
           const tercatat = k.tercatat !== false;
@@ -35,7 +35,7 @@ export async function KurasiLinimasa({ edisi, locale }: { edisi: EdisiKurasi; lo
                 style={{ borderColor: warna, background: tercatat ? warna : "var(--bg)" }}
               />
               <div className="min-w-0">
-                <p className={`text-[14.5px] leading-snug font-medium ${tercatat ? "text-[var(--ink)]" : "text-[var(--ink-faint)]"}`}>
+                <p className={`font-serif text-[15px] leading-snug font-bold ${tercatat ? "text-[var(--ink)]" : "text-[var(--ink-faint)]"}`}>
                   {k.label}
                 </p>
                 {tercatat ? (

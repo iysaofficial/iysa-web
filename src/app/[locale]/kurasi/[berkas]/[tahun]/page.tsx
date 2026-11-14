@@ -56,11 +56,11 @@ export default async function CurationEdition({ params }: { params: Promise<{ lo
                 <a href={f.url!} target="_blank" rel="noreferrer"
                   className="group flex h-full flex-col justify-between gap-6 p-6 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
                   <div>
-                    <p className="font-mono text-[11.5px] tracking-wide text-[var(--ink-faint)]">
+                    <p className="font-sans text-[11.5px] font-bold tracking-wide text-[var(--ink-faint)]">
                       {String(f.nomor).padStart(2, "0")} · {f.jenis === "dokumentasi" ? t("documentation") : t("administration")}
                       {f.kategori && f.kategori !== "Semua" ? ` · ${f.kategori}` : ""}
                     </p>
-                    <p className="mt-2 text-[15px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">{f.slot}</p>
+                    <p className="mt-2 font-serif text-[15.5px] leading-snug font-bold text-[var(--ink)] group-hover:text-[var(--navy)]">{f.slot}</p>
                   </div>
                   <span className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-[var(--teal)]">
                     {t("openPdf")}

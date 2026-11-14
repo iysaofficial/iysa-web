@@ -48,8 +48,8 @@ export default async function CurationPage({ params }: { params: Promise<{ local
                         {s.logo && <Image src={s.logo} alt="" fill sizes="48px" className="object-contain" />}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-mono text-[12px] tracking-wide text-[var(--ink-faint)]">{s.akronim}</p>
-                        <p className="text-[15.5px] leading-snug font-semibold text-[var(--ink)] group-hover:text-[var(--navy)]">{s.nama}</p>
+                        <p className="font-sans text-[12px] font-bold tracking-wide text-[var(--ink-faint)]">{s.akronim}</p>
+                        <p className="font-serif text-[16px] leading-snug font-bold text-[var(--ink)] group-hover:text-[var(--navy)]">{s.nama}</p>
                       </div>
                     </div>
                     {terbaru && k && (
@@ -64,7 +64,7 @@ export default async function CurationPage({ params }: { params: Promise<{ local
                     )}
                     <div className="flex flex-wrap gap-1.5">
                       {s.edisi.map((e) => (
-                        <span key={e.tahun} className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-[11.5px] text-[var(--ink-muted)]">{e.tahun}</span>
+                        <span key={e.tahun} className="tnum rounded-full border border-[var(--border)] px-2.5 py-0.5 font-sans text-[11.5px] font-bold text-[var(--ink-muted)]">{e.tahun}</span>
                       ))}
                     </div>
                   </Link>
