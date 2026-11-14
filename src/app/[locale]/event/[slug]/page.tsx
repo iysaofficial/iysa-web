@@ -163,7 +163,7 @@ export default async function EventDetail({
                 </Pill>
               </div>
 
-              <h1 className="rise mt-4 text-display text-[var(--navy)]">{judul}</h1>
+              <h1 className="rise mt-4 font-serif text-display text-[var(--navy)]">{judul}</h1>
 
               {e.origin === "affiliate" && (
                 <p className="mt-4 max-w-[52ch] text-[15px] text-[var(--ink-muted)]">

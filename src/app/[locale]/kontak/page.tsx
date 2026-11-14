@@ -24,7 +24,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
       <Section>
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-7">
-            <h2 className="eyebrow mb-6">{t("formTitle")}</h2>
+            <h2 className="mb-6 font-serif text-title text-[var(--ink)]">{t("formTitle")}</h2>
             <ContactForm />
           </div>
 

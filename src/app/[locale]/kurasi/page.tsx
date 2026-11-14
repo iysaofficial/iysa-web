@@ -77,7 +77,7 @@ export default async function CurationPage({ params }: { params: Promise<{ local
         )}
       </Section>
 
-      <Section eyebrow={t("archiveTitle")}>
+      <Section eyebrow="Puspresnas" title={t("archiveTitle")}>
         <ul className="grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
           {curation.folders.map((f) => (
             <li key={f.key} className="bg-[var(--bg)]">
@@ -103,7 +103,7 @@ export default async function CurationPage({ params }: { params: Promise<{ local
             tidak bisa dijangkau dari mana pun. Tempatnya di sini: halaman ini
             memang halaman dokumen resmi. */}
         <div className="mt-10 border-t border-[var(--line)] pt-8">
-          <h2 className="eyebrow">{t("documentsTitle")}</h2>
+          <h2 className="font-serif text-[19px] font-bold text-[var(--ink)]">{t("documentsTitle")}</h2>
           <ul className="mt-4 flex flex-col">
             {ptkDocuments.map((d) => (
               <li key={d.key} className="border-b border-[var(--line)] last:border-0">

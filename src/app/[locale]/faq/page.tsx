@@ -42,7 +42,7 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: Lo
       />
 
       {groups.map((g, i) => (
-        <Section key={g.group} eyebrow={GROUP_KEY[g.group] ? t(GROUP_KEY[g.group]) : g.group} sunk={i % 2 === 1}>
+        <Section key={g.group} eyebrow="FAQ" title={GROUP_KEY[g.group] ? t(GROUP_KEY[g.group]) : g.group} sunk={i % 2 === 1}>
           <ul className="flex flex-col">
             {g.items.map((item) => (
               <li key={item.question} className="border-b border-[var(--line)] last:border-0">

@@ -90,8 +90,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           <div className="grid gap-10 md:grid-cols-12 md:gap-12">
             <div className="md:col-span-8">
               <p className="eyebrow rise">{t("eyebrow")}</p>
-              <h1 className="rise mt-4 text-hero text-[var(--navy)]">{t("heroTitle")}</h1>
-              <p className="rise mt-6 max-w-[54ch] text-lead text-[var(--ink-muted)]">
+              <h1 className="rise mt-4 font-serif text-hero text-[var(--navy)]">{t("heroTitle")}</h1>
+              <p className="rise mt-6 max-w-[54ch] font-sans text-lead text-[var(--ink-muted)]">
                 {t("heroBody")}
               </p>
               <div className="rise mt-9 flex flex-wrap gap-3">
@@ -288,8 +288,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <div className="grid gap-10 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-7">
             <p className="eyebrow">{t("newsletterEyebrow")}</p>
-            <h2 className="mt-2 text-title text-[var(--ink)]">{t("newsletterTitle")}</h2>
-            <p className="mt-3 max-w-[52ch] text-[var(--ink-muted)]">{t("newsletterBody")}</p>
+            <h2 className="mt-2 font-serif text-title text-[var(--ink)]">{t("newsletterTitle")}</h2>
+            <p className="mt-3 max-w-[52ch] font-sans text-[var(--ink-muted)]">{t("newsletterBody")}</p>
             {latestIssue && (
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Pill tone="teal">{latestIssue.year}</Pill>

@@ -46,7 +46,7 @@ export default async function CurationEdition({ params }: { params: Promise<{ lo
         count={berkasList.length || undefined}
         countLabel={berkasList.length ? t("documentsCount", { count: berkasList.length }) : undefined} />
 
-      <Section eyebrow={t("documents")} padat>
+      <Section eyebrow={t("title")} title={t("documents")} padat>
         {berkasList.length === 0 ? (
           <EmptyState title={t("noDocuments")} />
         ) : (

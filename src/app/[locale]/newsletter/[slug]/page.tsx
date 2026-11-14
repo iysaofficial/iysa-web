@@ -133,7 +133,7 @@ export default async function IssuePage({
               <Pill tone="teal">{label}</Pill>
             </div>
 
-            <h1 className="mt-4 text-title text-[var(--navy)]">{judul}</h1>
+            <h1 className="mt-4 font-serif text-title text-[var(--navy)]">{judul}</h1>
 
             {/*
               Penghitung pembaca dari situs lama dihapus. Ia memasang Firebase

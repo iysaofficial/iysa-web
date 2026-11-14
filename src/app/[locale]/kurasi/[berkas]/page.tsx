@@ -73,7 +73,7 @@ export default async function CurationItem({ params }: { params: Promise<{ local
           <div className="relative ml-auto h-20 w-20"><Image src={s.logo} alt="" fill sizes="80px" className="object-contain" /></div>
         ) : undefined} />
       {edisi.map((e, i) => (
-        <Section key={e.tahun} eyebrow={t("edition", { tahun: e.tahun })} padat={i === 0}
+        <Section key={e.tahun} eyebrow={t("seriesEyebrow")} title={t("edition", { tahun: e.tahun })} padat={i === 0}
           action={<Link href={`/kurasi/${s.slug}/${e.tahun}`}
             className="text-[14px] font-medium text-[var(--teal)] underline decoration-1 underline-offset-2">{t("viewDocuments")} →</Link>}>
           <KurasiLinimasa edisi={e} locale={locale} />

@@ -55,9 +55,9 @@ export function PageHeader({
         <div className="grid gap-x-10 gap-y-4 md:grid-cols-12 md:items-end">
           <div className={adaKanan ? "md:col-span-8" : "md:col-span-12"}>
             {eyebrow && <p className="eyebrow rise">{eyebrow}</p>}
-            <h1 className="rise mt-1.5 text-title text-[var(--navy)]">{title}</h1>
+            <h1 className="rise mt-1.5 font-serif text-title text-[var(--navy)]">{title}</h1>
             {lead && (
-              <p className="rise mt-3 max-w-[62ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">
+              <p className="rise mt-3 max-w-[62ch] font-sans text-[15px] leading-relaxed text-[var(--ink-muted)]">
                 {lead}
               </p>
             )}
@@ -116,8 +116,8 @@ export function Section({
           <div className={`flex flex-wrap items-end justify-between gap-4 ${padat ? "mb-6" : "mb-10"}`}>
             <div>
               {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-              {title && <h2 className="mt-2 text-title text-[var(--ink)]">{title}</h2>}
-              {lead && <p className="mt-3 max-w-[56ch] text-[var(--ink-muted)]">{lead}</p>}
+              {title && <h2 className="mt-2 font-serif text-title text-[var(--ink)]">{title}</h2>}
+              {lead && <p className="mt-3 max-w-[56ch] font-sans text-[var(--ink-muted)]">{lead}</p>}
             </div>
             {action}
           </div>

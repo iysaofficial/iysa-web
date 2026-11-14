@@ -145,13 +145,13 @@ export default async function ProfilePage({
       <Section>
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <h3 className="eyebrow">{t("community")}</h3>
+            <h3 className="font-serif text-[18px] font-bold text-[var(--navy)]">{t("community")}</h3>
             <p className="mt-3 text-[15px] leading-relaxed text-[var(--ink-muted)]">
               {community[locale]}
             </p>
           </div>
           <div>
-            <h3 className="eyebrow">{t("experts")}</h3>
+            <h3 className="font-serif text-[18px] font-bold text-[var(--navy)]">{t("experts")}</h3>
             <p className="mt-3 text-[15px] leading-relaxed text-[var(--ink-muted)]">
               {experts[locale]}
             </p>
@@ -160,7 +160,7 @@ export default async function ProfilePage({
             </div>
           </div>
           <div>
-            <h3 className="eyebrow">{t("partners")}</h3>
+            <h3 className="font-serif text-[18px] font-bold text-[var(--navy)]">{t("partners")}</h3>
             <p className="mt-3 text-[15px] leading-relaxed text-[var(--ink-muted)]">
               {partnersNational[locale]}
             </p>

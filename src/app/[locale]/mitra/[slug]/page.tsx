@@ -139,7 +139,7 @@ export default async function AffiliateDetail({
           <div className="grid gap-8 md:grid-cols-12 md:gap-12">
             <div className="md:col-span-8">
               {showCountry && <Pill tone="teal">{country[locale]}</Pill>}
-              <h1 className="rise mt-4 text-display text-[var(--navy)]">
+              <h1 className="rise mt-4 font-serif text-display text-[var(--navy)]">
                 {name}
               </h1>
               <div className="prose-ink mt-6 text-lead">

@@ -313,7 +313,7 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: L
             <div className="mb-9 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="eyebrow">{t("divisionsEyebrow")}</p>
-                <h2 className="mt-2 text-title text-[var(--ink)]">
+                <h2 className="mt-2 font-serif text-title text-[var(--ink)]">
                   {terjemahDivisi(d.kunci, locale)}
                 </h2>
               </div>
