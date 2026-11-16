@@ -43,7 +43,7 @@ export default async function CalendarPage({
 
   const kunci = kunciBulan(tahun, bulan);
   const akhir = `${kunci}-${String(new Date(Date.UTC(tahun, bulan, 0)).getUTCDate()).padStart(2, "0")}`;
-  const data = await ambilKalender(`${kunci}-01`, akhir);
+  const data = await ambilKalender(`${kunci}-01`, akhir, locale);
   const entri: EntriKalender[] = (data ? ratakan(data) : []).map((e) => ({
     tanggal: e.tanggal,
     judul: e.judul,

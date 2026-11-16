@@ -39,9 +39,10 @@ export type EdisiKalender = {
 /** Satu entri kalender: agenda + edisi pemiliknya. */
 export type Entri = AgendaKalender & { edisi: EdisiKalender };
 
-export async function ambilKalender(dari: string, sampai: string): Promise<EdisiKalender[] | null> {
+/** `bahasa` = bahasa halaman: judul kegiatan diterjemahkan dasbor (tersimpan, lalu glosarium). */
+export async function ambilKalender(dari: string, sampai: string, bahasa: "id" | "en"): Promise<EdisiKalender[] | null> {
   try {
-    const r = await fetch(`${PANGKAL}/_kalender?lembaga=IYSA,YPBI&dari=${dari}&sampai=${sampai}`, {
+    const r = await fetch(`${PANGKAL}/_kalender?lembaga=IYSA,YPBI&dari=${dari}&sampai=${sampai}&bahasa=${bahasa}`, {
       next: { revalidate: SEGAR, tags: ["kalender"] },
       signal: AbortSignal.timeout(8000),
     });
