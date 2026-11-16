@@ -47,12 +47,19 @@ export async function SeriKartu({ seri, dash }: { seri: Seri; dash?: EdisiDashbo
     .filter((x): x is number => x !== null);
 
   const awal = tahun.length ? Math.min(...tahun) : null;
-  const akhir = tahun.length ? Math.max(...tahun) : null;
-  const rentang = awal === null ? null : awal === akhir ? `${awal}` : `${awal}–${akhir}`;
+  const tahunDash = dash?.tahun ? Number(dash.tahun) : null;
+  const awalGab = [awal, tahun.length ? Math.max(...tahun) : null, tahunDash].filter((x): x is number => x !== null && Number.isFinite(x));
+  const lo = awalGab.length ? Math.min(...awalGab) : null;
+  const hi = awalGab.length ? Math.max(...awalGab) : null;
+  const rentang = lo === null ? null : lo === hi ? `${lo}` : `${lo}–${hi}`;
+  /* Seri yang hanya ada di dasbor belum punya edisi warisan; jumlahnya dari dasbor. */
+  const jumlahEdisi = seri.edisi.length || Math.max(1, dash?.tahunEdisi.length ?? 0);
 
   // Satu penanda saja, dan yang paling mendesak yang menang: seri dengan edisi
   // yang pendaftarannya masih buka lebih penting daripada yang baru terjadwal.
-  const status = seri.edisi.map((e) => statusEvent(e, kini));
+  /* Status dari dasbor bila serinya sudah di-pin — togel dan tanggal sungguhan,
+     bukan tebakan dari kalimat tanggal warisan. */
+  const status = dash ? [dash.status] : seri.edisi.map((e) => statusEvent(e, kini));
   const tanda = status.includes("terbuka")
     ? { teks: t("statusOpen"), warna: "text-[var(--teal)]", titik: "bg-[var(--teal)]" }
     : status.includes("akan")
@@ -86,7 +93,7 @@ export async function SeriKartu({ seri, dash }: { seri: Seri; dash?: EdisiDashbo
           </span>
         </span>
         <span className="tnum shrink-0 font-sans text-[11.5px] text-[var(--ink-faint)]">
-          {t("editions", { count: seri.edisi.length })}
+          {t("editions", { count: jumlahEdisi })}
         </span>
       </div>
 

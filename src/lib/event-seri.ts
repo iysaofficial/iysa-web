@@ -232,3 +232,27 @@ export function kelompokkanSeri(events: IysaEvent[]): Seri[] {
 export function seriBySlug(events: IysaEvent[], slug: string): Seri | null {
   return kelompokkanSeri(events).find((s) => s.slug === slug) ?? null;
 }
+
+/**
+ * Gabungkan seri warisan dengan seri yang hanya ada di dasbor.
+ *
+ * Daftar seri situs ini dibangun dari 66 edisi warisan situs lama, jadi seri
+ * yang lahir setelah migrasi (mis. IASCAI) tidak punya tempat. Seri dasbor
+ * yang tidak dikenal data warisan ditambahkan sebagai seri tanpa edisi
+ * warisan; kartunya dan halamannya membaca dasbor.
+ */
+export function gabungSeriDashboard(
+  seri: Seri[],
+  dash: Iterable<{ akronim: string; nama: string; mulai: string | null; tahun: string }>,
+): Seri[] {
+  const ada = new Set(seri.map((s) => s.akronim.toUpperCase()));
+  const slugAda = new Set(seri.map((s) => s.slug));
+  const baru: Seri[] = [];
+  for (const d of dash) {
+    const slug = slugSeri(d.akronim);
+    if (ada.has(d.akronim.toUpperCase()) || slugAda.has(slug)) continue;
+    const waktu = d.mulai ? Date.parse(`${d.mulai}T00:00:00Z`) : Date.UTC(Number(d.tahun) || 0, 0, 1);
+    baru.push({ akronim: d.akronim, slug, nama: d.nama || null, edisi: [], terbaru: Number.isFinite(waktu) ? waktu : 0 });
+  }
+  return [...seri, ...baru].sort((a, b) => b.terbaru - a.terbaru || b.edisi.length - a.edisi.length);
+}

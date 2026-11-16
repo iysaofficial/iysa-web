@@ -84,7 +84,16 @@ export type EdisiDashboard = {
   status: StatusDashboard;
   /** Seluruh tahun edisi yang tercatat untuk seri ini, terbaru dulu. */
   tahunEdisi: string[];
+  /** Singkatan lembaga penyelenggara (IYSA, YPBI, IYORA, ICGI); null bila belum ditetapkan. */
+  lembaga: string | null;
 };
+
+/**
+ * Lembaga yang ajangnya tampil di situs IYSA. Seri IYORA (olimpiade) dan ICGI
+ * punya portal sendiri; `_seri` tanpa saringan memuat semuanya.
+ */
+const LEMBAGA_SITUS = new Set(["IYSA", "YPBI"]);
+export const milikSitus = (e: EdisiDashboard) => !e.lembaga || LEMBAGA_SITUS.has(e.lembaga.toUpperCase());
 
 type Seksi = { key: string; isi: unknown };
 
@@ -214,6 +223,7 @@ export async function ambilSeriDashboard(akronim: string): Promise<EdisiDashboar
     moda: moda === "online" || moda === "offline" || moda === "hybrid" ? moda : null,
     status: hitungStatus(dibuka, mulai, selesai, kini),
     tahunEdisi,
+    lembaga: teks((id.lembaga as Record<string, unknown> | null | undefined)?.singkatan),
   };
 }
 
@@ -271,6 +281,7 @@ export async function ambilSemuaSeriDashboard(): Promise<Map<string, EdisiDashbo
       moda: moda === "online" || moda === "offline" || moda === "hybrid" ? moda : null,
       status: hitungStatus(dibuka, mulai, selesai, kini),
       tahunEdisi: [],
+      lembaga: teks(r.lembaga),
     });
   }
   return peta;

@@ -8,8 +8,8 @@ import { EventFilters } from "@/components/event-filters";
 import { SeriKartu } from "@/components/seri-kartu";
 import { pageMetadata } from "@/lib/seo";
 import { filterEvents, eventFacets, allEvents, type EventLevel, type EventMode } from "@/lib/data";
-import { statusEvent, waktuEvent, kelompokkanSeri } from "@/lib/event-seri";
-import { ambilSemuaSeriDashboard } from "@/lib/dashboard-event";
+import { statusEvent, waktuEvent, kelompokkanSeri, gabungSeriDashboard } from "@/lib/event-seri";
+import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
 
 type Search = { level?: string; mode?: string; q?: string };
@@ -88,14 +88,19 @@ export default async function EventsPage({
   const akan = semua
     .filter((e) => statusEvent(e, kini) === "akan")
     .sort((a, b) => waktuEvent(a) - waktuEvent(b));
-  const seri = kelompokkanSeri(semua);
+  const seriWarisan = kelompokkanSeri(semua);
 
   /* Data dari database dashboard. Hanya seri yang sudah "dipin" panitia yang
      menjawab; sisanya diam-diam tetap memakai data warisan situs lama. Karena
      itu blok ini tidak pernah bisa menggagalkan halaman — paling buruk ia
      kosong. Lihat src/lib/dashboard-event.ts. */
   const dariDashboard = await ambilSemuaSeriDashboard();
-  const dibuka = [...dariDashboard.values()]
+  /* Hanya ajang IYSA/YPBI; seri IYORA dan ICGI punya portal sendiri. */
+  const dashSitus = [...dariDashboard.values()].filter(milikSitus);
+  /* Seri yang hanya ada di dasbor (lahir setelah migrasi, mis. IASCAI) ikut
+     tampil di arsip — sebelumnya daftar seri hanya dibangun dari data warisan. */
+  const seri = gabungSeriDashboard(seriWarisan, dashSitus);
+  const dibuka = dashSitus
     .filter((e) => e.pendaftaranDibuka)
     .sort((a, b) => (a.pendaftaranTutup ?? "").localeCompare(b.pendaftaranTutup ?? ""));
 
@@ -119,6 +124,14 @@ export default async function EventsPage({
 
   const terbukaWarisan = terbuka.filter((e) => !slugDiambilAlih.has(e.slug));
   const akanWarisan = akan.filter((e) => !slugDiambilAlih.has(e.slug));
+  /* Edisi terjadwal menurut dasbor: pendaftaran belum dibuka dan acaranya
+     BELUM mulai. Yang sedang berlangsung tidak disebut "akan datang". */
+  const hariIni = kini.toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
+  const akanDashboard = dashSitus
+    .filter((e) => e.status === "akan" && (e.mulai ?? e.pendaftaranBuka ?? "") > hariIni)
+    .sort((a, b) => (a.mulai ?? a.pendaftaranBuka ?? "").localeCompare(b.mulai ?? b.pendaftaranBuka ?? ""));
+  const kolomAkan =
+    akanDashboard.length === 1 ? "" : akanDashboard.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3";
 
   return (
     <>
@@ -200,8 +213,20 @@ export default async function EventsPage({
             </Section>
           )}
 
-          {akanWarisan.length > 0 && (
+          {(akanDashboard.length > 0 || akanWarisan.length > 0) && (
             <Section eyebrow={t("scheduledEyebrow")} title={t("upcomingTitle")} lead={t("upcomingLead")} sunk>
+              {akanDashboard.length > 0 && (
+                <ul className={`grid gap-px border border-[var(--line)] bg-[var(--line)] ${kolomAkan} ${akanWarisan.length > 0 ? "mb-px" : ""}`}>
+                  {akanDashboard.map((e) => (
+                    <li key={e.id} className="flex">
+                      <EdisiDashboardKartu edisi={e} />
+                    </li>
+                  ))}
+                  <SelPengisi jumlah={akanDashboard.length} kolom={3} />
+                  <SelPengisi jumlah={akanDashboard.length} kolom={2} />
+                </ul>
+              )}
+              {akanWarisan.length > 0 && (
               <ul className="grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3">
                 {akanWarisan.map((e) => (
                   <li key={e.slug} className="bg-[var(--bg)]">
@@ -211,6 +236,7 @@ export default async function EventsPage({
                 <SelPengisi jumlah={akanWarisan.length} kolom={2} tampak="block lg:hidden" />
                 <SelPengisi jumlah={akanWarisan.length} kolom={3} />
               </ul>
+              )}
             </Section>
           )}
 

@@ -7,8 +7,18 @@ import { PageHeader, Section, BackLink, SelPengisi } from "@/components/ui";
 import { EventCard } from "@/components/event-card";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allEvents } from "@/lib/data";
-import { kelompokkanSeri, seriBySlug } from "@/lib/event-seri";
-import { ambilSeriDashboard, gambarDashboard } from "@/lib/dashboard-event";
+import { kelompokkanSeri, gabungSeriDashboard, type Seri } from "@/lib/event-seri";
+import { ambilSeriDashboard, ambilSemuaSeriDashboard, milikSitus, gambarDashboard } from "@/lib/dashboard-event";
+import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
+
+/** Seri warisan + seri yang hanya ada di dasbor (lihat gabungSeriDashboard). */
+async function semuaSeri(): Promise<Seri[]> {
+  const dash = [...(await ambilSemuaSeriDashboard()).values()].filter(milikSitus);
+  return gabungSeriDashboard(kelompokkanSeri(allEvents()), dash);
+}
+const cariSeri = async (slug: string) => (await semuaSeri()).find((s) => s.slug === slug) ?? null;
+
+export const revalidate = 3600;
 
 /**
  * Satu seri beserta seluruh edisinya.
@@ -23,8 +33,8 @@ import { ambilSeriDashboard, gambarDashboard } from "@/lib/dashboard-event";
  * lewat `/api/public/v1`, halaman ini seharusnya membaca dari sana.
  */
 
-export function generateStaticParams() {
-  const seri = kelompokkanSeri(allEvents());
+export async function generateStaticParams() {
+  const seri = await semuaSeri();
   return routing.locales.flatMap((locale) =>
     seri.map((s) => ({ locale, slug: s.slug })),
   );
@@ -36,7 +46,7 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const seri = seriBySlug(allEvents(), slug);
+  const seri = await cariSeri(slug);
   if (!seri) return {};
 
   const t = await getTranslations({ locale, namespace: "events" });
@@ -65,7 +75,7 @@ export default async function SeriPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const seri = seriBySlug(allEvents(), slug);
+  const seri = await cariSeri(slug);
   if (!seri) notFound();
 
   const t = await getTranslations("events");
@@ -93,8 +103,8 @@ export default async function SeriPage({
         eyebrow={t("seriesOne")}
         title={seri.akronim}
         lead={seri.nama ?? undefined}
-        count={seri.edisi.length}
-        countLabel={t("editions", { count: seri.edisi.length })}
+        count={seri.edisi.length || Math.max(1, dash?.tahunEdisi.length ?? 0)}
+        countLabel={t("editions", { count: seri.edisi.length || Math.max(1, dash?.tahunEdisi.length ?? 0) })}
       />
 
       {/* Gambar dari dashboard, kalau serinya sudah dipin di sana. Ini
@@ -147,6 +157,14 @@ export default async function SeriPage({
           <BackLink href="/event">{t("backToSeries")}</BackLink>
         </div>
 
+        {/* Seri yang hanya ada di dasbor: kartu edisi berjalan dari dasbor. */}
+        {seri.edisi.length === 0 && dash && (
+          <div className="flex max-w-md border border-[var(--line)]">
+            <EdisiDashboardKartu edisi={dash} />
+          </div>
+        )}
+
+        {seri.edisi.length > 0 && (
         <ul className="grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3">
           {seri.edisi.map((e) => (
             <li key={e.slug} className="bg-[var(--bg)]">
@@ -156,6 +174,7 @@ export default async function SeriPage({
           <SelPengisi jumlah={seri.edisi.length} kolom={2} tampak="block lg:hidden" />
           <SelPengisi jumlah={seri.edisi.length} kolom={3} />
         </ul>
+        )}
       </Section>
     </>
   );
