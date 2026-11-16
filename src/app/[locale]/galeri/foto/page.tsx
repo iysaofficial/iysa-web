@@ -1,76 +1,86 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { PageHeader, Section, MoreLink, SelPengisi } from "@/components/ui";
+import { Link } from "@/i18n/navigation";
+import { Section, EmptyState } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { photoFolders } from "@/content/external";
+import { GaleriKepala } from "@/components/galeri-kepala";
+import { GaleriFoto } from "@/components/galeri-foto";
+import { ambilAlbum } from "@/lib/galeri";
+
+export const revalidate = 900;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "gallery" });
   return pageMetadata({ locale, path: "/galeri/foto", title: t("photoTitle"), description: t("photoLead"),
-    og: { eyebrow: "IYSA", heading: t("photoTitle"), meta: `${photoFolders.length} ${locale === "id" ? "tahun" : "years"}` } });
+    og: { eyebrow: "IYSA", heading: t("photoTitle") } });
 }
 
 /**
- * Tujuh kartu tahun, tanpa gambar — dan itu keputusan, bukan kekosongan yang
- * belum sempat diisi.
- *
- * Halaman ini sempat dibuat bergambar, memakai poster event lalu sampul
- * newsletter sebagai thumbnail per tahun. Keduanya dibatalkan setelah
- * dihitung terhadap data yang benar-benar ada:
- *
- *   poster event      2 dari 7 tahun  (events.json hanya memuat 2024–2026)
- *   sampul newsletter 4 dari 7 tahun  (terbitan baru mulai 2022)
- *
- * Tidak ada satu pun sumber yang menutup 2019–2025. Hasilnya kartu yang
- * sebagian bergambar dan sebagian kosong — lebih buruk daripada tujuh kartu
- * seragam, karena ketidakhadiran gambar jadi terbaca sebagai kerusakan.
- *
- * Menambalnya dengan gambar dari tahun lain bukan pilihan: kartu 2021 yang
- * menampilkan poster 2025 adalah keterangan yang salah, dan di halaman arsip
- * justru di situ ia paling menyesatkan. Aturan yang sama sudah berlaku untuk
- * lima poster event yang hilang.
- *
- * Kalau nanti dokumentasi fotonya pindah dari Drive, satu gambar sampul per
- * tahun bisa diambil dari sana dan halaman ini tinggal merendernya.
+ * Galeri foto — album dokumentasi per event dari dasbor (`_dokumentasi`),
+ * dipilih per tahun (?tahun=). Folder Drive per tahun dari situs lama tetap
+ * ditautkan sebagai arsip lengkap.
  */
-export default async function PhotoGallery({ params }: { params: Promise<{ locale: Locale }> }) {
+export default async function PhotoGallery({
+  params, searchParams,
+}: {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ tahun?: string }>;
+}) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("gallery");
 
+  const semua = (await ambilAlbum()) ?? [];
+  const daftarTahun = [...new Set(semua.map((a) => a.tahun).filter(Boolean))].sort((a, b) => b.localeCompare(a));
+  const diminta = (await searchParams).tahun;
+  const tahun = diminta && daftarTahun.includes(diminta) ? diminta : daftarTahun[0];
+  const album = semua
+    .filter((a) => a.tahun === tahun)
+    .sort((a, b) => b.foto.length - a.foto.length || a.akronim.localeCompare(b.akronim));
+
+  const chip = (aktif: boolean) =>
+    `tnum rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
+      aktif ? "bg-[var(--navy)] text-[var(--on-navy)]" : "border border-[var(--border)] text-[var(--ink-muted)] hover:border-[var(--teal)] hover:text-[var(--teal)]"
+    }`;
+
   return (
     <>
-      <PageHeader
-        eyebrow={t("eyebrow")}
-        title={t("photoTitle")}
-        lead={t("photoLead")}
-        count={photoFolders.length}
-        countLabel={locale === "id" ? "tahun dokumentasi" : "years of archives"}
-        aside={<MoreLink href="/galeri/video">{t("videoTitle")}</MoreLink>}
-      />
-      <Section>
-        {/* Dokumentasi foto tetap di Drive. Memindahkannya ke penyimpanan lain
-            adalah keputusan IYSA, bukan keputusan penulisan ulang situs. */}
-        <ul
-          className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-4"
-        >
-          {photoFolders.map((f) => (
-            <li key={f.year} className="bg-[var(--bg)]">
-              <a href={f.url} target="_blank" rel="noreferrer"
-                 className="group flex h-full flex-col justify-between gap-6 p-7 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
-                <span className="tnum font-serif text-[34px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)]">{f.year}</span>
-                <span className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-[var(--teal)]">
-                  {t("openFolder", { year: f.year })}
-                  <span aria-hidden className="transition-transform duration-[var(--gerak-cepat)] group-hover:translate-x-0.5">↗</span>
-                </span>
+      <GaleriKepala judul={t("photoTitle")} aktif="foto" label={{ eyebrow: t("eyebrow"), foto: t("photoTab"), video: t("videoTab") }} />
+
+      <Section padat>
+        {daftarTahun.length === 0 ? (
+          <EmptyState title={t("unavailable")} />
+        ) : (
+          <>
+            <div className="mb-8 flex flex-wrap items-center gap-2">
+              {daftarTahun.map((y) => (
+                <Link key={y} href={`/galeri/foto?tahun=${y}`} scroll={false} className={chip(y === tahun)} aria-current={y === tahun ? "page" : undefined}>
+                  {y}
+                </Link>
+              ))}
+              <span className="ml-auto text-[13px] text-[var(--ink-faint)]">{t("albumCount", { count: album.length })}</span>
+            </div>
+            <GaleriFoto key={tahun} album={album}
+              teks={{ foto: t("photoCount", { count: 2 }).replace("2", "#"), tutup: t("close"), sebelum: t("prev"), sesudah: t("next"),
+                folder: t("driveFolder"), luring: t("offline"), daring: t("online"), sarpras: t("venue") }} />
+          </>
+        )}
+
+        {/* Arsip lengkap per tahun di Google Drive (situs lama). */}
+        <div className="mt-14 border-t border-[var(--line)] pt-6">
+          <p className="text-[13px] text-[var(--ink-muted)]">{t("archiveLead")}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {photoFolders.map((f) => (
+              <a key={f.year} href={f.url} target="_blank" rel="noreferrer"
+                className="tnum rounded-full border border-[var(--border)] px-3 py-1 text-[12.5px] text-[var(--ink-muted)] hover:border-[var(--teal)] hover:text-[var(--teal)]">
+                {f.year} ↗
               </a>
-            </li>
-          ))}
-          <SelPengisi jumlah={photoFolders.length} kolom={2} />
-          <SelPengisi jumlah={photoFolders.length} kolom={4} />
-        </ul>
+            ))}
+          </div>
+        </div>
       </Section>
     </>
   );
