@@ -291,8 +291,8 @@
     "lead": "Activities and key dates for every IYSA event, straight from the organisers' dashboard.",
     "openExternal": "Open the calendar flipbook",
     "monthNav": "Change month",
-    "prev": "Previous",
-    "next": "Next",
+    "prev": "Previous month",
+    "next": "Next month",
     "today": "This month",
     "count": "{count, plural, =0 {No items} one {# item} other {# items}}",
     "more": "more",
@@ -308,7 +308,11 @@
     "officialSite": "Official site",
     "flipbook": "The printed IYSA {year} calendar (flipbook) is still available.",
     "pickMonth": "Choose month",
-    "pickYear": "Choose year"
+    "pickYear": "Choose year",
+    "emptyDay": "Nothing scheduled on this date.",
+    "eventsThisMonth": "Events this month",
+    "legendActivityShort": "Activity",
+    "legendDeadlineShort": "Key date"
   },
   "common": {
     "readMore": "Read more",

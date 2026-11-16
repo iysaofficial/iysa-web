@@ -291,8 +291,8 @@
     "lead": "Jadwal kegiatan dan tanggal penting semua event IYSA, langsung dari dasbor panitia.",
     "openExternal": "Buka flipbook kalender",
     "monthNav": "Pindah bulan",
-    "prev": "Sebelumnya",
-    "next": "Berikutnya",
+    "prev": "Bulan sebelumnya",
+    "next": "Bulan berikutnya",
     "today": "Bulan ini",
     "count": "{count, plural, =0 {Tidak ada agenda} other {# agenda}}",
     "more": "lagi",
@@ -308,7 +308,11 @@
     "officialSite": "Situs resmi",
     "flipbook": "Kalender cetak IYSA {year} (flipbook) tetap tersedia.",
     "pickMonth": "Pilih bulan",
-    "pickYear": "Pilih tahun"
+    "pickYear": "Pilih tahun",
+    "emptyDay": "Tidak ada agenda di tanggal ini.",
+    "eventsThisMonth": "Event bulan ini",
+    "legendActivityShort": "Kegiatan",
+    "legendDeadlineShort": "Tanggal penting"
   },
   "common": {
     "readMore": "Selengkapnya",
