@@ -24,7 +24,8 @@
     "eventSites": "Situs event",
     "photos": "Galeri foto",
     "expertTeam": "Tim ahli",
-    "more": "Lainnya"
+    "more": "Lainnya",
+    "calendarShort": "Kalender"
   },
   "home": {
     "eyebrow": "Indonesian Young Scientist Association",
@@ -286,10 +287,26 @@
     "latestStatus": "Status terakhir"
   },
   "calendar": {
-    "title": "Kalender event",
-    "lead": "Jadwal event IYSA sepanjang tahun.",
-    "openExternal": "Buka kalender di jendela baru",
-    "fallback": "Kalender dimuat dari Heyzine. Kalau tidak tampil, buka tautan di bawah."
+    "title": "Kalender kegiatan",
+    "lead": "Jadwal kegiatan dan tanggal penting semua event IYSA, langsung dari dasbor panitia.",
+    "openExternal": "Buka flipbook kalender",
+    "monthNav": "Pindah bulan",
+    "prev": "Sebelumnya",
+    "next": "Berikutnya",
+    "today": "Bulan ini",
+    "count": "{count, plural, =0 {Tidak ada agenda} other {# agenda}}",
+    "more": "lagi",
+    "legendActivity": "Kegiatan (opening, penjurian, awarding)",
+    "legendDeadline": "Tanggal penting (batas pendaftaran, pembayaran, pengumuman)",
+    "agendaTitle": "Agenda {month}",
+    "unavailable": "Kalender belum bisa dimuat dari dasbor. Coba lagi sebentar lagi.",
+    "empty": "Belum ada agenda di bulan ini.",
+    "deadline": "Tanggal penting",
+    "activity": "Kegiatan",
+    "online": "Daring",
+    "offline": "Luring",
+    "officialSite": "Situs resmi",
+    "flipbook": "Kalender cetak IYSA {year} (flipbook) tetap tersedia."
   },
   "common": {
     "readMore": "Selengkapnya",

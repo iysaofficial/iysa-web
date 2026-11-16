@@ -24,7 +24,8 @@
     "eventSites": "Event websites",
     "photos": "Photo gallery",
     "expertTeam": "Expert team",
-    "more": "More"
+    "more": "More",
+    "calendarShort": "Calendar"
   },
   "home": {
     "eyebrow": "Indonesian Young Scientist Association",
@@ -287,9 +288,25 @@
   },
   "calendar": {
     "title": "Event calendar",
-    "lead": "The IYSA event schedule through the year.",
-    "openExternal": "Open the calendar in a new window",
-    "fallback": "The calendar loads from Heyzine. If it does not appear, use the link below."
+    "lead": "Activities and key dates for every IYSA event, straight from the organisers' dashboard.",
+    "openExternal": "Open the calendar flipbook",
+    "monthNav": "Change month",
+    "prev": "Previous",
+    "next": "Next",
+    "today": "This month",
+    "count": "{count, plural, =0 {No items} one {# item} other {# items}}",
+    "more": "more",
+    "legendActivity": "Activities (opening, judging, awarding)",
+    "legendDeadline": "Key dates (registration and payment deadlines, announcements)",
+    "agendaTitle": "Agenda for {month}",
+    "unavailable": "The calendar could not be loaded from the dashboard. Please try again shortly.",
+    "empty": "Nothing scheduled this month yet.",
+    "deadline": "Key date",
+    "activity": "Activity",
+    "online": "Online",
+    "offline": "Onsite",
+    "officialSite": "Official site",
+    "flipbook": "The printed IYSA {year} calendar (flipbook) is still available."
   },
   "common": {
     "readMore": "Read more",

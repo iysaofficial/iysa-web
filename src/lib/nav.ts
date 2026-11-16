@@ -20,10 +20,12 @@ export const primaryNav: NavItem[] = [
     children: [
       { key: "events", path: "/event" },
       { key: "partners", path: "/mitra" },
-      { key: "calendar", path: "/kalender" },
     ],
   },
   { key: "team", path: "/tim" },
+  /* Kalender jadi menu utama: di menu Event ia hanya submenu, dan navbar
+     desktop tidak merender submenu — sehingga tidak terjangkau dari atas. */
+  { key: "calendarShort", path: "/kalender" },
   { key: "newsletter", path: "/newsletter" },
   { key: "gallery", path: "/galeri/video" },
   { key: "faq", path: "/faq" },
