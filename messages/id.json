@@ -306,7 +306,9 @@
     "online": "Daring",
     "offline": "Luring",
     "officialSite": "Situs resmi",
-    "flipbook": "Kalender cetak IYSA {year} (flipbook) tetap tersedia."
+    "flipbook": "Kalender cetak IYSA {year} (flipbook) tetap tersedia.",
+    "pickMonth": "Pilih bulan",
+    "pickYear": "Pilih tahun"
   },
   "common": {
     "readMore": "Selengkapnya",

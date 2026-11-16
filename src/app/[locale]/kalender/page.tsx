@@ -7,6 +7,7 @@ import { pageMetadata } from "@/lib/seo";
 import { eventCalendar } from "@/content/external";
 import { slugSeri } from "@/lib/event-seri";
 import { gambarDashboard } from "@/lib/dashboard-event";
+import { PilihBulan } from "@/components/pilih-bulan";
 import {
   ambilKalender, bacaBulan, geserBulan, kisiBulan, kunciBulan, ratakan, type Entri,
 } from "@/lib/kalender";
@@ -78,8 +79,20 @@ export default async function CalendarPage({
   const kisi = kisiBulan(tahun, bulan);
   const judulBulan = namaBulan(tahun, bulan, locale);
 
+  /* Pilihan tahun: sejak IYSA berdiri (2018) sampai dua tahun ke depan, dan
+     selalu memuat tahun yang sedang dibuka. */
+  const tahunKini = Number(hariIni.slice(0, 4));
+  const tahunPilihan = Array.from({ length: tahunKini + 2 - 2018 + 1 }, (_, i) => 2018 + i);
+  if (!tahunPilihan.includes(tahun)) tahunPilihan.push(tahun);
+  tahunPilihan.sort((a, b) => b - a);
+  const daftarNamaBulan = Array.from({ length: 12 }, (_, i) =>
+    new Date(Date.UTC(2000, i, 1)).toLocaleDateString(locale === "en" ? "en-GB" : "id-ID", { month: "long", timeZone: "UTC" }));
+
   const navBulan = (
-    <nav aria-label={t("monthNav")} className="flex items-center gap-2 md:justify-end">
+    <nav aria-label={t("monthNav")} className="flex flex-col gap-2 md:items-end">
+      <PilihBulan tahun={tahun} bulan={bulan} namaBulan={daftarNamaBulan} tahunPilihan={tahunPilihan}
+        labelBulan={t("pickMonth")} labelTahun={t("pickYear")} />
+      <div className="flex flex-wrap items-center gap-2">
       <Link href={`/kalender?bulan=${kunciBulan(sebelum.tahun, sebelum.bulan)}`} scroll={false}
         className="rounded-full border border-[var(--border)] px-3 py-1 text-[13px] text-[var(--ink-muted)] hover:border-[var(--teal)] hover:text-[var(--teal)]">
         ← {t("prev")}
@@ -92,12 +105,13 @@ export default async function CalendarPage({
         className="rounded-full border border-[var(--border)] px-3 py-1 text-[13px] text-[var(--ink-muted)] hover:border-[var(--teal)] hover:text-[var(--teal)]">
         {t("next")} →
       </Link>
+      </div>
     </nav>
   );
 
   return (
     <>
-      <PageHeader eyebrow={judulBulan} title={t("title")} lead={t("lead")}
+      <PageHeader eyebrow={judulBulan} title={t("title")}
         count={entri.length} countLabel={t("count", { count: entri.length })} aside={navBulan} />
 
       <Section padat>

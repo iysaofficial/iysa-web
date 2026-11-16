@@ -306,7 +306,9 @@
     "online": "Online",
     "offline": "Onsite",
     "officialSite": "Official site",
-    "flipbook": "The printed IYSA {year} calendar (flipbook) is still available."
+    "flipbook": "The printed IYSA {year} calendar (flipbook) is still available.",
+    "pickMonth": "Choose month",
+    "pickYear": "Choose year"
   },
   "common": {
     "readMore": "Read more",
