@@ -6,6 +6,7 @@ import type { Locale } from "@/i18n/routing";
 import { Section, StatRow, MoreLink, Pill, SelPengisi } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
+import { HeroAtom } from "@/components/hero-atom";
 import { statusEvent, waktuEvent } from "@/lib/event-seri";
 import { PartnerWall } from "@/components/partner-wall";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
@@ -14,10 +15,9 @@ import { KurasiPanel } from "@/components/kurasi-panel";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allAffiliates } from "@/lib/data";
 import { semuaTerbitan } from "@/lib/newsletter";
-import { ambilAlbum, kecil } from "@/lib/galeri";
 import { ambilKalender, ratakan } from "@/lib/kalender";
 import { judulNewsletter } from "@/lib/teks-event";
-import { vision, mission, goals } from "@/content/profile";
+import { intro, vision, mission, goals } from "@/content/profile";
 import { affiliateNames } from "@/content/affiliates";
 import { mediaPartners } from "@/content/external";
 
@@ -73,13 +73,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
   const { terbitan } = await semuaTerbitan();
 
-  /* Foto hero: dokumentasi luring terbaru di dasbor (pembukaan/penjurian/penghargaan). */
-  const album = (await ambilAlbum()) ?? [];
-  const kegiatan = /(pembukaan|opening|penjurian|judging|penghargaan|awarding|peresmian)/i;
-  const fotoHero = album
-    .flatMap((al) => al.foto.filter((f) => f.jenis === "luring" && kegiatan.test(f.label)).map((f) => ({ ...f, gambar: kecil(f.gambar, 1280) })))[0]
-    ?? null;
-
   /* Agenda terdekat: satu kegiatan per edisi, lima ke depan (kalender dasbor). */
   const hariIni = kini.toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
   const sampai = new Date(kini.getTime() + 200 * 86_400_000).toISOString().slice(0, 10);
@@ -111,26 +104,37 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
   return (
     <>
-      {/* ── Hero (konsep GYSO): foto dokumentasi IYSA penuh lebar + lapisan navy ── */}
+      {/* ── Hero (konsep GYSO): bidang navy + logo IYSA 3D ── */}
       <section className="relative isolate overflow-hidden bg-[#0b2948] text-white">
-        {fotoHero && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={fotoHero.gambar} alt={fotoHero.label} className="absolute inset-0 -z-10 h-full w-full object-cover" />
-        )}
-        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0b2948]/95 via-[#0b2948]/75 to-[#0b2948]/35" />
-        <div className="shell py-24 md:py-36">
-          <p className="rise font-sans text-[11.5px] font-bold tracking-[0.16em] text-white/80 uppercase">{t("eyebrow")}</p>
-          <h1 className="rise mt-5 max-w-[16ch] font-serif text-[clamp(2.6rem,1.4rem+5.5vw,6rem)] leading-[1.02] font-normal tracking-[-0.02em] text-white">
-            {t("heroTitle")}
-          </h1>
-          <p className="rise mt-6 max-w-[56ch] font-sans text-lead text-white/85">{t("heroBody")}</p>
-          <div className="rise mt-10 flex flex-wrap gap-3">
-            <Link href="/event" className="group inline-flex items-center gap-3 bg-white px-6 py-3.5 text-[14.5px] font-bold text-[#0b2948] transition-opacity hover:opacity-90">
-              {t("ctaEvents")} <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
-            </Link>
-            <Link href="/profil" className="inline-flex items-center gap-3 border border-white/60 px-6 py-3.5 text-[14.5px] font-bold text-white transition-colors hover:border-white hover:bg-white/10">
-              {t("ctaProfile")}
-            </Link>
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(1000px_520px_at_85%_20%,rgba(32,98,180,0.55),transparent_60%),radial-gradient(700px_420px_at_0%_100%,rgba(32,98,180,0.25),transparent_60%)]" />
+        <div aria-hidden className="absolute inset-0 -z-10 opacity-[0.07] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:56px_56px]" />
+        <div className="shell grid items-center gap-10 py-20 md:grid-cols-12 md:py-28">
+          <div className="md:col-span-7">
+            <p className="rise font-sans text-[11.5px] font-bold tracking-[0.16em] text-white/75 uppercase">{t("eyebrow")}</p>
+            <h1 className="rise mt-5 max-w-[16ch] font-serif text-[clamp(2.6rem,1.4rem+5vw,5.5rem)] leading-[1.03] tracking-[-0.02em] text-white">
+              {t("heroTitle")}
+            </h1>
+            <p className="rise mt-6 max-w-[54ch] font-sans text-lead text-white/85">{t("heroBody")}</p>
+            <div className="rise mt-10 flex flex-wrap gap-3">
+              <Link href="/event" className="group inline-flex items-center gap-3 bg-white px-6 py-3.5 text-[14.5px] font-bold text-[#0b2948] transition-opacity hover:opacity-90">
+                {t("ctaEvents")} <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+              </Link>
+              <Link href="/profil" className="inline-flex items-center gap-3 border border-white/60 px-6 py-3.5 text-[14.5px] font-bold text-white transition-colors hover:border-white hover:bg-white/10">
+                {t("ctaProfile")}
+              </Link>
+            </div>
+          </div>
+          {/* Lambang IYSA tiga dimensi, bergerak. Warnanya dibaca dari --logo-*;
+              di bidang navy dipakai versi terang supaya tetap terbaca. */}
+          <div className="md:col-span-5"
+            style={{ ["--logo-navy" as string]: "#a9c6f7", ["--logo-teal" as string]: "#4fc4bc", ["--logo-coral" as string]: "#ff7a5e",
+                     ["--logo-globe" as string]: "#eef2f9", ["--logo-globe-badan" as string]: "#1d4f8f" }}>
+            <div className="relative">
+              {/* Cahaya lembut di belakang lambang supaya ia menonjol dari bidang navy. */}
+              <div aria-hidden className="pointer-events-none absolute inset-0 -z-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.62),rgba(200,220,255,0.28)_40%,transparent_70%)]" />
+              <HeroAtom className="relative mx-auto md:mr-0 md:ml-auto" />
+            </div>
+            <p className="mt-6 max-w-[40ch] text-[15px] leading-relaxed text-white/75 md:ml-auto">{intro[locale]}</p>
           </div>
         </div>
       </section>
