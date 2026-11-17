@@ -303,7 +303,6 @@
   "calendar": {
     "title": "Event calendar",
     "lead": "Activities and key dates for every IYSA event, straight from the organisers' dashboard.",
-    "openExternal": "Open the calendar flipbook",
     "monthNav": "Change month",
     "prev": "Previous month",
     "next": "Next month",
@@ -320,7 +319,6 @@
     "online": "Online",
     "offline": "Onsite",
     "officialSite": "Official site",
-    "flipbook": "The printed IYSA {year} calendar (flipbook) is still available.",
     "pickMonth": "Choose month",
     "pickYear": "Choose year",
     "emptyDay": "Nothing scheduled on this date.",
