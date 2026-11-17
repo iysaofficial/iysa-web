@@ -286,3 +286,57 @@ export async function ambilSemuaSeriDashboard(): Promise<Map<string, EdisiDashbo
   }
   return peta;
 }
+
+/** Satu edisi dalam daftar seri — bahan kisi edisi di halaman seri. */
+export type EdisiRingkas = {
+  tahun: string;
+  nama: string;
+  slug: string | null;
+  dipin: boolean;
+  /** Status edisi di dasbor (completed, active, published, …). */
+  status: string | null;
+  logo: string | null;
+  banner: string | null;
+  mulai: string | null;
+  selesai: string | null;
+  moda: "online" | "offline" | "hybrid" | null;
+};
+
+/**
+ * Seluruh edisi satu seri, terbaru dulu, masing-masing dengan bannernya.
+ *
+ * Draf dibuang: edisi yang belum disetujui (atau salinan kerja ganda seperti
+ * NSPC 2027) tidak punya tempat di arsip publik. `null` kalau serinya belum
+ * dipin atau API tidak terjangkau — halaman seri lalu kembali ke data warisan.
+ */
+export async function ambilEdisiDashboard(akronim: string): Promise<EdisiRingkas[] | null> {
+  const j = await ambilJson(`${PANGKAL}/${encodeURIComponent(akronim)}/edisi`);
+  const edisi = (j as { data?: { edisi?: Record<string, unknown>[] } })?.data?.edisi;
+  if (!Array.isArray(edisi)) return null;
+  const hasil: EdisiRingkas[] = [];
+  const tahunTerpakai = new Set<string>();
+  for (const r of edisi) {
+    const tahun = teks(r.tahun);
+    if (!tahun || teks(r.status) === "draft") continue;
+    // Satu kartu per tahun; yang dipin menang bila ada dua baris setahun.
+    if (tahunTerpakai.has(tahun) && r.dipin !== true) continue;
+    tahunTerpakai.add(tahun);
+    const moda = teks(r.moda);
+    const baru: EdisiRingkas = {
+      tahun,
+      nama: teks(r.nama) ?? "",
+      slug: teks(r.slug),
+      dipin: r.dipin === true,
+      status: teks(r.status),
+      logo: teks(r.logo),
+      banner: teks(r.banner),
+      mulai: teks(r.mulai),
+      selesai: teks(r.selesai),
+      moda: moda === "online" || moda === "offline" || moda === "hybrid" ? moda : null,
+    };
+    const i = hasil.findIndex((x) => x.tahun === tahun);
+    if (i >= 0) hasil[i] = baru;
+    else hasil.push(baru);
+  }
+  return hasil.sort((a, b) => b.tahun.localeCompare(a.tahun));
+}

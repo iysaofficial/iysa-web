@@ -8,7 +8,9 @@ import { EventCard } from "@/components/event-card";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allEvents } from "@/lib/data";
 import { kelompokkanSeri, gabungSeriDashboard, type Seri } from "@/lib/event-seri";
-import { ambilSeriDashboard, ambilSemuaSeriDashboard, milikSitus, gambarDashboard } from "@/lib/dashboard-event";
+import { ambilSeriDashboard, ambilSemuaSeriDashboard, ambilEdisiDashboard, milikSitus, gambarDashboard } from "@/lib/dashboard-event";
+import { EdisiBannerKartu } from "@/components/edisi-banner-kartu";
+import { tahunEvent } from "@/lib/teks-event";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
 
 /** Seri warisan + seri yang hanya ada di dasbor (lihat gabungSeriDashboard). */
@@ -80,7 +82,10 @@ export default async function SeriPage({
 
   const t = await getTranslations("events");
 
-  const dash = await ambilSeriDashboard(seri.akronim);
+  const [dash, edisiDash] = await Promise.all([ambilSeriDashboard(seri.akronim), ambilEdisiDashboard(seri.akronim)]);
+  /* Edisi warisan per tahun — tujuan klik kartu edisi dasbor yang punya halaman detail lama. */
+  const warisanPerTahun = new Map(seri.edisi.map((e) => [tahunEvent(e.title) ?? "", `/event/${e.slug}`]));
+  const jumlahEdisi = edisiDash?.length || seri.edisi.length || Math.max(1, dash?.tahunEdisi.length ?? 0);
 
   return (
     <>
@@ -103,8 +108,8 @@ export default async function SeriPage({
         eyebrow={t("seriesOne")}
         title={seri.akronim}
         lead={seri.nama ?? undefined}
-        count={seri.edisi.length || Math.max(1, dash?.tahunEdisi.length ?? 0)}
-        countLabel={t("editions", { count: seri.edisi.length || Math.max(1, dash?.tahunEdisi.length ?? 0) })}
+        count={jumlahEdisi}
+        countLabel={t("editions", { count: jumlahEdisi })}
       />
 
       {/* Gambar dari dashboard, kalau serinya sudah dipin di sana. Ini
@@ -157,6 +162,24 @@ export default async function SeriPage({
           <BackLink href="/event">{t("backToSeries")}</BackLink>
         </div>
 
+        {/* Seluruh edisi dari dasbor, masing-masing dengan bannernya sendiri.
+            Data warisan hanya dipakai bila dasbor tidak menjawab. */}
+        {edisiDash && edisiDash.length > 0 ? (
+          <ul className="grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3">
+            {edisiDash.map((e) => (
+              <li key={e.tahun} className="flex">
+                <EdisiBannerKartu
+                  akronim={seri.akronim}
+                  edisi={e}
+                  dash={dash}
+                  hrefWarisan={warisanPerTahun.get(e.tahun) ?? null}
+                />
+              </li>
+            ))}
+            <SelPengisi jumlah={edisiDash.length} kolom={2} tampak="block lg:hidden" />
+            <SelPengisi jumlah={edisiDash.length} kolom={3} />
+          </ul>
+        ) : (<>
         {/* Seri yang hanya ada di dasbor: kartu edisi berjalan dari dasbor. */}
         {seri.edisi.length === 0 && dash && (
           <div className="flex max-w-md border border-[var(--line)]">
@@ -175,6 +198,7 @@ export default async function SeriPage({
           <SelPengisi jumlah={seri.edisi.length} kolom={3} />
         </ul>
         )}
+        </>)}
       </Section>
     </>
   );
