@@ -35,6 +35,8 @@ export type Terbitan = NewsletterIssue & {
   /** PDF dari dasbor (URL penuh). */
   pdfUrl?: string | null;
   halaman?: number | null;
+  /** Bahasa terbitan dari dasbor: "en", "id-en", … */
+  bahasa?: string | null;
   sumber: "dashboard" | "lama";
 };
 
@@ -42,6 +44,7 @@ type BarisApi = {
   id: string;
   nama: string;
   halaman: number | null;
+  bahasa: string | null;
   sampul: string | null;
   pdf: string | null;
 };
@@ -79,7 +82,7 @@ const lama = (issuesRaw as NewsletterIssue[]).map((i): Terbitan => ({ ...i, sumb
 
 async function ambilApi(): Promise<BarisApi[] | null> {
   try {
-    const r = await fetch(`${PANGKAL}/_newsletter?lembaga=IYSA`, {
+    const r = await fetch(`${PANGKAL}/_newsletter?lembaga=IYSA,YPBI`, {
       next: { revalidate: SEGAR, tags: ["newsletter"] },
       signal: AbortSignal.timeout(8000),
     });
@@ -104,32 +107,34 @@ export async function semuaTerbitan(): Promise<{ terbitan: Terbitan[]; sumber: "
   const api = await ambilApi();
   if (!api) return { terbitan: [...lama].sort(urut), sumber: "lama" };
 
-  const peta = new Map(lama.map((i) => [i.slug, { ...i }]));
+  /* Dasbor adalah satu-satunya sumber daftar (2026-11-17). Data lama hanya
+     melengkapi terbitan yang sama dengan pratinjau Google Drive-nya — pembaca
+     di halaman lebih ringan daripada PDF dasbor (median 35 MB). Terbitan yang
+     hanya ada di data lama (Jan–Apr 2022, tanpa PDF) tidak ditampilkan lagi. */
+  const lamaPerSlug = new Map(lama.map((i) => [i.slug, i]));
+  const peta = new Map<string, Terbitan>();
   for (const b of api) {
     const u = uraiNama(b.nama);
-    if (!u || !b.pdf) continue;
-    const ada = peta.get(u.slug);
-    if (ada) {
-      peta.set(u.slug, { ...ada, sampul: b.sampul ?? null, pdfUrl: b.pdf, halaman: b.halaman, hasPdf: true, sumber: "dashboard" });
-    } else {
-      peta.set(u.slug, {
-        legacyKey: `dashboard:${b.id}`,
-        slug: u.slug,
-        year: u.year,
-        month: u.month,
-        batch: u.batch,
-        kind: u.kind,
-        title: u.kind === "batch" ? `IYSA Newsletter Batch ${u.batch} ${u.year}` : `IYSA Newsletter ${BULAN_EN[u.month!]}`,
-        cover: null,
-        driveId: null,
-        pdfPreview: null,
-        hasPdf: true,
-        sampul: b.sampul ?? null,
-        pdfUrl: b.pdf,
-        halaman: b.halaman,
-        sumber: "dashboard",
-      });
-    }
+    if (!u || !b.pdf || peta.has(u.slug)) continue;
+    const lm = lamaPerSlug.get(u.slug);
+    peta.set(u.slug, {
+      legacyKey: lm?.legacyKey ?? `dashboard:${b.id}`,
+      slug: u.slug,
+      year: u.year,
+      month: u.month,
+      batch: u.batch,
+      kind: u.kind,
+      title: lm?.title ?? (u.kind === "batch" ? `IYSA Newsletter Batch ${u.batch} ${u.year}` : `IYSA Newsletter ${BULAN_EN[u.month!]}`),
+      cover: lm?.cover ?? null,
+      driveId: lm?.driveId ?? null,
+      pdfPreview: lm?.pdfPreview ?? null,
+      hasPdf: true,
+      sampul: b.sampul ?? null,
+      pdfUrl: b.pdf,
+      halaman: b.halaman,
+      bahasa: b.bahasa,
+      sumber: "dashboard",
+    });
   }
   return { terbitan: [...peta.values()].sort(urut), sumber: "dashboard" };
 }
@@ -154,4 +159,15 @@ export function pdfTerbitan(i: Terbitan): { sematan: string | null; unduh: strin
   const drive = i.hasPdf && i.pdfPreview ? i.pdfPreview : null;
   const driveView = i.driveId ? `https://drive.google.com/file/d/${i.driveId}/view` : null;
   return { sematan: drive, unduh: i.pdfUrl ?? (drive ? driveView : null) };
+}
+
+/** "Juni 2025" / "Batch 3 · 2026" — label pendek di atas judul kartu. */
+export function labelTerbitan(i: Terbitan, locale: "id" | "en"): string {
+  if (i.batch) return `Batch ${i.batch} · ${i.year}`;
+  if (i.month) {
+    return new Date(Date.UTC(i.year, i.month - 1, 1)).toLocaleDateString(locale === "en" ? "en-GB" : "id-ID", {
+      month: "long", year: "numeric", timeZone: "UTC",
+    });
+  }
+  return String(i.year);
 }

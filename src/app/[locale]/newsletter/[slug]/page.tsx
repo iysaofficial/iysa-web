@@ -1,189 +1,128 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
-
-import { BackLink, ButtonLink, Pill, Section } from "@/components/ui";
+import { Link, redirect } from "@/i18n/navigation";
+import { BackLink, ButtonLink } from "@/components/ui";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
-import { semuaTerbitan, terbitanBySlug, sampulTerbitan, pdfTerbitan } from "@/lib/newsletter";
+import { semuaTerbitan, sampulTerbitan, pdfTerbitan, labelTerbitan } from "@/lib/newsletter";
 import { judulNewsletter } from "@/lib/teks-event";
 
-const MONTH: Record<Locale, string[]> = {
-  id: ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
-  en: ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-};
-
-/**
- * Inilah pengganti 42 komponen React yang isinya identik — masing-masing hanya
- * membaca kunci JSON yang berbeda. Menambah terbitan baru sekarang berarti
- * menambah satu baris data, bukan menulis berkas dan mendaftarkan rute.
- */
-export async function generateStaticParams() {
-  const { terbitan } = await semuaTerbitan();
-  return routing.locales.flatMap((locale) =>
-    terbitan.map((i) => ({ locale, slug: i.slug })),
-  );
-}
-
+export const revalidate = 900;
 /** Terbitan baru di dasbor tetap bisa dibuka sebelum build berikutnya. */
 export const dynamicParams = true;
-export const revalidate = 900;
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Locale; slug: string }>;
-}): Promise<Metadata> {
+export async function generateStaticParams() {
+  const { terbitan } = await semuaTerbitan();
+  return routing.locales.flatMap((locale) => terbitan.map((i) => ({ locale, slug: i.slug })));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const issue = await terbitanBySlug(slug);
+  const issue = (await semuaTerbitan()).terbitan.find((i) => i.slug === slug);
   if (!issue) return {};
-
   const t = await getTranslations({ locale, namespace: "newsletter" });
   const judul = judulNewsletter(issue, locale);
-  const label = issue.batch
-    ? t("batchOf", { batch: issue.batch, year: issue.year })
-    : issue.month
-      ? t("issueOf", { month: MONTH[locale][issue.month], year: issue.year })
-      : String(issue.year);
-
+  const label = labelTerbitan(issue, locale);
   return pageMetadata({
-    locale,
-    path: `/newsletter/${issue.slug}`,
-    title: judul,
-    description:
-      locale === "id"
-        ? `${label} — terbitan newsletter IYSA. ${t("lead")}`
-        : `${label} — IYSA newsletter issue. ${t("lead")}`,
-    og: { eyebrow: "Newsletter", heading: judul, meta: label },
-    type: "article",
+    locale, path: `/newsletter/${issue.slug}`, title: judul,
+    description: locale === "id" ? `${label} — terbitan newsletter IYSA. ${t("lead")}` : `${label} — IYSA newsletter issue. ${t("lead")}`,
+    og: { eyebrow: "Newsletter", heading: judul, meta: label }, type: "article",
   });
 }
 
-export default async function IssuePage({
-  params,
-}: {
-  params: Promise<{ locale: Locale; slug: string }>;
-}) {
+const BAHASA: Record<string, Record<Locale, string>> = {
+  en: { id: "Inggris", en: "English" },
+  id: { id: "Indonesia", en: "Indonesian" },
+  "id-en": { id: "Indonesia & Inggris", en: "Indonesian & English" },
+};
+
+/** Halaman baca satu terbitan: sampul + info di kiri, pembaca PDF di kanan, navigasi terbitan. */
+export default async function IssuePage({ params }: { params: Promise<{ locale: Locale; slug: string }> }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const issue = await terbitanBySlug(slug);
-  if (!issue) notFound();
+  const { terbitan } = await semuaTerbitan();
+  const idx = terbitan.findIndex((i) => i.slug === slug);
+  /* Alamat terbitan lama yang tidak ada lagi (mis. Jan–Apr 2022 tanpa PDF) → daftar. */
+  if (idx < 0) redirect({ href: "/newsletter", locale });
+  const issue = terbitan[idx];
+  const lebihBaru = idx > 0 ? terbitan[idx - 1] : null;
+  const lebihLama = idx < terbitan.length - 1 ? terbitan[idx + 1] : null;
 
   const t = await getTranslations("newsletter");
   const cover = sampulTerbitan(issue);
   const judul = judulNewsletter(issue, locale);
-
-  const label = issue.batch
-    ? t("batchOf", { batch: issue.batch, year: issue.year })
-    : issue.month
-      ? t("issueOf", { month: MONTH[locale][issue.month], year: issue.year })
-      : String(issue.year);
-
-  // PDF dari dasbor bila ada; kalau tidak, tautan Drive lama (/preview untuk
-  // disematkan, /view untuk diunduh).
+  const label = labelTerbitan(issue, locale);
   const pdf = pdfTerbitan(issue);
-  const viewUrl = pdf.unduh;
+  const bahasa = issue.bahasa ? BAHASA[issue.bahasa]?.[locale] ?? issue.bahasa : null;
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            breadcrumbJsonLd(
-              [
-                { name: "IYSA", path: "/" },
-                { name: t("title"), path: "/newsletter" },
-                { name: judul, path: `/newsletter/${issue.slug}` },
-              ],
-              locale,
-            ),
-          ),
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([
+        { name: "IYSA", path: "/" }, { name: t("title"), path: "/newsletter" }, { name: judul, path: `/newsletter/${issue.slug}` },
+      ], locale)) }} />
 
-      <div className="shell pt-8">
+      <div className="shell py-8 md:py-10">
         <BackLink href="/newsletter">{t("backToNewsletter")}</BackLink>
-      </div>
 
-      <Section>
-        <div className="grid gap-10 md:grid-cols-12 md:gap-12">
-          {/* Sampul */}
-          <div className="md:col-span-4">
-            <div className="relative aspect-[3/4] overflow-hidden border border-[var(--line)] bg-[var(--bg-sunk)]">
-              {cover ? (
-                <Image
-                  src={cover}
-                  alt={judul}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 30vw"
-                  className="object-cover"
-                  priority
-                />
-              ) : (
-                <span className="absolute inset-0 grid place-items-center px-4 text-center font-serif text-[13px] font-bold text-[var(--ink-faint)]">
-                  {judul}
-                </span>
-              )}
-            </div>
-
-            <div className="mt-5">
-              <Pill tone="teal">{label}</Pill>
-            </div>
-
-            <h1 className="mt-4 font-serif text-title text-[var(--navy)]">{judul}</h1>
-
-            {/*
-              Penghitung pembaca dari situs lama dihapus. Ia memasang Firebase
-              Firestore — paket 12 MB dan satu layanan pihak ketiga — hanya
-              untuk satu angka yang tidak dipakai siapa pun untuk mengambil
-              keputusan apa pun.
-            */}
-
-            {viewUrl && (
-              <div className="mt-6">
-                <ButtonLink href={viewUrl} tone="primary" external>
-                  {t("download")}
-                </ButtonLink>
+        <div className="mt-6 grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-12">
+          {/* ── Sampul + info ── */}
+          <aside className="flex flex-col gap-5 lg:sticky lg:top-24 lg:self-start">
+            <div className="flex gap-5 lg:flex-col">
+              <div className="relative aspect-[3/4] w-32 shrink-0 overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--bg-sunk)] shadow-sm lg:w-full">
+                {cover && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={cover} alt={judul} className="h-full w-full object-cover" />
+                )}
               </div>
+              <div>
+                <p className="text-[12px] font-semibold tracking-wide text-[var(--teal)] uppercase">{label}</p>
+                <h1 className="mt-1.5 font-serif text-[24px] leading-tight font-bold text-[var(--navy)] lg:text-[28px]">{judul}</h1>
+                <dl className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-[var(--ink-muted)]">
+                  {issue.halaman ? <div><dt className="inline text-[var(--ink-faint)]">{t("pagesLabel")}: </dt><dd className="inline tnum">{issue.halaman}</dd></div> : null}
+                  {bahasa && <div><dt className="inline text-[var(--ink-faint)]">{t("language")}: </dt><dd className="inline">{bahasa}</dd></div>}
+                </dl>
+              </div>
+            </div>
+            {pdf.unduh && (
+              <ButtonLink href={pdf.unduh} tone="primary" external>{t("download")}</ButtonLink>
             )}
-          </div>
+          </aside>
 
-          {/* Pembaca PDF */}
-          <div className="md:col-span-8">
+          {/* ── Pembaca ── */}
+          <div>
             {pdf.sematan ? (
-              <iframe
-                src={pdf.sematan}
-                title={judul}
-                loading="lazy"
-                className="aspect-[3/4] w-full border border-[var(--line)] bg-[var(--bg-sunk)] md:aspect-[4/5]"
-                allow="autoplay"
-              />
-            ) : viewUrl ? (
-              <div className="flex aspect-[4/5] flex-col items-center justify-center gap-5 border border-dashed border-[var(--border)] px-8">
-                <p className="max-w-[36ch] text-center text-[15px] leading-relaxed text-[var(--ink-muted)]">
-                  {t("readPdfLead", { pages: issue.halaman ?? 0 })}
-                </p>
-                <ButtonLink href={viewUrl} tone="navy" external>{t("readPdf")}</ButtonLink>
+              <iframe src={pdf.sematan} title={judul} loading="lazy" allow="autoplay"
+                className="aspect-[3/4] w-full rounded-lg border border-[var(--line)] bg-[var(--bg-sunk)] md:aspect-[4/5]" />
+            ) : pdf.unduh ? (
+              <div className="flex aspect-[4/5] flex-col items-center justify-center gap-5 rounded-lg border border-dashed border-[var(--border)] px-8 text-center">
+                <p className="max-w-[36ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">{t("readPdfLead", { pages: issue.halaman ?? 0 })}</p>
+                <ButtonLink href={pdf.unduh} tone="navy" external>{t("readPdf")}</ButtonLink>
               </div>
             ) : (
-              /*
-                Lima terbitan awal 2022 tercatat di situs lama tanpa tautan PDF
-                sama sekali. Entrinya dipertahankan — judul dan sampulnya nyata
-                dan alamatnya sudah terindeks — tapi pembaca kosong tidak
-                disajikan seolah-olah ada isinya.
-              */
-              <div className="flex aspect-[4/5] items-center justify-center border border-dashed border-[var(--border)] px-8">
-                <p className="max-w-[36ch] text-center text-[15px] leading-relaxed text-[var(--ink-muted)]">
-                  {t("noPdf")}
-                </p>
+              <div className="flex aspect-[4/5] items-center justify-center rounded-lg border border-dashed border-[var(--border)] px-8">
+                <p className="max-w-[36ch] text-center text-[15px] text-[var(--ink-muted)]">{t("noPdf")}</p>
               </div>
             )}
+
+            {/* ── Navigasi terbitan ── */}
+            <nav className="mt-6 grid gap-3 sm:grid-cols-2">
+              {lebihLama ? (
+                <Link href={`/newsletter/${lebihLama.slug}`} className="group rounded-lg border border-[var(--line)] p-4 transition-colors hover:border-[var(--teal)]">
+                  <span className="text-[12px] text-[var(--ink-faint)]">← {t("prevIssue")}</span>
+                  <span className="mt-1 block font-serif text-[15px] font-bold text-[var(--ink)] group-hover:text-[var(--navy)]">{labelTerbitan(lebihLama, locale)}</span>
+                </Link>
+              ) : <span />}
+              {lebihBaru && (
+                <Link href={`/newsletter/${lebihBaru.slug}`} className="group rounded-lg border border-[var(--line)] p-4 text-right transition-colors hover:border-[var(--teal)]">
+                  <span className="text-[12px] text-[var(--ink-faint)]">{t("nextIssue")} →</span>
+                  <span className="mt-1 block font-serif text-[15px] font-bold text-[var(--ink)] group-hover:text-[var(--navy)]">{labelTerbitan(lebihBaru, locale)}</span>
+                </Link>
+              )}
+            </nav>
           </div>
         </div>
-      </Section>
+      </div>
     </>
   );
 }

@@ -166,7 +166,14 @@
     "issueOf": "{month} {year} issue",
     "batchOf": "Batch {batch} Edition · {year}",
     "readPdf": "Read PDF",
-    "readPdfLead": "{pages, plural, =0 {This issue opens as a PDF in a new tab.} other {This issue opens as a PDF ({pages} pages) in a new tab.}}"
+    "readPdfLead": "{pages, plural, =0 {This issue opens as a PDF in a new tab.} other {This issue opens as a PDF ({pages} pages) in a new tab.}}",
+    "latest": "Latest issue",
+    "latestLead": "IYSA event recaps, announcements, and participant stories — read it right here or download the PDF.",
+    "pages": "{count} pages",
+    "prevIssue": "Previous issue",
+    "nextIssue": "Next issue",
+    "language": "Language",
+    "pagesLabel": "Pages"
   },
   "team": {
     "title": "Team",

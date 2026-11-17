@@ -166,7 +166,14 @@
     "issueOf": "Terbitan {month} {year}",
     "batchOf": "Edisi Batch {batch} · {year}",
     "readPdf": "Baca PDF",
-    "readPdfLead": "{pages, plural, =0 {Terbitan ini dibuka sebagai PDF di tab baru.} other {Terbitan ini dibuka sebagai PDF ({pages} halaman) di tab baru.}}"
+    "readPdfLead": "{pages, plural, =0 {Terbitan ini dibuka sebagai PDF di tab baru.} other {Terbitan ini dibuka sebagai PDF ({pages} halaman) di tab baru.}}",
+    "latest": "Terbitan terbaru",
+    "latestLead": "Rekap event, pengumuman, dan cerita peserta IYSA — baca langsung di halaman atau unduh PDF-nya.",
+    "pages": "{count} halaman",
+    "prevIssue": "Terbitan sebelumnya",
+    "nextIssue": "Terbitan berikutnya",
+    "language": "Bahasa",
+    "pagesLabel": "Halaman"
   },
   "team": {
     "title": "Tim",
