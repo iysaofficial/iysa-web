@@ -83,7 +83,19 @@
     "curationB3Body": "Helps open up scholarship opportunities, and the professional path that follows.",
     "curationB4Title": "Grants for schools",
     "curationB4Body": "Improves a school’s chances of receiving a BOSKIN grant at primary and secondary level.",
-    "mediaPartnersTitle": "Media partners"
+    "mediaPartnersTitle": "Media partners",
+    "stripEyebrow": "Registration",
+    "stripOpen": "{count} events are open for registration · nearest deadline {date}.",
+    "stripOpenNoDate": "{count} events are open for registration.",
+    "stripClosed": "No registrations are open right now. See upcoming events.",
+    "stripCta": "See events",
+    "timelineEyebrow": "Coming up",
+    "timelineTitle": "Plan your scientific journey.",
+    "timelineAll": "Full calendar",
+    "ctaBandEyebrow": "National & international competitions",
+    "ctaBandTitle": "Begin your scientific journey with IYSA.",
+    "ctaBandBody": "Pick the right competition, register your team, and present your work to judges from many countries.",
+    "ctaBandButton": "Choose an event"
   },
   "events": {
     "eyebrow": "Events",

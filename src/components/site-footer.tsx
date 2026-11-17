@@ -15,7 +15,7 @@ export async function SiteFooter() {
   // tersembunyi di baliknya — itu hanya mungkin kalau footer punya lapisan
   // lebih tinggi.
   return (
-    <footer className="relative z-30 mt-24 border-t border-[var(--line)] bg-[var(--bg-sunk)]">
+    <footer className="tema-navy relative z-30 mt-24">
       <div className="shell py-14">
         <div className="grid gap-10 md:grid-cols-12">
           {/* Identitas */}

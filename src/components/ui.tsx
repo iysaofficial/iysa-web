@@ -134,7 +134,7 @@ type ButtonTone = "primary" | "navy" | "outline";
 
 const toneClass: Record<ButtonTone, string> = {
   // coral: satu per layar
-  primary: "bg-[var(--coral)] text-[var(--on-coral)] hover:opacity-90",
+  primary: "bg-[var(--navy)] text-[var(--on-navy)] hover:opacity-90",
   navy: "bg-[var(--navy)] text-[var(--on-navy)] hover:opacity-90",
   outline:
     "border border-[var(--border)] text-[var(--ink)] hover:border-[var(--teal)] hover:text-[var(--teal)]",
@@ -153,7 +153,7 @@ export function ButtonLink({
   external?: boolean;
   className?: string;
 }) {
-  const cls = `inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[14.5px] font-semibold transition-all duration-[var(--gerak-cepat)] ${toneClass[tone]} ${className}`;
+  const cls = `group inline-flex items-center justify-center gap-3 px-6 py-3 text-[14.5px] font-bold transition-all duration-[var(--gerak-cepat)] ${toneClass[tone]} ${className}`;
 
   if (external) {
     return (
@@ -168,6 +168,7 @@ export function ButtonLink({
   return (
     <Link href={href} className={cls}>
       {children}
+      <span aria-hidden className="transition-transform duration-[var(--gerak-cepat)] group-hover:translate-x-0.5">→</span>
     </Link>
   );
 }

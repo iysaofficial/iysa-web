@@ -3,20 +3,21 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
-import { Section, StatRow, ButtonLink, MoreLink, Pill, SelPengisi } from "@/components/ui";
+import { Section, StatRow, MoreLink, Pill, SelPengisi } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
-import { HeroAtom } from "@/components/hero-atom";
 import { statusEvent, waktuEvent } from "@/lib/event-seri";
 import { PartnerWall } from "@/components/partner-wall";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
-import { ambilSemuaSeriDashboard } from "@/lib/dashboard-event";
+import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allAffiliates } from "@/lib/data";
 import { semuaTerbitan } from "@/lib/newsletter";
+import { ambilAlbum, kecil } from "@/lib/galeri";
+import { ambilKalender, ratakan } from "@/lib/kalender";
 import { judulNewsletter } from "@/lib/teks-event";
-import { intro, vision, mission, goals } from "@/content/profile";
+import { vision, mission, goals } from "@/content/profile";
 import { affiliateNames } from "@/content/affiliates";
 import { mediaPartners } from "@/content/external";
 
@@ -71,52 +72,106 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     .slice(0, 6);
 
   const { terbitan } = await semuaTerbitan();
+
+  /* Foto hero: dokumentasi luring terbaru di dasbor (pembukaan/penjurian/penghargaan). */
+  const album = (await ambilAlbum()) ?? [];
+  const kegiatan = /(pembukaan|opening|penjurian|judging|penghargaan|awarding|peresmian)/i;
+  const fotoHero = album
+    .flatMap((al) => al.foto.filter((f) => f.jenis === "luring" && kegiatan.test(f.label)).map((f) => ({ ...f, gambar: kecil(f.gambar, 1280) })))[0]
+    ?? null;
+
+  /* Agenda terdekat: satu kegiatan per edisi, lima ke depan (kalender dasbor). */
+  const hariIni = kini.toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
+  const sampai = new Date(kini.getTime() + 200 * 86_400_000).toISOString().slice(0, 10);
+  const kal = (await ambilKalender(hariIni, sampai, locale)) ?? [];
+  const sudah = new Set<string>();
+  const agendaDekat = ratakan(kal)
+    .filter((e) => e.tanggal >= hariIni && !sudah.has(e.edisi.akronim) && (sudah.add(e.edisi.akronim), true))
+    .slice(0, 5)
+    .map((e) => ({
+      tanggalPendek: new Date(`${e.tanggal}T00:00:00Z`).toLocaleDateString(locale === "en" ? "en-GB" : "id-ID", { day: "2-digit", month: "short", timeZone: "UTC" }),
+      judul: e.judul,
+      edisi: `${e.edisi.akronim} ${e.edisi.tahun}`,
+    }));
   const latestIssue = terbitan.find((i) => i.hasPdf);
 
   /* Edisi yang pendaftarannya benar-benar dibuka menurut dashboard. Ini satu-
      satunya sumber yang tahu saklarnya, dan sebagian edisi di sini belum
      pernah ada di data warisan sama sekali. Seri yang belum dipin panitia
      tidak menjawab, dan beranda diam-diam tampil tanpa blok ini. */
-  const dibuka = [...(await ambilSemuaSeriDashboard()).values()]
+  const semuaDibuka = [...(await ambilSemuaSeriDashboard()).values()]
+    .filter(milikSitus)
     .filter((e) => e.pendaftaranDibuka)
-    .sort((a, b) => (a.pendaftaranTutup ?? "").localeCompare(b.pendaftaranTutup ?? ""))
-    .slice(0, 3);
+    .sort((a, b) => (a.pendaftaranTutup ?? "9999").localeCompare(b.pendaftaranTutup ?? "9999"));
+  const dibuka = semuaDibuka.slice(0, 3);
+  const tutupIso = semuaDibuka.find((e) => e.pendaftaranTutup)?.pendaftaranTutup ?? null;
+  const tutupTerdekat = tutupIso
+    ? new Date(`${tutupIso}T00:00:00Z`).toLocaleDateString(locale === "en" ? "en-GB" : "id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+    : null;
 
   return (
     <>
-      {/* ── Hero ──────────────────────────────────────────────────── */}
-      <section className="border-b border-[var(--line)]">
-        <div className="shell py-16 md:py-28">
-          <div className="grid gap-10 md:grid-cols-12 md:gap-12">
-            <div className="md:col-span-8">
-              <p className="eyebrow rise">{t("eyebrow")}</p>
-              <h1 className="rise mt-4 font-serif text-hero text-[var(--navy)]">{t("heroTitle")}</h1>
-              <p className="rise mt-6 max-w-[54ch] font-sans text-lead text-[var(--ink-muted)]">
-                {t("heroBody")}
-              </p>
-              <div className="rise mt-9 flex flex-wrap gap-3">
-                {/* Satu coral di layar ini — ajakan utama. */}
-                <ButtonLink href="/event" tone="primary">
-                  {t("ctaEvents")}
-                </ButtonLink>
-                <ButtonLink href="/profil" tone="outline">
-                  {t("ctaProfile")}
-                </ButtonLink>
-              </div>
-            </div>
-
-            <div className="md:col-span-4 md:pt-4">
-              {/* Lambang IYSA dalam tiga dimensi. Dekoratif sepenuhnya —
-                  aria-hidden, dan three.js baru diunduh setelah beranda
-                  terpasang, jadi ia tidak pernah menahan judul hero tampil. */}
-              <HeroAtom className="mb-8 md:-mt-6 md:ml-auto" />
-              <p className="max-w-[40ch] text-[15px] leading-relaxed text-[var(--ink-muted)]">
-                {intro[locale]}
-              </p>
-            </div>
+      {/* ── Hero (konsep GYSO): foto dokumentasi IYSA penuh lebar + lapisan navy ── */}
+      <section className="relative isolate overflow-hidden bg-[#0b2948] text-white">
+        {fotoHero && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={fotoHero.gambar} alt={fotoHero.label} className="absolute inset-0 -z-10 h-full w-full object-cover" />
+        )}
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0b2948]/95 via-[#0b2948]/75 to-[#0b2948]/35" />
+        <div className="shell py-24 md:py-36">
+          <p className="rise font-sans text-[11.5px] font-bold tracking-[0.16em] text-white/80 uppercase">{t("eyebrow")}</p>
+          <h1 className="rise mt-5 max-w-[16ch] font-serif text-[clamp(2.6rem,1.4rem+5.5vw,6rem)] leading-[1.02] font-normal tracking-[-0.02em] text-white">
+            {t("heroTitle")}
+          </h1>
+          <p className="rise mt-6 max-w-[56ch] font-sans text-lead text-white/85">{t("heroBody")}</p>
+          <div className="rise mt-10 flex flex-wrap gap-3">
+            <Link href="/event" className="group inline-flex items-center gap-3 bg-white px-6 py-3.5 text-[14.5px] font-bold text-[#0b2948] transition-opacity hover:opacity-90">
+              {t("ctaEvents")} <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+            </Link>
+            <Link href="/profil" className="inline-flex items-center gap-3 border border-white/60 px-6 py-3.5 text-[14.5px] font-bold text-white transition-colors hover:border-white hover:bg-white/10">
+              {t("ctaProfile")}
+            </Link>
           </div>
         </div>
       </section>
+
+      {/* ── Pita info navy ── */}
+      <section className="tema-navy">
+        <div className="shell flex flex-col gap-2 py-4 text-[13.5px] md:flex-row md:items-center md:justify-between md:gap-8">
+          <p className="font-sans text-[11px] font-bold tracking-[0.16em] text-[var(--ink-faint)] uppercase">{t("stripEyebrow")}</p>
+          <p className="text-[var(--ink)]">
+            {dibuka.length > 0
+              ? tutupTerdekat ? t("stripOpen", { count: semuaDibuka.length, date: tutupTerdekat }) : t("stripOpenNoDate", { count: semuaDibuka.length })
+              : t("stripClosed")}
+          </p>
+          <Link href="/event" className="font-bold text-[var(--ink)] hover:underline">{t("stripCta")} →</Link>
+        </div>
+      </section>
+
+      {/* ── Linimasa agenda terdekat (kalender dasbor) ── */}
+      {agendaDekat.length > 0 && (
+        <section className="border-b border-[var(--line)]">
+          <div className="shell py-16 md:py-20">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="eyebrow">{t("timelineEyebrow")}</p>
+                <h2 className="mt-3 font-serif text-display font-normal text-[var(--navy)]">{t("timelineTitle")}</h2>
+              </div>
+              <MoreLink href="/kalender">{t("timelineAll")}</MoreLink>
+            </div>
+            <ol className="relative mt-12 grid gap-8 border-t-2 border-[var(--navy)] pt-0 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0">
+              {agendaDekat.map((a, k) => (
+                <li key={k} className="relative pt-8 lg:border-l lg:border-[var(--line)] lg:px-5 lg:first:border-l-0 lg:first:pl-0">
+                  <span aria-hidden className="absolute -top-[7px] left-0 h-3 w-3 rounded-full border-2 border-[var(--navy)] bg-[var(--bg)] lg:left-5 lg:first:left-0" />
+                  <p className="tnum font-serif text-[24px] text-[var(--teal)] uppercase">{a.tanggalPendek}</p>
+                  <p className="mt-3 font-serif text-[16px] leading-snug text-[var(--ink)]">{a.judul}</p>
+                  <p className="mt-2 text-[12px] text-[var(--ink-faint)]">{a.edisi}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
 
       {/* ── Angka ─────────────────────────────────────────────────── */}
       <section className="border-b border-[var(--line)]">
@@ -282,6 +337,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           </div>
         </div>
       </Section>
+
+      {/* ── Pita ajakan biru (konsep GYSO) ── */}
+      <section className="tema-biru">
+        <div className="shell flex flex-col gap-6 py-14 md:flex-row md:items-center md:justify-between md:py-16">
+          <div>
+            <p className="font-sans text-[11.5px] font-bold tracking-[0.16em] text-[var(--ink-muted)] uppercase">{t("ctaBandEyebrow")}</p>
+            <h2 className="mt-3 font-serif text-display font-normal text-white">{t("ctaBandTitle")}</h2>
+            <p className="mt-3 max-w-[52ch] text-[15px] text-[var(--ink-muted)]">{t("ctaBandBody")}</p>
+          </div>
+          <Link href="/event" className="group inline-flex shrink-0 items-center gap-3 bg-white px-7 py-3.5 text-[14.5px] font-bold text-[#0b2948] transition-opacity hover:opacity-90">
+            {t("ctaBandButton")} <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+          </Link>
+        </div>
+      </section>
 
       {/* ── Newsletter ────────────────────────────────────────────── */}
       <Section sunk>

@@ -71,7 +71,7 @@ export function SiteHeader() {
           */}
           <a
             href={org.dashboardUrl}
-            className="hidden rounded-full bg-[var(--navy)] px-4 py-2 text-[13px] font-semibold whitespace-nowrap text-[var(--on-navy)] transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 sm:inline-block"
+            className="hidden bg-[var(--navy)] px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap text-[var(--on-navy)] transition-opacity duration-[var(--gerak-cepat)] hover:opacity-90 sm:inline-block"
           >
             {t("dashboard")}
           </a>
@@ -122,7 +122,7 @@ export function SiteHeader() {
 
             <a
               href={org.dashboardUrl}
-              className="mt-4 block rounded-full bg-[var(--navy)] px-4 py-3 text-center text-[15px] font-semibold text-[var(--on-navy)]"
+              className="mt-4 block bg-[var(--navy)] px-4 py-3 text-center text-[15px] font-semibold text-[var(--on-navy)]"
             >
               {t("dashboard")}
             </a>

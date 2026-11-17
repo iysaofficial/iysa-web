@@ -54,7 +54,7 @@ export function NewsletterDaftar({
             <p className="text-[13px] text-[var(--ink-faint)]">
               {utama.label}{hal(utama.halaman) ? ` · ${hal(utama.halaman)}` : ""}
             </p>
-            <span className="mt-1 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--navy)] px-5 py-2.5 text-[14px] font-semibold text-[var(--on-navy)] transition-transform group-hover:translate-x-0.5">
+            <span className="mt-1 inline-flex w-fit items-center gap-3 bg-[var(--navy)] px-6 py-3 text-[14px] font-semibold text-[var(--on-navy)] transition-transform group-hover:translate-x-0.5">
               {teks.baca} →
             </span>
           </div>

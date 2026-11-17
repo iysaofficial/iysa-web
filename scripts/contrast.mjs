@@ -39,14 +39,14 @@ const light = {
   inkMuted: "#4A5568",
   inkFaint: "#6B7687",
   // merek
-  navy: "#1B3A6B",
-  teal: "#1F7A74",
+  navy: "#0B2948",
+  teal: "#1F5FAE",
   coral: "#C2410C",
   // garis dekoratif — pemisah seksi, bukan batas komponen
   line: "#E2E8F0",
   // batas komponen interaktif (input, select, tombol bergaris) + cincin fokus
   border: "#7E8A9E",
-  focus: "#1F7A74",
+  focus: "#1F5FAE",
 };
 
 const dark = {
@@ -56,7 +56,7 @@ const dark = {
   inkMuted: "#A8B4C8",
   inkFaint: "#8B97AB",
   navy: "#A9C2F0",
-  teal: "#5FC9C0",
+  teal: "#8AB8FF",
   coral: "#FF8A63",
   line: "#212C42",
   border: "#64758F",

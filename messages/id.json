@@ -83,7 +83,19 @@
     "curationB3Body": "Membantu membuka peluang beasiswa, juga jenjang karier profesional berikutnya.",
     "curationB4Title": "Hibah untuk sekolah",
     "curationB4Body": "Menambah peluang satuan pendidikan mendapat hibah BOSKIN di jenjang dasar dan menengah.",
-    "mediaPartnersTitle": "Mitra media"
+    "mediaPartnersTitle": "Mitra media",
+    "stripEyebrow": "Pendaftaran",
+    "stripOpen": "{count} event sedang membuka pendaftaran · tenggat terdekat {date}.",
+    "stripOpenNoDate": "{count} event sedang membuka pendaftaran.",
+    "stripClosed": "Belum ada pendaftaran yang dibuka. Lihat event yang akan datang.",
+    "stripCta": "Lihat event",
+    "timelineEyebrow": "Agenda terdekat",
+    "timelineTitle": "Rencanakan perjalanan ilmiahmu.",
+    "timelineAll": "Kalender lengkap",
+    "ctaBandEyebrow": "Ajang nasional & internasional",
+    "ctaBandTitle": "Mulai perjalanan ilmiahmu bersama IYSA.",
+    "ctaBandBody": "Pilih ajang yang cocok, daftarkan timmu, dan presentasikan karyamu di depan juri dari berbagai negara.",
+    "ctaBandButton": "Pilih event"
   },
   "events": {
     "eyebrow": "Event",

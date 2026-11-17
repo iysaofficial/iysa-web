@@ -52,8 +52,10 @@
   --ink-muted: #4a5568;
   --ink-faint: #6b7687;
 
-  --navy: #1b3a6b;
-  --teal: #1f7a74;
+  /* Konsep GYSO (2026-11-17): navy pekat + aksen biru menggantikan teal. */
+  --navy: #0b2948;
+  --teal: #1f5fae;
+  --biru: #2062b4;
   --coral: #c2410c;
 
   /* Teks di atas blok warna penuh. */
@@ -61,7 +63,7 @@
 
   --line: #e2e8f0;   /* dekoratif — lihat catatan di scripts/contrast.mjs */
   --border: #7e8a9e; /* batas komponen, WCAG 1.4.11 */
-  --focus: #1f7a74;
+  --focus: #1f5fae;
 
   --radius: 0.5rem;
 
@@ -89,14 +91,14 @@
     --ink-faint: #8b97ab;
 
     --navy: #a9c2f0;
-    --teal: #5fc9c0;
+    --teal: #8ab8ff;
     --coral: #ff8a63;
 
     --on-brand: #0c1220;
 
     --line: #212c42;
     --border: #64758f;
-    --focus: #5fc9c0;
+    --focus: #8ab8ff;
   }
 }
 
@@ -112,14 +114,14 @@
   --ink-faint: #8b97ab;
 
   --navy: #a9c2f0;
-  --teal: #5fc9c0;
+  --teal: #8ab8ff;
   --coral: #ff8a63;
 
   --on-brand: #0c1220;
 
   --line: #212c42;
   --border: #64758f;
-  --focus: #5fc9c0;
+  --focus: #8ab8ff;
 }
 
 /* Teks di atas isian coral/teal butuh pasangannya sendiri di tema gelap —
@@ -211,11 +213,15 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-serif);
-  color: var(--ink);
-  text-wrap: balance;
-  font-weight: 700;
+/* Di @layer base supaya kelas utilitas (text-white, font-bold, …) bisa menimpanya.
+   Konsep GYSO (2026-11-17): judul serif berketebalan normal. */
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    color: var(--ink);
+    text-wrap: balance;
+    font-weight: 400;
+  }
 }
 
 p, li {
@@ -465,7 +471,36 @@ summary {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--teal);
+}
+
+/* Bidang navy (pita info, footer): variabel warna ditimpa, jadi komponen apa
+   pun di dalamnya otomatis tampil terang di atas navy. */
+.tema-navy {
+  --bg: #0b2948;
+  --bg-sunk: #0f3260;
+  --ink: #ffffff;
+  --ink-muted: #c7d4e8;
+  --ink-faint: #9db3d2;
+  --navy: #ffffff;
+  --teal: #a9c9ff;
+  --line: #24466f;
+  --border: #6f8bb0;
+  --on-navy: #0b2948;
+  color: var(--ink);
+  background-color: var(--bg);
+}
+
+/* Pita ajakan biru. */
+.tema-biru {
+  --bg: #2062b4;
+  --ink: #ffffff;
+  --ink-muted: #dce8fb;
+  --ink-faint: #c4d7f5;
+  --teal: #ffffff;
+  --line: #3d78c2;
+  color: var(--ink);
+  background-color: var(--bg);
 }
 
 @utility tnum {
