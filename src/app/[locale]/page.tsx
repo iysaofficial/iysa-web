@@ -104,10 +104,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
   return (
     <>
-      {/* ── Hero (konsep GYSO): bidang navy + logo IYSA 3D ── */}
+      {/* ── Hero (konsep GYSO): bidang navy bergradasi + logo IYSA 3D ── */}
       <section className="relative isolate overflow-hidden bg-[#0b2948] text-white">
-        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(1000px_520px_at_85%_20%,rgba(32,98,180,0.55),transparent_60%),radial-gradient(700px_420px_at_0%_100%,rgba(32,98,180,0.25),transparent_60%)]" />
-        <div aria-hidden className="absolute inset-0 -z-10 opacity-[0.07] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:56px_56px]" />
+        {/* Latar polos bergradasi: gelap di sisi teks (kontras judul), makin biru
+            ke sisi lambang 3D — tanpa kisi, tanpa foto. */}
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(110deg,#0a2443_0%,#0b2948_45%,#123d6f_78%,#1a4f8c_100%)]" />
         <div className="shell grid items-center gap-10 py-20 md:grid-cols-12 md:py-28">
           <div className="md:col-span-7">
             <p className="rise font-sans text-[11.5px] font-bold tracking-[0.16em] text-white/75 uppercase">{t("eyebrow")}</p>
