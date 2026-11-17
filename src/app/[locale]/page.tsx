@@ -119,21 +119,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               <Link href="/event" className="group inline-flex items-center gap-3 bg-white px-6 py-3.5 text-[14.5px] font-bold text-[#0b2948] transition-opacity hover:opacity-90">
                 {t("ctaEvents")} <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
               </Link>
-              <Link href="/profil" className="inline-flex items-center gap-3 border border-white/60 px-6 py-3.5 text-[14.5px] font-bold text-white transition-colors hover:border-white hover:bg-white/10">
+              <Link href="/profil" className="inline-flex items-center gap-3 border-2 border-white px-6 py-3 text-[14.5px] font-bold text-white transition-colors hover:border-white hover:bg-white/10">
                 {t("ctaProfile")}
               </Link>
             </div>
           </div>
-          {/* Lambang IYSA tiga dimensi, bergerak. Warnanya dibaca dari --logo-*;
-              di bidang navy dipakai versi terang supaya tetap terbaca. */}
-          <div className="md:col-span-5"
-            style={{ ["--logo-navy" as string]: "#a9c6f7", ["--logo-teal" as string]: "#4fc4bc", ["--logo-coral" as string]: "#ff7a5e",
-                     ["--logo-globe" as string]: "#eef2f9", ["--logo-globe-badan" as string]: "#1d4f8f" }}>
-            <div className="relative">
-              {/* Cahaya lembut di belakang lambang supaya ia menonjol dari bidang navy. */}
-              <div aria-hidden className="pointer-events-none absolute inset-0 -z-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.62),rgba(200,220,255,0.28)_40%,transparent_70%)]" />
-              <HeroAtom className="relative mx-auto md:mr-0 md:ml-auto" />
-            </div>
+          {/* Lambang IYSA tiga dimensi, bergerak. Warnanya dibaca dari --logo-*:
+              selagi di hero navy dipakai orbit putih + teal/oranye jenuh dan bola
+              dunia putih berbenua biru (warnaHero), tanpa sorot. */}
+          <div className="md:col-span-5">
+            <HeroAtom className="mx-auto md:mr-0 md:ml-auto"
+              warnaHero={{ navy: "#ffffff", teal: "#2ec4b6", coral: "#ff6b4a", "bola-benua": "#1f5fae", "bola-badan": "#ffffff" }} />
             <p className="mt-6 max-w-[40ch] text-[15px] leading-relaxed text-white/75 md:ml-auto">{intro[locale]}</p>
           </div>
         </div>

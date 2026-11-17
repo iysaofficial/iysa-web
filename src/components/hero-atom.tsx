@@ -123,10 +123,17 @@ function bacaWarna(el: HTMLElement, nama: string, cadangan: string) {
   return getComputedStyle(el).getPropertyValue(nama).trim() || cadangan;
 }
 
-export function HeroAtom({ className = "" }: { className?: string }) {
+/**
+ * `warnaHero`: palet selagi lambang duduk di hero (mis. bidang navy). Begitu ia
+ * lepas mengikuti gulir, warnanya berangsur kembali ke token --logo-* dan
+ * lapisannya kembali ke campuran tanda air (multiply/screen).
+ */
+export function HeroAtom({ className = "", warnaHero }: { className?: string; warnaHero?: Partial<Record<string, string>> }) {
   const slot = useRef<HTMLDivElement>(null);
   const lapisan = useRef<HTMLDivElement>(null);
   const [hidup, setHidup] = useState(false);
+  /* Dibaca sekali saat lambang dibangun; prop dari server tidak berubah. */
+  const paletHero = useRef(warnaHero);
 
   useEffect(() => {
     const kotak = slot.current;
@@ -217,6 +224,8 @@ export function HeroAtom({ className = "" }: { className?: string }) {
       /* Bahan tiap lapisan disimpan supaya pendar warnanya bisa digerakkan
          posisi gulir — lihat blok Gerak di bawah. */
       const bahanLapisan: import("three").MeshStandardMaterial[] = [];
+      const warnaAsal: import("three").Color[] = [];
+      const warnaDiHero: import("three").Color[] = [];
 
       /* Bentuknya diambil dari berkas SVG yang SUDAH diunduh halaman ini
          sebagai lambang cadangan — nol byte tambahan, karena peramban
@@ -254,6 +263,8 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         });
         dibuang.push(bahan);
         bahanLapisan.push(bahan);
+        warnaAsal.push(isi.clone());
+        warnaDiHero.push(new THREE.Color(paletHero.current?.[nama] ?? isi.getStyle()));
 
         for (const b of path.toShapes()) {
           const geo = new THREE.ExtrudeGeometry(b, {
@@ -317,6 +328,18 @@ export function HeroAtom({ className = "" }: { className?: string }) {
          itu masih cukup di layar; sesudahnya ia menambat di kanan atas sambil
          mengecil. Semua angka berasal dari kotak kosong dan ukuran layar —
          tidak satu pun dari kanvas itu sendiri. */
+      let majuTerakhir = -1;
+      const aturWarna = (maju: number) => {
+        if (!paletHero.current || Math.abs(maju - majuTerakhir) < 0.01) return;
+        majuTerakhir = maju;
+        for (let i = 0; i < bahanLapisan.length; i++) {
+          bahanLapisan[i].color.copy(warnaDiHero[i]).lerp(warnaAsal[i], maju);
+          bahanLapisan[i].emissive.copy(bahanLapisan[i].color);
+        }
+        if (maju < 0.5) layer.dataset.diHero = "1";
+        else delete layer.dataset.diHero;
+      };
+
       const tempatkan = (p: number) => {
         const r = kotak.getBoundingClientRect();
         const lebarLayar = window.innerWidth;
@@ -325,6 +348,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
         // Di layar sempit lambang tetap duduk di hero dan menggulir bersamanya:
         // tidak ada ruang tepi untuk ditempati tanpa menutupi bacaan.
         if (lebarLayar < 1024) {
+          aturWarna(0);
           pasang(r.left, r.top, r.width, 1);
           return;
         }
@@ -378,6 +402,7 @@ export function HeroAtom({ className = "" }: { className?: string }) {
 
         // 0 selagi lambang masih di tempatnya di hero, 1 saat lepas penuh.
         const maju = lunak(jepit((PEMICU - r.top) / PERALIHAN));
+        aturWarna(maju);
         pasang(
           antara(r.left, tujuanX, maju),
           antara(r.top, tujuanY, maju),

@@ -43,7 +43,7 @@ const light = {
   teal: "#1F5FAE",
   coral: "#C2410C",
   // garis dekoratif — pemisah seksi, bukan batas komponen
-  line: "#E2E8F0",
+  line: "#CDD6E2",
   // batas komponen interaktif (input, select, tombol bergaris) + cincin fokus
   border: "#7E8A9E",
   focus: "#1F5FAE",
@@ -58,7 +58,7 @@ const dark = {
   navy: "#A9C2F0",
   teal: "#8AB8FF",
   coral: "#FF8A63",
-  line: "#212C42",
+  line: "#2E3B57",
   border: "#64758F",
   focus: "#5FC9C0",
 };
