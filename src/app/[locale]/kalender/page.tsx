@@ -3,7 +3,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { Section, EmptyState } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
-import { eventCalendar } from "@/content/external";
 import { slugSeri } from "@/lib/event-seri";
 import { PilihBulan } from "@/components/pilih-bulan";
 import { KalenderInteraktif, type EntriKalender } from "@/components/kalender-interaktif";
@@ -109,12 +108,6 @@ export default async function CalendarPage({
           />
         )}
 
-        <p className="mt-10 text-[12.5px] text-[var(--ink-faint)]">
-          {t("flipbook", { year: eventCalendar.year })}{" "}
-          <a href={eventCalendar.embedUrl} target="_blank" rel="noreferrer" className="text-[var(--teal)] hover:underline">
-            {t("openExternal")} ↗
-          </a>
-        </p>
       </Section>
     </>
   );
