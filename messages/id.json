@@ -95,7 +95,11 @@
     "ctaBandEyebrow": "Ajang nasional & internasional",
     "ctaBandTitle": "Mulai perjalanan ilmiahmu bersama IYSA.",
     "ctaBandBody": "Pilih ajang yang cocok, daftarkan timmu, dan presentasikan karyamu di depan juri dari berbagai negara.",
-    "ctaBandButton": "Pilih event"
+    "ctaBandButton": "Pilih event",
+    "partnersAll": "Semua {count} afiliasi",
+    "partnersWallAll": "Lihat semua {count} institusi",
+    "openBar": "{count} event dibuka",
+    "openBarCta": "Lihat"
   },
   "events": {
     "eyebrow": "Event",
@@ -219,7 +223,9 @@
     "count": "{count} lembaga",
     "backToPartners": "Semua mitra",
     "national": "Mitra nasional",
-    "international": "Mitra internasional"
+    "international": "Mitra internasional",
+    "wallTitle": "Institusi yang mendukung",
+    "wallLead": "{count} logo institusi mitra, nasional dan internasional."
   },
   "gallery": {
     "eyebrow": "Galeri",

@@ -44,8 +44,15 @@ export default async function CurationPage({ params }: { params: Promise<{ local
                   <Link href={`/kurasi/${s.slug}`}
                     className="group flex h-full flex-col gap-5 p-6 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]">
                     <div className="flex items-center gap-4">
+                      {/* Seri tanpa logo di dasbor diberi monogram, bukan kotak kosong. */}
                       <div className="relative h-12 w-12 shrink-0">
-                        {s.logo && <Image src={s.logo} alt="" fill sizes="48px" className="object-contain" />}
+                        {s.logo ? (
+                          <Image src={s.logo} alt="" fill sizes="48px" className="object-contain" />
+                        ) : (
+                          <span aria-hidden className="grid h-full w-full place-items-center rounded-lg bg-[var(--bg-sunk)] font-sans text-[13px] font-bold tracking-tight text-[var(--navy)] ring-1 ring-[var(--line)]">
+                            {s.akronim.replace(/[^A-Za-z0-9]/g, "").slice(0, 3).toUpperCase()}
+                          </span>
+                        )}
                       </div>
                       <div className="min-w-0">
                         <p className="font-sans text-[12px] font-bold tracking-wide text-[var(--ink-faint)]">{s.akronim}</p>

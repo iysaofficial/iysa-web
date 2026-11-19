@@ -71,8 +71,8 @@ export async function SeriKartu({ seri, dash }: { seri: Seri; dash?: EdisiDashbo
       href={`/event/seri/${seri.slug}`}
       className="group flex h-full w-full flex-col gap-2 bg-[var(--bg)] p-4 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)] sm:p-5"
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="flex items-center gap-2.5">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <span className="flex min-w-0 items-center gap-2.5">
           {dash?.logo && (
             // Ubin terang: logo event dirancang untuk latar putih dan sebagian
             // besar akan lenyap di tema gelap tanpa alasnya sendiri.
@@ -88,7 +88,7 @@ export async function SeriKartu({ seri, dash }: { seri: Seri; dash?: EdisiDashbo
               />
             </span>
           )}
-          <span className="font-serif text-[19px] leading-none font-bold tracking-[-0.02em] text-[var(--navy)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--teal)]">
+          <span className="min-w-0 font-serif text-[19px] leading-none font-bold tracking-[-0.02em] break-words text-[var(--navy)] transition-colors duration-[var(--gerak-cepat)] group-hover:text-[var(--teal)]">
             {seri.akronim}
           </span>
         </span>

@@ -5,6 +5,8 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { PageHeader, Pill, SelPengisi } from "@/components/ui";
+import { PartnerWall } from "@/components/partner-wall";
+import { stats } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
 import { allAffiliates } from "@/lib/data";
 import { logoUrl } from "@/lib/assets";
@@ -106,6 +108,15 @@ export default async function PartnersPage({
           <SelPengisi jumlah={items.length} kolom={2} />
           <SelPengisi jumlah={items.length} kolom={3} />
         </ul>
+
+        {/* Seluruh logo institusi pendukung; beranda hanya memajang dua baris. */}
+        <section id="institusi" className="mt-16 scroll-mt-24">
+          <h2 className="eyebrow">{t("wallTitle")}</h2>
+          <p className="mt-2 mb-6 max-w-[52ch] text-[14.5px] text-[var(--ink-muted)]">
+            {t("wallLead", { count: stats().partners })}
+          </p>
+          <PartnerWall />
+        </section>
       </div>
     </>
   );

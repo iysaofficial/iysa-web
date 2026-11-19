@@ -1,7 +1,8 @@
 import { getTranslations, getFormatter } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { org } from "@/content/org";
-import { gambarDashboard, type EdisiDashboard } from "@/lib/dashboard-event";
+import { gambarDashboard, bannerSeragam, type EdisiDashboard } from "@/lib/dashboard-event";
+import { UbinLogo } from "./ubin-logo";
 import { Pill } from "./ui";
 
 /** Moda dashboard → kunci terjemahan yang sudah ada di situs. */
@@ -58,9 +59,14 @@ export async function EdisiDashboardKartu({
       : (mulai ?? selesai);
   const tutup = tanggal(edisi.pendaftaranTutup);
 
+  const seragam = bannerSeragam(edisi.banner);
+
   return (
     <article className="flex h-full w-full flex-col bg-[var(--bg)]">
-      {edisi.banner && (
+      {/* Banner seragam (logo + nama di atas navy) mengulang isi kartu, jadi
+          diganti ubin logo; logo kecil di samping judul lalu tidak perlu. */}
+      {seragam && <UbinLogo logo={edisi.logo} akronim={edisi.akronim} tahun={edisi.tahun} />}
+      {edisi.banner && !seragam && (
         /* Banner dashboard bukan poster — ia foto acaranya sendiri, 3:2, dan
            memperlihatkan skala ajangnya jauh lebih baik daripada selembar
            poster. Rasio yang sama dengan kartu event warisan, jadi kedua kisi
@@ -78,7 +84,7 @@ export async function EdisiDashboardKartu({
 
       <div className="flex flex-1 flex-col gap-4 p-6">
         <div className="flex items-start gap-4">
-          {edisi.logo ? (
+          {edisi.logo && !seragam ? (
             // Ubin terang: logo event dirancang untuk latar putih, dan di tema
             // gelap situs ini sebagian besar akan lenyap tanpa alasnya sendiri.
             // Pola yang sama dipakai dinding logo mitra.

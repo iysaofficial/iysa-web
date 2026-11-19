@@ -1,6 +1,7 @@
 import { getTranslations, getFormatter } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { gambarDashboard, type EdisiRingkas, type EdisiDashboard } from "@/lib/dashboard-event";
+import { gambarDashboard, bannerSeragam, type EdisiRingkas, type EdisiDashboard } from "@/lib/dashboard-event";
+import { UbinLogo } from "./ubin-logo";
 import { Pill } from "./ui";
 
 const MODA = { online: "modeOnline", offline: "modeOnsite", hybrid: "modeHybrid" } as const;
@@ -46,6 +47,9 @@ export async function EdisiBannerKartu({
 
   const isi = (
     <>
+      {bannerSeragam(edisi.banner) ? (
+        <UbinLogo logo={edisi.logo} akronim={akronim} tahun={edisi.tahun} />
+      ) : (
       <div className="relative aspect-[3/2] overflow-hidden bg-[var(--bg-sunk)]">
         {edisi.banner ? (
           /* Poster resmi umumnya persegi atau tegak, banner seragam 3:2.
@@ -74,6 +78,7 @@ export async function EdisiBannerKartu({
           </div>
         )}
       </div>
+      )}
       <div className="flex flex-1 flex-col gap-2 p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-1.5">
           {edisi.moda && <Pill>{t(MODA[edisi.moda])}</Pill>}

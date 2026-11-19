@@ -340,3 +340,14 @@ export async function ambilEdisiDashboard(akronim: string): Promise<EdisiRingkas
   }
   return hasil.sort((a, b) => b.tahun.localeCompare(a.tahun));
 }
+
+/**
+ * Banner seragam buatan dasbor (17 Nov 2026): logo + akronim + tahun di atas
+ * latar navy, dipasang untuk edisi yang tidak punya poster asli. Isinya sama
+ * persis dengan teks kartu di bawahnya, dan dua belas kartu navy berjejer
+ * membuat kisi tampak seragam — jadi kartu situs menggantinya dengan ubin
+ * logo ringan. Begitu panitia mengunggah poster asli, nama berkasnya berubah
+ * dan poster itu tampil seperti biasa.
+ */
+export const bannerSeragam = (url: string | null | undefined): boolean =>
+  !!url && /\/events\/[^/]+\/banner-\d{13}\.webp(?:[?#]|$)/.test(url);

@@ -146,6 +146,15 @@ export function HeroAtom({ className = "", warnaHero }: { className?: string; wa
     let bersihkan: (() => void) | undefined;
 
     (async () => {
+      /* three.js (±150 KB gzip) baru diunduh saat peramban senggang, supaya
+         tidak berebut jaringan dan CPU dengan tampilan awal halaman. Paling
+         lambat 1,5 detik — lambangnya tetap muncul cepat. */
+      await new Promise<void>((lanjut) => {
+        const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+        if (w.requestIdleCallback) w.requestIdleCallback(() => lanjut(), { timeout: 1500 });
+        else setTimeout(lanjut, 300);
+      });
+      if (batal) return;
       let THREE: typeof import("three");
       let SVGLoaderMod: typeof import("three/examples/jsm/loaders/SVGLoader.js");
       let RuangMod: typeof import("three/examples/jsm/environments/RoomEnvironment.js");

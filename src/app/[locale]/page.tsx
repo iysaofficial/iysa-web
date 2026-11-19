@@ -12,6 +12,7 @@ import { PartnerWall } from "@/components/partner-wall";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
 import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
+import { PitaDaftar } from "@/components/pita-daftar";
 import { pageMetadata } from "@/lib/seo";
 import { stats, allEvents, allAffiliates } from "@/lib/data";
 import { semuaTerbitan } from "@/lib/newsletter";
@@ -160,13 +161,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               </div>
               <MoreLink href="/kalender">{t("timelineAll")}</MoreLink>
             </div>
-            <ol className="relative mt-12 grid gap-8 border-t-2 border-[var(--navy)] pt-0 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0">
+            {/* Ponsel: daftar rapat bertanggal di kiri (dulu tiap agenda
+                memakan ±130 px). Layar lebar: linimasa mendatar seperti semula. */}
+            <ol className="relative mt-8 divide-y divide-[var(--line)] border-y border-[var(--line)] sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-8 sm:divide-y-0 sm:border-b-0 sm:border-t-2 sm:border-[var(--navy)] lg:grid-cols-5 lg:gap-0">
               {agendaDekat.map((a, k) => (
-                <li key={k} className="relative pt-8 lg:border-l lg:border-[var(--line)] lg:px-5 lg:first:border-l-0 lg:first:pl-0">
-                  <span aria-hidden className="absolute -top-[7px] left-0 h-3 w-3 rounded-full border-2 border-[var(--navy)] bg-[var(--bg)] lg:left-5 lg:first:left-0" />
-                  <p className="tnum font-serif text-[24px] text-[var(--teal)] uppercase">{a.tanggalPendek}</p>
-                  <p className="mt-3 font-serif text-[16px] leading-snug text-[var(--ink)]">{a.judul}</p>
-                  <p className="mt-2 text-[12px] text-[var(--ink-faint)]">{a.edisi}</p>
+                <li key={k} className="relative grid grid-cols-[76px_1fr] gap-x-3 py-3.5 sm:block sm:py-0 sm:pt-8 lg:border-l lg:border-[var(--line)] lg:px-5 lg:first:border-l-0 lg:first:pl-0">
+                  <span aria-hidden className="absolute -top-[7px] left-0 hidden h-3 w-3 rounded-full border-2 border-[var(--navy)] bg-[var(--bg)] sm:block lg:left-5 lg:first:left-0" />
+                  <p className="tnum row-span-2 font-serif text-[19px] leading-tight text-[var(--teal)] uppercase sm:text-[24px] sm:leading-normal">{a.tanggalPendek}</p>
+                  <p className="font-serif text-[16px] leading-snug text-[var(--ink)] sm:mt-3">{a.judul}</p>
+                  <p className="mt-1 text-[12.5px] text-[var(--ink-faint)] sm:mt-2">{a.edisi}</p>
                 </li>
               ))}
             </ol>
@@ -283,7 +286,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <Section
         eyebrow={t("partnersEyebrow")}
         title={t("partnersTitle")}
-        action={<MoreLink href="/mitra">{`${allAffiliates().length} →`}</MoreLink>}
+        action={<MoreLink href="/mitra">{t("partnersAll", { count: allAffiliates().length })}</MoreLink>}
       >
         {/* Mitra internasional: bernama, karena tiap satunya punya halaman
             sendiri berisi profil dan galeri. */}
@@ -308,7 +311,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           <p className="mt-2 mb-6 max-w-[52ch] text-[14.5px] text-[var(--ink-muted)]">
             {t("partnersWallLead", { count: s.partners })}
           </p>
-          <PartnerWall />
+          {/* Beranda cukup dua baris logo; daftar lengkapnya di halaman Mitra. */}
+          <PartnerWall batas={12} />
+          <div className="mt-5">
+            <MoreLink href="/mitra#institusi">{t("partnersWallAll", { count: s.partners })}</MoreLink>
+          </div>
 
           {/* Mitra media. Situs lama memberinya seksi sendiri di beranda; itu
               tidak ikut pindah sama sekali, jadi satu-satunya mitra media IYSA
@@ -338,6 +345,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           </div>
         </div>
       </Section>
+
+      {dibuka.length > 0 && (
+        <PitaDaftar teks={t("openBar", { count: semuaDibuka.length })} aksi={t("openBarCta")} />
+      )}
 
       {/* ── Pita ajakan biru (konsep GYSO) ── */}
       <section className="tema-biru">

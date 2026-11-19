@@ -8,7 +8,7 @@ import { EventCard } from "@/components/event-card";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { allEvents } from "@/lib/data";
 import { kelompokkanSeri, gabungSeriDashboard, type Seri } from "@/lib/event-seri";
-import { ambilSeriDashboard, ambilSemuaSeriDashboard, ambilEdisiDashboard, milikSitus, gambarDashboard } from "@/lib/dashboard-event";
+import { ambilSeriDashboard, ambilSemuaSeriDashboard, ambilEdisiDashboard, milikSitus, gambarDashboard, bannerSeragam } from "@/lib/dashboard-event";
 import { EdisiBannerKartu } from "@/components/edisi-banner-kartu";
 import { tahunEvent } from "@/lib/teks-event";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
@@ -117,10 +117,12 @@ export default async function SeriPage({
           sebesar ini — dan bannernya biasanya foto acaranya sendiri, bukan
           poster, jadi ia menjawab "seperti apa sih ajang ini" dalam satu
           pandang. Seri yang belum dipin melewati blok ini tanpa jejak. */}
+      {/* Banner seragam tidak dipajang besar: isinya logo + nama yang sudah
+          tertulis di kepala halaman. Logo tetap tampil di bawah. */}
       {(dash?.banner || dash?.logo) && (
         <div className="border-b border-[var(--line)]">
           <div className="shell py-8">
-            {dash.banner && (
+            {dash.banner && !bannerSeragam(dash.banner) && (
               <>
                 {/* 5:2, bukan panji tipis. Bannernya foto rombongan peserta dan
                 orangnya ada di separuh bawah bingkai; dipotong lebih ketat,
@@ -143,7 +145,7 @@ export default async function SeriPage({
                  memanjang seperti IYMIA. Dijejalkan ke ubin persegi, yang
                  memanjang menyusut jadi seujung kuku. */
               <div
-                className={`inline-flex h-14 items-center rounded bg-white px-3 ${dash.banner ? "mt-5" : ""}`}
+                className={`inline-flex h-14 items-center rounded bg-white px-3 ${dash.banner && !bannerSeragam(dash.banner) ? "mt-5" : ""}`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img

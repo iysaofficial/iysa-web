@@ -44,11 +44,12 @@ import { SelPengisi } from "./ui";
  * institusi datang dalam rasio yang sangat berbeda — lencana bundar, spanduk
  * memanjang — dan tanpa kotak seragam barisnya jadi tinggi-rendah acak.
  */
-export function PartnerWall({ scope }: { scope?: "national" | "international" }) {
+export function PartnerWall({ scope, batas }: { scope?: "national" | "international"; batas?: number }) {
   const items = partners()
     .filter((p) => (scope ? p.scope === scope : true))
     .map((p) => ({ ...p, src: logoUrl(p.logo) }))
-    .filter((p): p is typeof p & { src: string } => Boolean(p.src));
+    .filter((p): p is typeof p & { src: string } => Boolean(p.src))
+    .slice(0, batas ?? Infinity);
 
   return (
     <ul

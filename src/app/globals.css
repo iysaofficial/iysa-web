@@ -540,3 +540,44 @@ summary {
     text-underline-offset: 0.2em;
   }
 }
+
+/* ── Area sentuh & ukuran teks di ponsel ─────────────────────────────
+ *
+ * Diukur 19 Nov 2026 di lebar 390 px: chip saring, pemilih tahun, tombol
+ * menu, dan tautan "Selengkapnya" tingginya 22–37 px — di bawah 44 px yang
+ * nyaman untuk ibu jari. Untuk perangkat sentuh:
+ *   - chip/tombol bulat dan kontrol kalender dibuat minimal 44 px;
+ *   - tautan teks sebaris (MoreLink, "Register now") diberi area klik lebih
+ *     luas lewat padding + margin negatif, jadi tata letaknya tidak bergeser.
+ * Label 11–12 px dinaikkan sedikit di layar sempit supaya tetap terbaca.
+ */
+@media (pointer: coarse) {
+  main a.rounded-full,
+  main button.rounded-full,
+  main select.rounded-full,
+  main input.rounded,
+  header button.h-9,
+  main button.h-9 {
+    min-height: 44px;
+  }
+  main button.h-9.w-9,
+  header button.h-9.w-9 {
+    min-width: 44px;
+  }
+  main a.inline-flex:not(.rounded-full):not([class*="px-"]) {
+    padding-block: 10px;
+    margin-block: -10px;
+  }
+  /* Tautan teks tebal sebaris (pita info, nama event di kalender). */
+  main a:is(.font-bold, .font-semibold):not(.inline-flex):not(.flex):not(.block):not([class*="px-"]) {
+    display: inline-block;
+    padding-block: 11px;
+    margin-block: -11px;
+  }
+}
+
+@media (max-width: 640px) {
+  .text-\[11px\] { font-size: 12px; }
+  .text-\[11\.5px\] { font-size: 12.5px; }
+  .text-\[12px\] { font-size: 13px; }
+}
