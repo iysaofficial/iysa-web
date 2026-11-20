@@ -77,6 +77,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const { terbitan } = await semuaTerbitan();
   /* Seksi partner: master institusi mitra Divisi Kemitraan (dasbor). */
   const mitraMaster = await ambilMitraMaster();
+  /* Beranda (permintaan Pras, 2026-11-20): UNIKOM, UP, Warmadewa, YPBI tidak
+     dipajang di sini (tetap ada di /mitra). Dinding logo hanya baris penuh
+     (kelipatan 6 = 2/3/6 kolom); sisanya ikut daftar nama di bawahnya. */
+  const SEMBUNYI_BERANDA = new Set(["UNIKOM", "UP", "UNIVERSITAS WARMADEWA", "YPBI"]);
+  const mitraBeranda = (mitraMaster ?? []).filter(
+    (m) => !SEMBUNYI_BERANDA.has((m.singkatan ?? "").toUpperCase()) && !SEMBUNYI_BERANDA.has(m.nama.toUpperCase()),
+  );
+  const berlogo = mitraBeranda.filter((m) => m.logo);
+  const dindingMitra = berlogo.slice(0, Math.floor(berlogo.length / 6) * 6 || berlogo.length);
+  const pilMitra = mitraBeranda.filter((m) => !dindingMitra.includes(m));
 
   /* Agenda terdekat: satu kegiatan per edisi, lima ke depan (kalender dasbor). */
   const hariIni = kini.toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
@@ -303,11 +313,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
              Pras): yang berlogo tampil di dinding bernama, sisanya sebagai
              nama saja — tidak ada mitra yang tersebut dua kali. */
           <div>
-            <MitraMasterWall mitra={mitraMaster} />
-            {mitraMaster.some((m) => !m.logo) && (
+            <MitraMasterWall mitra={dindingMitra} />
+            {pilMitra.length > 0 && (
               <ul className="mt-6 flex flex-wrap gap-2">
-                {mitraMaster
-                  .filter((m) => !m.logo)
+                {pilMitra
                   .map((m) => {
                     const href = situsMitra(m);
                     const kelas =
