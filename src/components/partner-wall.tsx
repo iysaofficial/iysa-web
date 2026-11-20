@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { logoUrl } from "@/lib/assets";
 import { partners } from "@/lib/data";
-import { SelPengisi } from "./ui";
 
 /**
  * Dinding logo institusi mitra — 59 logo, 30 nasional dan 29 internasional.
@@ -53,10 +52,10 @@ export function PartnerWall({ scope, batas }: { scope?: "national" | "internatio
 
   return (
     <ul
-      className="rise-stagger grid grid-cols-3 gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-4 lg:grid-cols-6"
+      className="rise-stagger grid grid-cols-3 border-t border-l border-[var(--line)] sm:grid-cols-4 lg:grid-cols-6"
     >
       {items.map((p, i) => (
-        <li key={`${p.logo}-${i}`} className="bg-[var(--bg)]">
+        <li key={`${p.logo}-${i}`} className="border-r border-b border-[var(--line)] bg-[var(--bg)]">
           {/*
             Tinggi tetap, BUKAN `aspect-[3/2]`.
 
@@ -88,9 +87,6 @@ export function PartnerWall({ scope, batas }: { scope?: "national" | "internatio
           </div>
         </li>
       ))}
-      <SelPengisi jumlah={items.length} kolom={3} tampak="block sm:hidden" />
-      <SelPengisi jumlah={items.length} kolom={4} tampak="hidden sm:block lg:hidden" />
-      <SelPengisi jumlah={items.length} kolom={6} tampak="hidden lg:block" />
     </ul>
   );
 }

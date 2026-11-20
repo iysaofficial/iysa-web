@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
-import { PageHeader, Pill, SelPengisi } from "@/components/ui";
+import { PageHeader, Pill } from "@/components/ui";
 import { PartnerWall } from "@/components/partner-wall";
 import { MitraMasterWall } from "@/components/mitra-master-wall";
 import { ambilMitraMaster } from "@/lib/mitra-dashboard";
@@ -62,7 +62,10 @@ export default async function PartnersPage({
       />
 
       <div className="shell py-12 md:py-16">
-        <ul className="rise-stagger grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
+        {/* Garis kisi digambar per sel (kanan + bawah), bukan lewat celah 1px di atas
+            latar garis: baris terakhir yang tidak penuh tidak lagi butuh sel
+            pengisi, yang di tema gelap terbaca sebagai kartu kosong. */}
+        <ul className="rise-stagger grid border-t border-l border-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
           {items.map((a) => {
             const logo = logoUrl(a.logo);
             const country = affiliateCountry[a.slug];
@@ -71,7 +74,7 @@ export default async function PartnersPage({
             const name = affiliateNames[a.slug] ?? a.name;
 
             return (
-              <li key={a.slug} className="bg-[var(--bg)]">
+              <li key={a.slug} className="border-r border-b border-[var(--line)] bg-[var(--bg)]">
                 <Link
                   href={`/mitra/${a.slug}`}
                   className="group flex h-full flex-col gap-4 p-6 transition-colors duration-[var(--gerak-cepat)] hover:bg-[var(--bg-sunk)]"
@@ -108,8 +111,6 @@ export default async function PartnersPage({
               </li>
             );
           })}
-          <SelPengisi jumlah={items.length} kolom={2} />
-          <SelPengisi jumlah={items.length} kolom={3} />
         </ul>
 
         {/* Seluruh logo institusi pendukung; beranda hanya memajang dua baris. */}
