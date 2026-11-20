@@ -1,5 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import kurasi from "@/content/generated/kurasi-simt.json";
+import { Link } from "@/i18n/navigation";
+import { ambilRingkasanKurasi } from "@/lib/kurasi-sorotan";
+import { ambilSemuaSeriDashboard, gambarDashboard } from "@/lib/dashboard-event";
+import { slugSeri } from "@/lib/kurasi";
 
 /**
  * Seksi kurasi Puspresnas — nilai jual utama ajang IYSA.
@@ -60,14 +64,20 @@ const SKALA = [
   { bintang: 1, nilai: "< 40" },
 ] as const;
 
-export async function KurasiPanel() {
+export async function KurasiPanel({ locale }: { locale: string }) {
   const t = await getTranslations("home");
 
+  /* Angka + sorotan dari Proses Kurasi dasbor (2026-11-20); tarikan SIMT
+     statis hanya cadangan bila dasbor tidak terjangkau. */
+  const ringkas = await ambilRingkasanKurasi(8);
+  const seriDipin = new Set([...(await ambilSemuaSeriDashboard()).keys()]);
   const angka = [
-    { nilai: kurasi.seri, label: t("curationStatSeries") },
-    { nilai: kurasi.edisi, label: t("curationStatEditions") },
-    { nilai: kurasi.tahunAwal, label: t("curationStatSince") },
+    { nilai: ringkas?.seri ?? kurasi.seri, label: t("curationStatSeries") },
+    { nilai: ringkas?.edisi ?? kurasi.edisi, label: t("curationStatEditions") },
+    { nilai: ringkas?.tahunAwal || kurasi.tahunAwal, label: t("curationStatSince") },
   ];
+  const sorotan = ringkas?.sorotan ?? [];
+  const fmtSkor = new Intl.NumberFormat(locale === "en" ? "en-GB" : "id-ID", { maximumFractionDigits: 1 });
 
   const manfaat = [
     ["curationB1Title", "curationB1Body"],
@@ -155,6 +165,80 @@ export async function KurasiPanel() {
             </div>
           </div>
         </div>
+
+        {/* Sorotan hasil kurasi per event (Proses Kurasi dasbor): edisi
+            berbintang terbaru tiap seri. */}
+        {sorotan.length > 0 && (
+          <div className="mt-14">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <h3 className="font-sans text-[11px] font-bold tracking-[0.14em] text-[var(--on-navy)]/70 uppercase">
+                  {t("curationHighlightTitle")}
+                </h3>
+                <p className="mt-1.5 text-[14px] text-[var(--on-navy)]/75">{t("curationHighlightLead")}</p>
+              </div>
+              <Link
+                href="/kurasi"
+                className="inline-flex items-center gap-1.5 border-b border-[var(--on-navy)]/40 pb-0.5 text-[14px] font-medium transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--on-navy)]"
+              >
+                {t("curationHighlightAll")} <span aria-hidden>→</span>
+              </Link>
+            </div>
+            <ul className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+              {sorotan.map((e) => {
+                const slug = slugSeri(e.akronim);
+                const isi = (
+                  <>
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="flex h-11 min-w-11 items-center justify-center rounded-lg bg-white px-2 shadow-sm">
+                        {e.logo ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img src={gambarDashboard(e.logo, 128)} alt="" loading="lazy" className="h-7 w-auto max-w-[84px] object-contain" />
+                        ) : (
+                          <span className="font-sans text-[11px] font-bold text-[#0b2948]">{e.akronim.slice(0, 4)}</span>
+                        )}
+                      </span>
+                      <span className="tnum rounded-full border border-[var(--on-navy)]/25 px-2 py-0.5 text-[11.5px] font-bold text-[var(--on-navy)]/80">
+                        {e.tahun}
+                      </span>
+                    </div>
+                    <p className="mt-4 font-sans text-[13px] font-bold tracking-[0.06em] uppercase">{e.akronim}</p>
+                    <p className="mt-0.5 line-clamp-2 min-h-[2.6em] text-[12.5px] leading-snug text-[var(--on-navy)]/70">{e.nama}</p>
+                    <div className="mt-3 flex items-center gap-0.5" aria-label={`${e.bintang}/5`}>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Bintang key={i} penuh={i <= (e.bintang ?? 0)} />
+                      ))}
+                    </div>
+                    <p className="mt-1.5 flex items-baseline justify-between gap-2 text-[13px]">
+                      <span className="font-medium">{t(`curationScale${Math.min(5, Math.max(1, e.bintang ?? 1))}`)}</span>
+                      {e.skor != null && (
+                        <span className="tnum text-[12px] text-[var(--on-navy)]/65">
+                          {t("curationScore", { skor: fmtSkor.format(e.skor) })}
+                        </span>
+                      )}
+                    </p>
+                  </>
+                );
+                const kelas =
+                  "flex h-full flex-col rounded-xl border border-[var(--on-navy)]/15 bg-[var(--on-navy)]/[0.06] p-4 transition-[transform,background-color,border-color] duration-300 ease-out";
+                return (
+                  <li key={`${e.akronim}-${e.tahun}`}>
+                    {seriDipin.has(e.akronim.toUpperCase()) ? (
+                      <Link
+                        href={`/kurasi/${slug}/${e.tahun}`}
+                        className={`${kelas} hover:-translate-y-0.5 hover:border-[var(--on-navy)]/35 hover:bg-[var(--on-navy)]/[0.1]`}
+                      >
+                        {isi}
+                      </Link>
+                    ) : (
+                      <div className={kelas}>{isi}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
 
         {/* Apa artinya buat peserta — jawaban atas "lalu sertifikat ini
             gunanya apa", yang justru tidak dijawab versi sebelumnya. */}

@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 import { filterEvents, eventFacets, allEvents, type EventLevel, type EventMode } from "@/lib/data";
 import { statusEvent, waktuEvent, kelompokkanSeri, gabungSeriDashboard } from "@/lib/event-seri";
 import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
-import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
+import { EdisiDashboardKartu, KisiKartuEdisi } from "@/components/edisi-dashboard-kartu";
 
 type Search = { level?: string; mode?: string; q?: string };
 
@@ -115,13 +115,6 @@ export default async function EventsPage({
       .filter((x) => dariDashboard.has(x.akronim.toUpperCase()))
       .flatMap((x) => x.edisi.map((e) => e.slug)),
   );
-  /* Jumlah kolom disamakan dengan jumlah kartunya selama masih di bawah tiga.
-     Kisi garis rambut di situs ini memakai latar berwarna garis di wadahnya,
-     jadi kolom yang tidak terisi tidak hilang begitu saja — ia tampil sebagai
-     kotak kosong di sebelah kartu terakhir. */
-  const kolomDibuka =
-    dibuka.length === 1 ? "" : dibuka.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3";
-
   const terbukaWarisan = terbuka.filter((e) => !slugDiambilAlih.has(e.slug));
   const akanWarisan = akan.filter((e) => !slugDiambilAlih.has(e.slug));
   /* Edisi terjadwal menurut dasbor: pendaftaran belum dibuka dan acaranya
@@ -130,8 +123,6 @@ export default async function EventsPage({
   const akanDashboard = dashSitus
     .filter((e) => e.status === "akan" && (e.mulai ?? e.pendaftaranBuka ?? "") > hariIni)
     .sort((a, b) => (a.mulai ?? a.pendaftaranBuka ?? "").localeCompare(b.mulai ?? b.pendaftaranBuka ?? ""));
-  const kolomAkan =
-    akanDashboard.length === 1 ? "" : akanDashboard.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3";
 
   return (
     <>
@@ -184,21 +175,19 @@ export default async function EventsPage({
                   sama memaksa kartu dashboard meregang mengejar tinggi poster
                   dan menyisakan kekosongan besar di tengahnya. */}
               {dibuka.length > 0 && (
-                <ul className={`grid gap-px border border-[var(--line)] bg-[var(--line)] ${kolomDibuka}`}>
+                <KisiKartuEdisi jumlah={dibuka.length}>
                   {dibuka.map((e) => (
                     <li key={e.id} className="flex">
                       <EdisiDashboardKartu edisi={e} />
                     </li>
                   ))}
-                  <SelPengisi jumlah={dibuka.length} kolom={3} />
-                  <SelPengisi jumlah={dibuka.length} kolom={2} />
-                </ul>
+                </KisiKartuEdisi>
               )}
 
               {terbukaWarisan.length > 0 && (
                 <ul
                   className={`grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3 ${
-                    dibuka.length > 0 ? "mt-px" : ""
+                    dibuka.length > 0 ? "mt-6" : ""
                   }`}
                 >
                   {terbukaWarisan.map((e) => (
@@ -216,18 +205,16 @@ export default async function EventsPage({
           {(akanDashboard.length > 0 || akanWarisan.length > 0) && (
             <Section eyebrow={t("scheduledEyebrow")} title={t("upcomingTitle")} lead={t("upcomingLead")} sunk>
               {akanDashboard.length > 0 && (
-                <ul className={`grid gap-px border border-[var(--line)] bg-[var(--line)] ${kolomAkan} ${akanWarisan.length > 0 ? "mb-px" : ""}`}>
+                <KisiKartuEdisi jumlah={akanDashboard.length}>
                   {akanDashboard.map((e) => (
                     <li key={e.id} className="flex">
                       <EdisiDashboardKartu edisi={e} />
                     </li>
                   ))}
-                  <SelPengisi jumlah={akanDashboard.length} kolom={3} />
-                  <SelPengisi jumlah={akanDashboard.length} kolom={2} />
-                </ul>
+                </KisiKartuEdisi>
               )}
               {akanWarisan.length > 0 && (
-              <ul className="grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3">
+              <ul className="mt-6 grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3">
                 {akanWarisan.map((e) => (
                   <li key={e.slug} className="bg-[var(--bg)]">
                     <EventCard event={e} />

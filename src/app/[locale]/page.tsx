@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
-import { Section, StatRow, MoreLink, Pill, SelPengisi } from "@/components/ui";
+import { Section, StatRow, MoreLink, Pill } from "@/components/ui";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { EventCard } from "@/components/event-card";
 import { HeroAtom } from "@/components/hero-atom";
@@ -11,7 +11,7 @@ import { statusEvent, waktuEvent } from "@/lib/event-seri";
 import { PartnerWall } from "@/components/partner-wall";
 import { MitraMasterWall } from "@/components/mitra-master-wall";
 import { ambilMitraMaster, situsMitra } from "@/lib/mitra-dashboard";
-import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
+import { EdisiDashboardKartu, KisiKartuEdisi } from "@/components/edisi-dashboard-kartu";
 import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
 import { PitaDaftar } from "@/components/pita-daftar";
@@ -107,11 +107,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
      satunya sumber yang tahu saklarnya, dan sebagian edisi di sini belum
      pernah ada di data warisan sama sekali. Seri yang belum dipin panitia
      tidak menjawab, dan beranda diam-diam tampil tanpa blok ini. */
-  const semuaDibuka = [...(await ambilSemuaSeriDashboard()).values()]
-    .filter(milikSitus)
+  const seriDasbor = [...(await ambilSemuaSeriDashboard()).values()].filter(milikSitus);
+  const semuaDibuka = seriDasbor
     .filter((e) => e.pendaftaranDibuka)
     .sort((a, b) => (a.pendaftaranTutup ?? "9999").localeCompare(b.pendaftaranTutup ?? "9999"));
   const dibuka = semuaDibuka.slice(0, 3);
+  /* Edisi yang belum selesai (dihitung dari tanggal dasbor), selain tiga di
+     atas; yang sudah selesai dilewati. */
+  const sudahTampil = new Set(dibuka.map((e) => e.id));
+  const akanDatang = seriDasbor
+    .filter((e) => e.status !== "selesai" && !sudahTampil.has(e.id))
+    .sort((a, b) => (a.mulai ?? "9999").localeCompare(b.mulai ?? "9999"))
+    .slice(0, 6);
   const tutupIso = semuaDibuka.find((e) => e.pendaftaranTutup)?.pendaftaranTutup ?? null;
   const tutupTerdekat = tutupIso
     ? new Date(`${tutupIso}T00:00:00Z`).toLocaleDateString(locale === "en" ? "en-GB" : "id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
@@ -214,40 +221,51 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           daftari sekarang — dan hanya dashboard yang tahu jawabannya. */}
       {dibuka.length > 0 && (
         <Section eyebrow={t("openNowEyebrow")} title={t("openNowTitle")}>
-          <ul
-            className={`grid gap-px border border-[var(--line)] bg-[var(--line)] ${
-              dibuka.length === 1 ? "" : dibuka.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"
-            }`}
-          >
+          <KisiKartuEdisi jumlah={dibuka.length}>
             {dibuka.map((e) => (
               <li key={e.id} className="flex">
                 <EdisiDashboardKartu edisi={e} />
               </li>
             ))}
-            <SelPengisi jumlah={dibuka.length} kolom={3} />
-            <SelPengisi jumlah={dibuka.length} kolom={2} />
-          </ul>
+          </KisiKartuEdisi>
         </Section>
       )}
 
-      {/* ── Event ─────────────────────────────────────────────────── */}
-      <Section
-        eyebrow={t("eventsEyebrow")}
-        title={t("eventsTitle")}
-        action={<MoreLink href="/event">{t("eventsAll")}</MoreLink>}
-      >
-        <ul
-          className="rise-stagger grid grid-cols-2 gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-3"
+      {/* ── Akan datang (dasbor) ───────────────────────────────────
+          Dulu dari data warisan situs lama (poster, judul, tanggal yang sudah
+          tidak sesuai, termasuk event yang sudah selesai). Sejak 2026-11-20
+          (permintaan Pras): edisi dasbor yang belum selesai, di luar yang
+          sudah tampil di "Pendaftaran terbuka", urut dari yang terdekat.
+          Bila dasbor tidak terjangkau, kembali ke daftar warisan. */}
+      {akanDatang.length > 0 ? (
+        <Section
+          eyebrow={t("eventsEyebrow")}
+          title={t("upcomingTitle")}
+          action={<MoreLink href="/event">{t("eventsAll")}</MoreLink>}
         >
-          {featured.map((e) => (
-            <li key={e.slug} className="bg-[var(--bg)]">
-              <EventCard event={e} />
-            </li>
-          ))}
-          <SelPengisi jumlah={featured.length} kolom={2} tampak="block lg:hidden" />
-          <SelPengisi jumlah={featured.length} kolom={3} />
-        </ul>
-      </Section>
+          <KisiKartuEdisi jumlah={akanDatang.length}>
+            {akanDatang.map((e) => (
+              <li key={e.id} className="flex">
+                <EdisiDashboardKartu edisi={e} />
+              </li>
+            ))}
+          </KisiKartuEdisi>
+        </Section>
+      ) : seriDasbor.length === 0 ? (
+        <Section
+          eyebrow={t("eventsEyebrow")}
+          title={t("eventsTitle")}
+          action={<MoreLink href="/event">{t("eventsAll")}</MoreLink>}
+        >
+          <ul className="rise-stagger grid grid-cols-2 border-t border-l border-[var(--line)] lg:grid-cols-3">
+            {featured.map((e) => (
+              <li key={e.slug} className="border-r border-b border-[var(--line)] bg-[var(--bg)]">
+                <EventCard event={e} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       {/* ── Kurasi Puspresnas ─────────────────────────────────────────
           Duduk tepat setelah daftar event: di situlah pengunjung sedang
@@ -255,7 +273,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           adalah yang membedakan ajang IYSA dari lomba biasa. Isinya, dan
           alasan ia satu-satunya blok berwarna penuh di halaman ini, ada di
           komponennya. */}
-      <KurasiPanel />
+      <KurasiPanel locale={locale} />
 
       {/* ── Visi, misi, tujuan ────────────────────────────────────── */}
       <Section eyebrow={t("visionEyebrow")} title={t("visionTitle")} sunk>

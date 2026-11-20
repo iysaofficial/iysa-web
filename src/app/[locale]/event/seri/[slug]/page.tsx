@@ -184,7 +184,7 @@ export default async function SeriPage({
         ) : (<>
         {/* Seri yang hanya ada di dasbor: kartu edisi berjalan dari dasbor. */}
         {seri.edisi.length === 0 && dash && (
-          <div className="flex max-w-md border border-[var(--line)]">
+          <div className="flex max-w-md">
             <EdisiDashboardKartu edisi={dash} />
           </div>
         )}
