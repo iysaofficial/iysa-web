@@ -6,6 +6,8 @@ import type { Locale } from "@/i18n/routing";
 
 import { PageHeader, Pill, SelPengisi } from "@/components/ui";
 import { PartnerWall } from "@/components/partner-wall";
+import { MitraMasterWall } from "@/components/mitra-master-wall";
+import { ambilMitraMaster } from "@/lib/mitra-dashboard";
 import { stats } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
 import { allAffiliates } from "@/lib/data";
@@ -46,6 +48,7 @@ export default async function PartnersPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("partners");
+  const mitraMaster = await ambilMitraMaster();
   const items = allAffiliates();
 
   return (
@@ -113,9 +116,27 @@ export default async function PartnersPage({
         <section id="institusi" className="mt-16 scroll-mt-24">
           <h2 className="eyebrow">{t("wallTitle")}</h2>
           <p className="mt-2 mb-6 max-w-[52ch] text-[14.5px] text-[var(--ink-muted)]">
-            {t("wallLead", { count: stats().partners })}
+            {mitraMaster
+              ? t("wallLeadMaster", { count: mitraMaster.length })
+              : t("wallLead", { count: stats().partners })}
           </p>
-          <PartnerWall />
+          {/* Master data Divisi Kemitraan (dasbor); daftar warisan bila dasbor tak terjangkau. */}
+          {mitraMaster ? (
+            <>
+              <MitraMasterWall mitra={mitraMaster} />
+              {mitraMaster.some((m) => !m.logo) && (
+                <ul className="mt-6 flex flex-wrap gap-2">
+                  {mitraMaster.filter((m) => !m.logo).map((m) => (
+                    <li key={m.id} className="inline-flex rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[13.5px] text-[var(--ink-muted)]">
+                      {m.nama}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ) : (
+            <PartnerWall />
+          )}
         </section>
       </div>
     </>

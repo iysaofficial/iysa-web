@@ -96,6 +96,7 @@
     "ctaBandTitle": "Begin your scientific journey with IYSA.",
     "ctaBandBody": "Pick the right competition, register your team, and present your work to judges from many countries.",
     "ctaBandButton": "Choose an event",
+    "partnersMasterAll": "All {count} partners",
     "partnersAll": "All {count} affiliates",
     "partnersWallAll": "See all {count} institutions",
     "openBar": "{count, plural, one {# event open} other {# events open}}",
@@ -225,6 +226,7 @@
     "national": "National partners",
     "international": "International partners",
     "wallTitle": "Supporting institutions",
+    "wallLeadMaster": "{count} partner institutions from academia, practitioners, and industry — national and international.",
     "wallLead": "{count} partner institution logos, national and international."
   },
   "gallery": {

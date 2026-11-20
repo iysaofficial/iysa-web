@@ -9,6 +9,8 @@ import { EventCard } from "@/components/event-card";
 import { HeroAtom } from "@/components/hero-atom";
 import { statusEvent, waktuEvent } from "@/lib/event-seri";
 import { PartnerWall } from "@/components/partner-wall";
+import { MitraMasterWall } from "@/components/mitra-master-wall";
+import { ambilMitraMaster, situsMitra } from "@/lib/mitra-dashboard";
 import { EdisiDashboardKartu } from "@/components/edisi-dashboard-kartu";
 import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
@@ -73,6 +75,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     .slice(0, 6);
 
   const { terbitan } = await semuaTerbitan();
+  /* Seksi partner: master institusi mitra Divisi Kemitraan (dasbor). */
+  const mitraMaster = await ambilMitraMaster();
 
   /* Agenda terdekat: satu kegiatan per edisi, lima ke depan (kalender dasbor). */
   const hariIni = kini.toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
@@ -286,37 +290,77 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <Section
         eyebrow={t("partnersEyebrow")}
         title={t("partnersTitle")}
-        action={<MoreLink href="/mitra">{t("partnersAll", { count: allAffiliates().length })}</MoreLink>}
+        action={
+          mitraMaster ? (
+            <MoreLink href="/mitra#institusi">{t("partnersMasterAll", { count: mitraMaster.length })}</MoreLink>
+          ) : (
+            <MoreLink href="/mitra">{t("partnersAll", { count: allAffiliates().length })}</MoreLink>
+          )
+        }
       >
-        {/* Mitra internasional: bernama, karena tiap satunya punya halaman
-            sendiri berisi profil dan galeri. */}
-        <ul className="flex flex-wrap gap-2">
-          {allAffiliates().map((a) => (
-            <li key={a.slug}>
-              <Link
-                href={`/mitra/${a.slug}`}
-                className="inline-flex rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[13.5px] text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]"
-              >
-                {affiliateNames[a.slug] ?? a.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        {/* Institusi pendukung — 59 logo, diambil dari daftar yang benar-benar
-            tampil di situs lama (dua komponen afiliasi), bukan dari
-            AffiliationLogo.json yang rusak. */}
-        <div className="mt-12">
-          <h3 className="eyebrow">{t("partnersWallTitle")}</h3>
-          <p className="mt-2 mb-6 max-w-[52ch] text-[14.5px] text-[var(--ink-muted)]">
-            {t("partnersWallLead", { count: s.partners })}
-          </p>
-          {/* Beranda cukup dua baris logo; daftar lengkapnya di halaman Mitra. */}
-          <PartnerWall batas={12} />
-          <div className="mt-5">
-            <MoreLink href="/mitra#institusi">{t("partnersWallAll", { count: s.partners })}</MoreLink>
+        {mitraMaster ? (
+          /* Master data Divisi Kemitraan di dasbor (2026-11-20, permintaan
+             Pras): yang berlogo tampil di dinding bernama, sisanya sebagai
+             nama saja — tidak ada mitra yang tersebut dua kali. */
+          <div>
+            <MitraMasterWall mitra={mitraMaster} />
+            {mitraMaster.some((m) => !m.logo) && (
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {mitraMaster
+                  .filter((m) => !m.logo)
+                  .map((m) => {
+                    const href = situsMitra(m);
+                    const kelas =
+                      "inline-flex rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[13.5px] text-[var(--ink-muted)]";
+                    return (
+                      <li key={m.id}>
+                        {href ? (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={`${kelas} transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]`}
+                          >
+                            {m.nama}
+                          </a>
+                        ) : (
+                          <span className={kelas}>{m.nama}</span>
+                        )}
+                      </li>
+                    );
+                  })}
+              </ul>
+            )}
           </div>
+        ) : (
+          /* Cadangan bila dasbor tidak terjangkau: daftar warisan situs lama. */
+          <>
+            <ul className="flex flex-wrap gap-2">
+              {allAffiliates().map((a) => (
+                <li key={a.slug}>
+                  <Link
+                    href={`/mitra/${a.slug}`}
+                    className="inline-flex rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[13.5px] text-[var(--ink-muted)] transition-colors duration-[var(--gerak-cepat)] hover:border-[var(--teal)] hover:text-[var(--teal)]"
+                  >
+                    {affiliateNames[a.slug] ?? a.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-12">
+              <h3 className="eyebrow">{t("partnersWallTitle")}</h3>
+              <p className="mt-2 mb-6 max-w-[52ch] text-[14.5px] text-[var(--ink-muted)]">
+                {t("partnersWallLead", { count: s.partners })}
+              </p>
+              <PartnerWall batas={12} />
+              <div className="mt-5">
+                <MoreLink href="/mitra#institusi">{t("partnersWallAll", { count: s.partners })}</MoreLink>
+              </div>
+            </div>
+          </>
+        )}
 
+        <div>
           {/* Mitra media. Situs lama memberinya seksi sendiri di beranda; itu
               tidak ikut pindah sama sekali, jadi satu-satunya mitra media IYSA
               tak tersebut di mana pun. Ia menumpang di sini alih-alih diberi
