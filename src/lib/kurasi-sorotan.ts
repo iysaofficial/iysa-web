@@ -29,7 +29,7 @@ export type RingkasanKurasi = {
   edisi: number;
   tahunAwal: string;
   sedang: number;
-  /** Edisi terbaru tiap seri yang sudah berbintang, terbaik dulu. */
+  /** Edisi terbaik tiap seri yang sudah berbintang, hasil terbesar dulu. */
   sorotan: EdisiKurasiRingkas[];
 };
 
@@ -45,21 +45,18 @@ export async function ambilRingkasanKurasi(batas = 8): Promise<RingkasanKurasi |
     if (selesai.length === 0) return null;
     const tahunAwal = selesai.map((e) => e.tahun).filter(Boolean).sort()[0] ?? "";
 
-    /* Satu kartu per seri: edisi berbintang paling baru. */
+    /* Satu kartu per seri: edisi dengan hasil terbaik (bintang, lalu skor,
+       lalu tahun terbaru). Urutan kartu: hasil terbesar dulu (permintaan
+       Pras, 2026-11-20). */
+    const lebihBaik = (a: EdisiKurasiRingkas, b: EdisiKurasiRingkas) =>
+      (b.bintang ?? 0) - (a.bintang ?? 0) || (b.skor ?? 0) - (a.skor ?? 0) || b.tahun.localeCompare(a.tahun);
     const perSeri = new Map<string, EdisiKurasiRingkas>();
     for (const e of selesai) {
       if (!e.bintang || e.bintang < 1) continue;
       const ada = perSeri.get(e.akronim);
-      if (!ada || e.tahun > ada.tahun) perSeri.set(e.akronim, e);
+      if (!ada || lebihBaik(e, ada) < 0) perSeri.set(e.akronim, e);
     }
-    const sorotan = [...perSeri.values()]
-      .sort(
-        (a, b) =>
-          (b.bintang ?? 0) - (a.bintang ?? 0) ||
-          b.tahun.localeCompare(a.tahun) ||
-          (b.skor ?? 0) - (a.skor ?? 0),
-      )
-      .slice(0, batas);
+    const sorotan = [...perSeri.values()].sort(lebihBaik).slice(0, batas);
 
     return {
       seri: new Set(selesai.map((e) => e.akronim)).size,
