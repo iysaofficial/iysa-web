@@ -6,7 +6,7 @@
  * 2026-11-20 (permintaan Pras), menggantikan 59 logo statis peninggalan situs
  * lama. Bila dasbor tidak terjangkau, pemanggil kembali ke data warisan.
  *
- * IYSA sendiri tercatat di master (dipakai berkas kerja sama), tapi bukan
+ * IYSA sendiri (dan IIIO) tercatat di master (dipakai berkas kerja sama), tapi bukan
  * "mitra" bagi situsnya sendiri, jadi dibuang di sini.
  */
 
@@ -24,7 +24,14 @@ export type MitraMaster = {
   logo: string | null;
 };
 
-const BUKAN_MITRA = new Set(["IYSA", "INDONESIAN YOUNG SCIENTIST ASSOCIATION"]);
+/* IIIO juga disembunyikan (2026-11-20, permintaan Pras): ajang IYSA sendiri,
+   dan logonya di master adalah gambar logo IYSA. */
+const BUKAN_MITRA = new Set([
+  "IYSA",
+  "INDONESIAN YOUNG SCIENTIST ASSOCIATION",
+  "IIIO",
+  "INDONESIA INTERNATIONAL IOT OLYMPIAD",
+]);
 
 export async function ambilMitraMaster(): Promise<MitraMaster[] | null> {
   try {
