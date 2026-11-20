@@ -9,7 +9,7 @@ import { SeriKartu } from "@/components/seri-kartu";
 import { pageMetadata } from "@/lib/seo";
 import { filterEvents, eventFacets, allEvents, type EventLevel, type EventMode } from "@/lib/data";
 import { statusEvent, waktuEvent, kelompokkanSeri, gabungSeriDashboard } from "@/lib/event-seri";
-import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
+import { ambilSemuaSeriDashboard, milikSitus, pendaftaranLewat } from "@/lib/dashboard-event";
 import { EdisiDashboardKartu, KisiKartuEdisi } from "@/components/edisi-dashboard-kartu";
 
 type Search = { level?: string; mode?: string; q?: string };
@@ -121,7 +121,7 @@ export default async function EventsPage({
      BELUM mulai. Yang sedang berlangsung tidak disebut "akan datang". */
   const hariIni = kini.toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
   const akanDashboard = dashSitus
-    .filter((e) => e.status === "akan" && (e.mulai ?? e.pendaftaranBuka ?? "") > hariIni)
+    .filter((e) => e.status === "akan" && (e.mulai ?? e.pendaftaranBuka ?? "") > hariIni && !pendaftaranLewat(e, hariIni))
     .sort((a, b) => (a.mulai ?? a.pendaftaranBuka ?? "").localeCompare(b.mulai ?? b.pendaftaranBuka ?? ""));
 
   return (

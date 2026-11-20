@@ -12,7 +12,7 @@ import { PartnerWall } from "@/components/partner-wall";
 import { MitraMasterWall } from "@/components/mitra-master-wall";
 import { ambilMitraMaster, situsMitra } from "@/lib/mitra-dashboard";
 import { EdisiDashboardKartu, KisiKartuEdisi } from "@/components/edisi-dashboard-kartu";
-import { ambilSemuaSeriDashboard, milikSitus } from "@/lib/dashboard-event";
+import { ambilSemuaSeriDashboard, milikSitus, pendaftaranLewat } from "@/lib/dashboard-event";
 import { KurasiPanel } from "@/components/kurasi-panel";
 import { PitaDaftar } from "@/components/pita-daftar";
 import { pageMetadata } from "@/lib/seo";
@@ -112,11 +112,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     .filter((e) => e.pendaftaranDibuka)
     .sort((a, b) => (a.pendaftaranTutup ?? "9999").localeCompare(b.pendaftaranTutup ?? "9999"));
   const dibuka = semuaDibuka.slice(0, 3);
-  /* Edisi yang belum selesai (dihitung dari tanggal dasbor), selain tiga di
-     atas; yang sudah selesai dilewati. */
+  /* Edisi yang belum selesai dan pendaftarannya belum tutup (tanggal dasbor),
+     selain tiga di atas. */
   const sudahTampil = new Set(dibuka.map((e) => e.id));
   const akanDatang = seriDasbor
-    .filter((e) => e.status !== "selesai" && !sudahTampil.has(e.id))
+    .filter((e) => e.status !== "selesai" && !pendaftaranLewat(e, hariIni) && !sudahTampil.has(e.id))
     .sort((a, b) => (a.mulai ?? "9999").localeCompare(b.mulai ?? "9999"))
     .slice(0, 6);
   const tutupIso = semuaDibuka.find((e) => e.pendaftaranTutup)?.pendaftaranTutup ?? null;

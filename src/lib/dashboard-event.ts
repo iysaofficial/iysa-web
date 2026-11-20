@@ -287,6 +287,15 @@ export async function ambilSemuaSeriDashboard(): Promise<Map<string, EdisiDashbo
   return peta;
 }
 
+/**
+ * Pendaftaran edisi sudah ditutup menurut tanggal tutupnya (WIB), walau
+ * acaranya belum berlangsung. Edisi seperti ini tidak disebut "akan datang"
+ * di situs (2026-11-20, permintaan Pras: I2ASPO/NASPO tutup 3 Nov, acara Des).
+ */
+export function pendaftaranLewat(e: EdisiDashboard, hariIni: string): boolean {
+  return !e.pendaftaranDibuka && e.pendaftaranTutup != null && e.pendaftaranTutup < hariIni;
+}
+
 /** Satu edisi dalam daftar seri — bahan kisi edisi di halaman seri. */
 export type EdisiRingkas = {
   tahun: string;
