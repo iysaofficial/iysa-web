@@ -70,3 +70,18 @@ export function setTheme(next: ThemeMode) {
   else root.setAttribute("data-theme", next);
   emit();
 }
+
+/**
+ * Pasang ulang tema tersimpan ke <html> (2026-11-20).
+ *
+ * <html> dipegang app/[locale]/layout.tsx, jadi ganti bahasa membuat React
+ * menyusun <html> BARU tanpa atribut data-theme — dan ThemeScript di <head>
+ * tidak dijalankan lagi pada navigasi sisi klien. Akibatnya pengunjung yang
+ * memilih gelap di /en jatuh ke tema sistem begitu pindah ke /id.
+ */
+export function terapkanTemaTersimpan() {
+  const saved = readStorage();
+  const root = document.documentElement;
+  if (saved === "system") root.removeAttribute("data-theme");
+  else if (root.getAttribute("data-theme") !== saved) root.setAttribute("data-theme", saved);
+}

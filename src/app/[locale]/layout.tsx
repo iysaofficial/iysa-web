@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { GulirHalus } from "@/components/gulir-halus";
 import { ThemeScript } from "@/components/theme-script";
+import { TemaTetap } from "@/components/tema-tetap";
 import { siteUrl, alternatesFor, organizationJsonLd } from "@/lib/seo";
 import "../globals.css";
 
@@ -90,6 +91,7 @@ export default async function LocaleLayout({
       </head>
       <body className="antialiased">
         <NextIntlClientProvider>
+          <TemaTetap />
           <GulirHalus />
           <a
             href="#isi"
